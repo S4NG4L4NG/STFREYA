@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="STFREYA.View.StudentView"
+             Title="StudentView">
+    <ScrollView>
+        <VerticalStackLayout>
+            <Label 
+         Text="Student Data Management"
+         VerticalOptions="Center" 
+         HorizontalOptions="Center" 
+         FontAttributes="Bold" 
+         FontSize="20" />
+
+            <!-- LOAD STUDENTS BUTTON -->
+            <Button Text="Load Students" Command="{Binding LoadStudentCommand}" />
+
+            <!-- FOR VIEWING THE LIST OF STUDENTS -->
+            <ListView ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout 
+                             Orientation="Horizontal"
+                             Padding="10">
+                                <Label 
+                             Text="{Binding Name}" 
+                             FontAttributes="Bold"/>
+                                <Label Text=" "
+                                FontAttributes="Bold"/>
+                                <Label 
+                             Text="{Binding LastName}" 
+                             FontAttributes="Bold"/>
+                                <Label Text=" | "
+                                FontAttributes="Bold"/>
+                                <Label 
+                             Text="{Binding Age}" />
+                                <Label Text=" | "
+                                FontAttributes="Bold"/>
+                                <Label 
+                             Text="{Binding Email}" />
+                                <Label Text=" | "
+                                FontAttributes="Bold"/>
+                                <Label 
+                             Text="{Binding ContactNo}" />
+                                <Label Text=" | "
+                                FontAttributes="Bold"/>
+                                <Label 
+                             Text="{Binding Course}" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <!-- ADD STUDENT SECTION -->
+            <Label Text="ADD STUDENT" 
+            FontAttributes="Bold" 
+            HorizontalOptions="Center" 
+            VerticalOptions="Center" 
+            FontSize="18" />
+
+            <Label Text="Name" />
+            <Entry Placeholder="Enter Name" Text="{Binding NameInput}" />
+
+            <Label Text="Last Name" />
+            <Entry Placeholder="Enter Last Name" Text="{Binding LastNameInput}" />
+
+            <Label Text="Age" />
+            <Entry Placeholder="Enter Age" Text="{Binding AgeInput}" />
+
+            <Label Text="Email" />
+            <Entry Placeholder="Enter Email" Text="{Binding EmailInput}" />
+
+            <Label Text="Contact No" />
+            <Entry Placeholder="Enter Contact No" Text="{Binding ContactNoInput}" />
+
+            <Label Text="Course" />
+            <Entry Placeholder="Enter Course" Text="{Binding CourseInput}" />
+
+            <!-- BUTTONS -->
+            <Button Text="Add Student" Command="{Binding AddStudentCommand}" />
+
+            <Button Text="Delete Student" Command="{Binding DeleteCommand}" />
+
+            <Button Text="Update Student" Command="{Binding UpdateStudentCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
