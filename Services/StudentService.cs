@@ -32,10 +32,18 @@ namespace STFREYA.Services
         // ADD STUDENT
         public async Task<string> AddStudentAsync(Student student)
         {
-            var response =
-                await _httpClient.PostAsJsonAsync($"{BaseUrl}add_student.php", student);
-            var result = await response.Content.ReadAsStringAsync();
-            return result;
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync($"{BaseUrl}add_student.php", student);
+                var result = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"AddStudentAsync response: {result}");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in AddStudentAsync: {ex.Message}");
+                return "Error";
+            }
         }
 
         // UPDATE STUDENT

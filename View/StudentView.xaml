@@ -21,38 +21,26 @@
                     <DataTemplate>
                         <ViewCell>
                             <StackLayout 
-                             Orientation="Horizontal"
-                             Padding="10">
+                     Orientation="Horizontal"
+                     Padding="10">
+                                <!-- Combined Name and Last Name -->
                                 <Label 
-                             Text="{Binding name}" 
-                             FontAttributes="Bold"/>
-                                <Label Text=" "
-                                FontAttributes="Bold"/>
-                                <Label 
-                             Text="{Binding lastname}" 
-                             FontAttributes="Bold"/>
-                                <Label Text=" | "
-                                FontAttributes="Bold"/>
-                                <Label 
-                             Text="{Binding age}" />
-                                <Label Text=" | "
-                                FontAttributes="Bold"/>
-                                <Label 
-                             Text="{Binding email}" />
-                                <Label Text=" | "
-                                FontAttributes="Bold"/>
-                                <Label 
-                             Text="{Binding contactno}" />
-                                <Label Text=" | "
-                                FontAttributes="Bold"/>
-                                <Label 
-                             Text="{Binding course}" />
+                         Text="{Binding FullName}" 
+                         FontAttributes="Bold"/>
+                                <Label Text=" | " FontAttributes="Bold"/>
+                                <Label Text="{Binding age}" />
+                                <Label Text=" | " FontAttributes="Bold"/>
+                                <Label Text="{Binding email}" />
+                                <Label Text=" | " FontAttributes="Bold"/>
+                                <Label Text="{Binding contactno}" />
+                                <Label Text=" | " FontAttributes="Bold"/>
+                                <Label Text="{Binding course}" />
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
+            
             <!-- ADD STUDENT SECTION -->
             <Label Text="ADD STUDENT" 
             FontAttributes="Bold" 

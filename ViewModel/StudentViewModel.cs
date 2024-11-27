@@ -147,6 +147,8 @@ namespace STFREYA.ViewModel
         // ADD STUDENT METHOD
         private async Task AddStudent()
         {
+            Console.WriteLine("AddStudent method triggered.");
+
             if (!string.IsNullOrWhiteSpace(NameInput) &&
                 !string.IsNullOrWhiteSpace(LastNameInput) &&
                 !string.IsNullOrWhiteSpace(AgeInput) &&
@@ -164,15 +166,28 @@ namespace STFREYA.ViewModel
                     course = CourseInput
                 };
 
+                Console.WriteLine($"Adding student: {newStudent.name} {newStudent.lastname}");
+
                 var result = await _studentService.AddStudentAsync(newStudent);
+                Console.WriteLine($"AddStudent result: {result}");
 
                 if (result.Equals("Success", StringComparison.OrdinalIgnoreCase))
                 {
                     await LoadStudents();
                     ClearInput();
+                    Console.WriteLine("Student added successfully and inputs cleared.");
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to add student: {result}");
                 }
             }
+            else
+            {
+                Console.WriteLine("Input validation failed: All fields must be filled.");
+            }
         }
+
 
 
         private async Task DeleteStudent()
