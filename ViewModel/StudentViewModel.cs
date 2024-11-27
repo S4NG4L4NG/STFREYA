@@ -180,10 +180,7 @@ namespace STFREYA.ViewModel
             if (SelectedStudent != null)
             {
                 var result = await _studentService.DeleteStudentAsync(SelectedStudent.student_id);
-                if (result.Equals("Success", StringComparison.OrdinalIgnoreCase))
-                {
-                    await LoadStudents();
-                }
+                await LoadStudents();
             }
         }
 

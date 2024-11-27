@@ -24,29 +24,29 @@
                              Orientation="Horizontal"
                              Padding="10">
                                 <Label 
-                             Text="{Binding Name}" 
+                             Text="{Binding name}" 
                              FontAttributes="Bold"/>
                                 <Label Text=" "
                                 FontAttributes="Bold"/>
                                 <Label 
-                             Text="{Binding LastName}" 
+                             Text="{Binding lastname}" 
                              FontAttributes="Bold"/>
                                 <Label Text=" | "
                                 FontAttributes="Bold"/>
                                 <Label 
-                             Text="{Binding Age}" />
+                             Text="{Binding age}" />
                                 <Label Text=" | "
                                 FontAttributes="Bold"/>
                                 <Label 
-                             Text="{Binding Email}" />
+                             Text="{Binding email}" />
                                 <Label Text=" | "
                                 FontAttributes="Bold"/>
                                 <Label 
-                             Text="{Binding ContactNo}" />
+                             Text="{Binding contactno}" />
                                 <Label Text=" | "
                                 FontAttributes="Bold"/>
                                 <Label 
-                             Text="{Binding Course}" />
+                             Text="{Binding course}" />
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>
