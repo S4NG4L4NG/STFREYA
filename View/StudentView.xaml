@@ -14,6 +14,8 @@
 
             <!-- LOAD STUDENTS BUTTON -->
             <Button Text="Load Students" Command="{Binding LoadStudentCommand}" />
+            <SearchBar Placeholder="Search by name, email, or course"
+               Text="{Binding SearchTerm}" />
 
             <!-- FOR VIEWING THE LIST OF STUDENTS -->
             <ListView ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}">
@@ -64,7 +66,9 @@
             <Entry Placeholder="Enter Contact No" Text="{Binding ContactNoInput}" />
 
             <Label Text="Course" />
-            <Entry Placeholder="Enter Course" Text="{Binding CourseInput}" />
+            <Picker Title="Select a Course"
+            ItemsSource="{Binding CourseOptions}" 
+            SelectedItem="{Binding SelectedCourse}" />
 
             <!-- BUTTONS -->
             <Button Text="Add Student" Command="{Binding AddStudentCommand}" />
