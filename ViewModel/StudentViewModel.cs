@@ -54,6 +54,7 @@ namespace STFREYA.ViewModel
             OnPropertyChanged(nameof(Students));
         }
 
+
         private void UpdateEntryField()
         {
             if (SelectedStudent != null)
@@ -65,6 +66,23 @@ namespace STFREYA.ViewModel
                 ContactNoInput = SelectedStudent.contactno;
                 SelectedCourse = SelectedStudent.course; // Set the dropdown to the selected course
             }
+        }
+
+        private Dictionary<string, int> _courseCounts;
+        public Dictionary<string, int> CourseCounts
+        {
+            get => _courseCounts;
+            set
+            {
+                _courseCounts = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void CalculateCourseCounts()
+        {
+            CourseCounts = Students.GroupBy(s => s.course)
+                                   .ToDictionary(g => g.Key, g => g.Count());
         }
 
         private string _selectedCourse;
@@ -186,13 +204,27 @@ namespace STFREYA.ViewModel
         public ICommand UpdateStudentCommand { get; }
 
         // LOAD STUDENTS FROM THE DATABASE
+        //private async Task LoadStudents()
+        //{
+        //    Console.WriteLine("Loading students...");
+        //    var students = await _studentService.GetStudentsAsync();
+        //    _allStudents = new ObservableCollection<Student>(students); // Cache the full list
+        //    Students = new ObservableCollection<Student>(_allStudents); // Initialize the displayed list
+        //    OnPropertyChanged(nameof(Students));
+        //}
+
         private async Task LoadStudents()
         {
             Console.WriteLine("Loading students...");
             var students = await _studentService.GetStudentsAsync();
-            _allStudents = new ObservableCollection<Student>(students); // Cache the full list
-            Students = new ObservableCollection<Student>(_allStudents); // Initialize the displayed list
-            OnPropertyChanged(nameof(Students));
+            Students.Clear();
+
+            foreach (var student in students)
+            {
+                Students.Add(student);
+            }
+
+            CalculateCourseCounts(); // Update course counts
         }
 
         // ADD STUDENT METHOD

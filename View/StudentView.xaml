@@ -5,50 +5,66 @@
              Title="StudentView">
     <ScrollView>
         <VerticalStackLayout>
+            <!-- TITLE -->
             <Label 
-         Text="Student Data Management"
-         VerticalOptions="Center" 
-         HorizontalOptions="Center" 
-         FontAttributes="Bold" 
-         FontSize="20" />
+            Text="Student Data Management"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" 
+            FontAttributes="Bold" 
+            FontSize="20" />
 
             <!-- LOAD STUDENTS BUTTON -->
             <Button Text="Load Students" Command="{Binding LoadStudentCommand}" />
-            <SearchBar Placeholder="Search by name, email, or course"
-               Text="{Binding SearchTerm}" />
 
-            <!-- FOR VIEWING THE LIST OF STUDENTS -->
+            <!-- SEARCH BAR -->
+            <SearchBar Placeholder="Search by name, email, or course"
+                   Text="{Binding SearchTerm}" />
+
+            <!-- TOTAL STUDENTS PER COURSE -->
+            <Label Text="Total Students per Course" 
+               FontAttributes="Bold"
+               HorizontalOptions="Center" 
+               Margin="10" />
+            <CollectionView ItemsSource="{Binding CourseCounts}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Orientation="Horizontal" Padding="10">
+                            <Label Text="{Binding Key}" FontAttributes="Bold" />
+                            <Label Text=": " />
+                            <Label Text="{Binding Value}" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- LIST OF STUDENTS -->
             <ListView ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <StackLayout 
-                     Orientation="Horizontal"
-                     Padding="10">
+                            <StackLayout Orientation="Horizontal" Padding="10">
                                 <!-- Combined Name and Last Name -->
-                                <Label 
-                         Text="{Binding FullName}" 
-                         FontAttributes="Bold"/>
-                                <Label Text=" | " FontAttributes="Bold"/>
+                                <Label Text="{Binding FullName}" FontAttributes="Bold" />
+                                <Label Text=" | " FontAttributes="Bold" />
                                 <Label Text="{Binding age}" />
-                                <Label Text=" | " FontAttributes="Bold"/>
+                                <Label Text=" | " FontAttributes="Bold" />
                                 <Label Text="{Binding email}" />
-                                <Label Text=" | " FontAttributes="Bold"/>
+                                <Label Text=" | " FontAttributes="Bold" />
                                 <Label Text="{Binding contactno}" />
-                                <Label Text=" | " FontAttributes="Bold"/>
+                                <Label Text=" | " FontAttributes="Bold" />
                                 <Label Text="{Binding course}" />
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            
+
             <!-- ADD STUDENT SECTION -->
             <Label Text="ADD STUDENT" 
-            FontAttributes="Bold" 
-            HorizontalOptions="Center" 
-            VerticalOptions="Center" 
-            FontSize="18" />
+               FontAttributes="Bold" 
+               HorizontalOptions="Center" 
+               VerticalOptions="Center" 
+               FontSize="18" />
 
             <Label Text="Name" />
             <Entry Placeholder="Enter Name" Text="{Binding NameInput}" />
@@ -67,16 +83,14 @@
 
             <Label Text="Course" />
             <Picker Title="Select a Course"
-            ItemsSource="{Binding CourseOptions}" 
-            SelectedItem="{Binding SelectedCourse}" />
+                ItemsSource="{Binding CourseOptions}" 
+                SelectedItem="{Binding SelectedCourse}" />
 
             <!-- BUTTONS -->
             <Button Text="Add Student" Command="{Binding AddStudentCommand}" />
-
             <Button Text="Delete Student" Command="{Binding DeleteCommand}" />
-
             <Button Text="Update Student" Command="{Binding UpdateStudentCommand}" />
-
         </VerticalStackLayout>
     </ScrollView>
+
 </ContentPage>
