@@ -35,18 +35,21 @@ namespace STFREYA.ViewModel
 
         private void FilterStudents()
         {
-            if (_allStudents == null || string.IsNullOrWhiteSpace(SearchTerm))
+            if (_allStudents == null) return; // Avoid null reference errors
+
+            if (string.IsNullOrWhiteSpace(SearchTerm))
             {
-                // Show all students if no search term
+                // Reset to the full list if the search term is empty
                 Students = new ObservableCollection<Student>(_allStudents);
             }
             else
             {
-                // Filter students based on name, email, or course
+                // Filter the list by name, email, or course
                 var filtered = _allStudents.Where(s =>
-                    s.name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ||
-                    s.email.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ||
-                    s.course.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
+                    (!string.IsNullOrEmpty(s.name) && s.name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                    (!string.IsNullOrEmpty(s.email) && s.email.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                    (!string.IsNullOrEmpty(s.course) && s.course.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)))
+                    .ToList();
 
                 Students = new ObservableCollection<Student>(filtered);
             }
@@ -54,6 +57,21 @@ namespace STFREYA.ViewModel
             OnPropertyChanged(nameof(Students));
         }
 
+        private void FilterByCourse(string course)
+        {
+            if (_allStudents == null || string.IsNullOrEmpty(course))
+            {
+                Console.WriteLine("FilterByCourse: No students or course is empty.");
+                return; // Avoid null reference errors
+            }
+
+            // Filter students matching the selected course
+            var filtered = _allStudents.Where(s => s.course.Equals(course, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            Students = new ObservableCollection<Student>(filtered);
+            TotalStudentsDisplay = $"Total Students in {course}: {filtered.Count}";
+            OnPropertyChanged(nameof(Students)); // Notify the UI
+        }
 
         private void UpdateEntryField()
         {
@@ -81,8 +99,29 @@ namespace STFREYA.ViewModel
 
         private void CalculateCourseCounts()
         {
-            CourseCounts = Students.GroupBy(s => s.course)
-                                   .ToDictionary(g => g.Key, g => g.Count());
+            if (_allStudents == null) return;
+
+            CourseCounts = _allStudents
+                .Where(s => !string.IsNullOrEmpty(s.course)) // Ignore null or empty courses
+                .GroupBy(s => s.course)
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            Console.WriteLine("CourseCounts updated:");
+            foreach (var entry in CourseCounts)
+            {
+                Console.WriteLine($"{entry.Key}: {entry.Value}");
+            }
+        }
+
+        private string _totalStudentsDisplay;
+        public string TotalStudentsDisplay
+        {
+            get => _totalStudentsDisplay;
+            set
+            {
+                _totalStudentsDisplay = value;
+                OnPropertyChanged();
+            }
         }
 
         private string _selectedCourse;
@@ -182,7 +221,7 @@ namespace STFREYA.ViewModel
             {
                 _searchTerm = value;
                 OnPropertyChanged();
-                FilterStudents(); // Trigger filtering when the search term changes
+                FilterStudents(); // Filter students whenever the search term changes
             }
         }
 
@@ -195,6 +234,7 @@ namespace STFREYA.ViewModel
             AddStudentCommand = new Command(async () => await AddStudent());
             DeleteCommand = new Command(async () => await DeleteStudent());
             UpdateStudentCommand = new Command(async () => await UpdateStudent());
+            FilterByCourseCommand = new Command<string>(FilterByCourse); // Initialize the command
         }
 
         // PUBLIC COMMANDS
@@ -202,9 +242,10 @@ namespace STFREYA.ViewModel
         public ICommand AddStudentCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand UpdateStudentCommand { get; }
+        public ICommand FilterByCourseCommand { get; }
 
         // LOAD STUDENTS FROM THE DATABASE
-        //private async Task LoadStudents()
+        //private async Task LoadStudents() ver 1
         //{
         //    Console.WriteLine("Loading students...");
         //    var students = await _studentService.GetStudentsAsync();
@@ -213,18 +254,28 @@ namespace STFREYA.ViewModel
         //    OnPropertyChanged(nameof(Students));
         //}
 
+        //private async Task LoadStudents() ver 2
+        //{
+        //    Console.WriteLine("Loading students...");
+        //    var students = await _studentService.GetStudentsAsync();
+        //    Students.Clear();
+
+        //    foreach (var student in students)
+        //    {
+        //        Students.Add(student);
+        //    }
+
+        //    CalculateCourseCounts(); // Update course counts
+        //}
+
+
         private async Task LoadStudents()
         {
-            Console.WriteLine("Loading students...");
             var students = await _studentService.GetStudentsAsync();
-            Students.Clear();
-
-            foreach (var student in students)
-            {
-                Students.Add(student);
-            }
-
-            CalculateCourseCounts(); // Update course counts
+            _allStudents = new ObservableCollection<Student>(students); // Cache the full list
+            Students = new ObservableCollection<Student>(_allStudents); // Initialize displayed list
+            TotalStudentsDisplay = $"Overall Total Students: {_allStudents.Count}";
+            OnPropertyChanged(nameof(Students));
         }
 
         // ADD STUDENT METHOD
@@ -260,7 +311,6 @@ namespace STFREYA.ViewModel
                 Console.WriteLine("Input validation failed: All fields must be filled.");
             }
         }
-
 
 
         private async Task DeleteStudent()

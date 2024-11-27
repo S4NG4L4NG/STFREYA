@@ -13,6 +13,12 @@
             FontAttributes="Bold" 
             FontSize="20" />
 
+            <!-- TOTAL STUDENTS DISPLAY -->
+            <Label Text="{Binding TotalStudentsDisplay}" 
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               Margin="10" />
+
             <!-- LOAD STUDENTS BUTTON -->
             <Button Text="Load Students" Command="{Binding LoadStudentCommand}" />
 
@@ -25,17 +31,14 @@
                FontAttributes="Bold"
                HorizontalOptions="Center" 
                Margin="10" />
-            <CollectionView ItemsSource="{Binding CourseCounts}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout Orientation="Horizontal" Padding="10">
-                            <Label Text="{Binding Key}" FontAttributes="Bold" />
-                            <Label Text=": " />
-                            <Label Text="{Binding Value}" />
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                <Button Text="BSCS" Command="{Binding FilterByCourseCommand}" CommandParameter="BSCS" />
+                <Button Text="BSIT" Command="{Binding FilterByCourseCommand}" CommandParameter="BSIT" />
+                <Button Text="BMMA" Command="{Binding FilterByCourseCommand}" CommandParameter="BMMA" />
+            </HorizontalStackLayout>
+
+            <!-- RESET FILTER BUTTON -->
+            <Button Text="Show All Students" Command="{Binding LoadStudentCommand}" Margin="10" />
 
             <!-- LIST OF STUDENTS -->
             <ListView ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}">
