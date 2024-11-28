@@ -31,8 +31,10 @@
                 Clicked="OnCounterClicked"
                 HorizontalOptions="Fill" />
 
-            <Button Text="View the Students" Clicked="ClickedViewStudents"/>
-            
+            <Button Text="Manage Students" Clicked="ClickedViewStudents"/>
+
+            <Button Text="View Student list" Clicked="ClieckedListSudents"/>
+
         </VerticalStackLayout>
     </ScrollView>
 

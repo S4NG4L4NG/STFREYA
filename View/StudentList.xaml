@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="STFREYA.View.StudentList"
+             Title="StudentList">
+    <VerticalStackLayout>
+        <ScrollView>
+            <VerticalStackLayout>
+
+                <Button 
+    Text="Back" 
+    Command="{Binding BackCommand}" 
+    HorizontalOptions="Start" 
+    Margin="10" />
+
+                <!-- TITLE -->
+                <Label 
+            Text="Student Data Management"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" 
+            FontAttributes="Bold" 
+            FontSize="20" />
+
+                <!-- TOTAL STUDENTS DISPLAY -->
+                <Label Text="{Binding TotalStudentsDisplay}" 
+            FontAttributes="Bold"
+            HorizontalOptions="Center"
+            Margin="10" />
+
+                <!-- LOAD STUDENTS BUTTON -->
+                <Button Text="Load Students" Command="{Binding LoadStudentCommand}" />
+
+                <!-- SEARCH BAR -->
+                <SearchBar Placeholder="Search by name, email, or course"
+            Text="{Binding SearchTerm}" />
+
+                <!-- TOTAL STUDENTS PER COURSE -->
+                <Label Text="Total Students per Course" 
+            FontAttributes="Bold"
+            HorizontalOptions="Center" 
+            Margin="10" />
+
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                    <Button Text="BSCS" Command="{Binding FilterByCourseCommand}" CommandParameter="BSCS" />
+                    <Button Text="BSIT" Command="{Binding FilterByCourseCommand}" CommandParameter="BSIT" />
+                    <Button Text="BMMA" Command="{Binding FilterByCourseCommand}" CommandParameter="BMMA" />
+                </HorizontalStackLayout>
+
+                <!-- LIST OF STUDENTS -->
+                <ListView ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal" Padding="10">
+                                    <!-- Combined Name and Last Name -->
+                                    <Label Text="{Binding FullName}" FontAttributes="Bold" />
+                                    <Label Text=" | " FontAttributes="Bold" />
+                                    <Label Text="{Binding age}" />
+                                    <Label Text=" | " FontAttributes="Bold" />
+                                    <Label Text="{Binding email}" />
+                                    <Label Text=" | " FontAttributes="Bold" />
+                                    <Label Text="{Binding contactno}" />
+                                    <Label Text=" | " FontAttributes="Bold" />
+                                    <Label Text="{Binding course}" />
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </VerticalStackLayout>
+
+        </ScrollView>
+    </VerticalStackLayout>
+</ContentPage>

@@ -5,6 +5,12 @@
              Title="StudentView">
     <ScrollView>
         <VerticalStackLayout>
+
+            <Button 
+    Text="Back" 
+    Command="{Binding BackCommand}" 
+    HorizontalOptions="Start" 
+    Margin="10" />
             <!-- TITLE -->
             <Label 
             Text="Student Data Management"
@@ -93,6 +99,7 @@
             <Button Text="Add Student" Command="{Binding AddStudentCommand}" />
             <Button Text="Delete Student" Command="{Binding DeleteCommand}" />
             <Button Text="Update Student" Command="{Binding UpdateStudentCommand}" />
+
         </VerticalStackLayout>
     </ScrollView>
 

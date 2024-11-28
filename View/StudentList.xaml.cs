@@ -1,12 +1,12 @@
 namespace STFREYA.View;
 using STFREYA.ViewModel;
 
-public partial class StudentView : ContentPage
+public partial class StudentList : ContentPage
 {
-	public StudentView()
+	public StudentList()
 	{
 		InitializeComponent();
         BindingContext = new StudentViewModel();
-    }
 
+    }
 }

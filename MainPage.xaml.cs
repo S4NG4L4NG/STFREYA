@@ -25,6 +25,13 @@
         {
             await Shell.Current.GoToAsync("//StudentView");
         }
+
+        private async void ClieckedListSudents(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//StudentList");
+        }
+
+  
     }
 
 }

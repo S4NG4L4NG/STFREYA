@@ -235,6 +235,7 @@ namespace STFREYA.ViewModel
             DeleteCommand = new Command(async () => await DeleteStudent());
             UpdateStudentCommand = new Command(async () => await UpdateStudent());
             FilterByCourseCommand = new Command<string>(FilterByCourse); // Initialize the command
+            BackCommand = new Command(async () => await Shell.Current.GoToAsync("//MainPage"));
         }
 
         // PUBLIC COMMANDS
@@ -243,6 +244,8 @@ namespace STFREYA.ViewModel
         public ICommand DeleteCommand { get; }
         public ICommand UpdateStudentCommand { get; }
         public ICommand FilterByCourseCommand { get; }
+
+        public ICommand BackCommand { get; }
 
         // LOAD STUDENTS FROM THE DATABASE
         //private async Task LoadStudents() ver 1

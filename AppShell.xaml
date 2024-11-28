@@ -18,4 +18,9 @@
           ContentTemplate="{DataTemplate views:StudentView}"
           Route="StudentView" />
 
+    <ShellContent
+        Title="Student list"
+        ContentTemplate="{DataTemplate views:StudentList}"
+        Route="StudentList" />
+
 </Shell>
