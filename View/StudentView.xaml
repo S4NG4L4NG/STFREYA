@@ -96,6 +96,10 @@
                 SelectedItem="{Binding SelectedCourse}" />
 
             <!-- BUTTONS -->
+            <Button Text="Export to CSV"
+        Command="{Binding ExportToCSVCommand}"
+        HorizontalOptions="Center"
+        Margin="10" />
             <Button Text="Add Student" Command="{Binding AddStudentCommand}" />
             <Button Text="Delete Student" Command="{Binding DeleteCommand}" />
             <Button Text="Update Student" Command="{Binding UpdateStudentCommand}" />

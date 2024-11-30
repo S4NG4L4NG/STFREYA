@@ -113,6 +113,32 @@ namespace STFREYA.ViewModel
             }
         }
 
+        private void ExportToCSV()
+        {
+            try
+            {
+                var fileName = "StudentList.csv";
+                var filePath = Path.Combine(FileSystem.AppDataDirectory, fileName);
+
+                var csvBuilder = new StringBuilder();
+                csvBuilder.AppendLine("Name,Last Name,Age,Email,Contact No,Course");
+
+                foreach (var student in Students)
+                {
+                    csvBuilder.AppendLine($"{student.name},{student.lastname},{student.age},{student.email},{student.contactno},{student.course}");
+                }
+
+                File.WriteAllText(filePath, csvBuilder.ToString());
+
+                // Notify user of successful export
+                App.Current.MainPage.DisplayAlert("Export Successful", $"CSV saved to: {filePath}", "OK");
+            }
+            catch (Exception ex)
+            {
+                App.Current.MainPage.DisplayAlert("Export Failed", $"Error: {ex.Message}", "OK");
+            }
+        }
+
         private string _totalStudentsDisplay;
         public string TotalStudentsDisplay
         {
@@ -236,6 +262,7 @@ namespace STFREYA.ViewModel
             UpdateStudentCommand = new Command(async () => await UpdateStudent());
             FilterByCourseCommand = new Command<string>(FilterByCourse); // Initialize the command
             BackCommand = new Command(async () => await Shell.Current.GoToAsync("//MainPage"));
+            ExportToCSVCommand = new Command(ExportToCSV);
         }
 
         // PUBLIC COMMANDS
@@ -244,33 +271,11 @@ namespace STFREYA.ViewModel
         public ICommand DeleteCommand { get; }
         public ICommand UpdateStudentCommand { get; }
         public ICommand FilterByCourseCommand { get; }
-
         public ICommand BackCommand { get; }
+        public ICommand ExportToCSVCommand { get; }
 
-        // LOAD STUDENTS FROM THE DATABASE
-        //private async Task LoadStudents() ver 1
-        //{
-        //    Console.WriteLine("Loading students...");
-        //    var students = await _studentService.GetStudentsAsync();
-        //    _allStudents = new ObservableCollection<Student>(students); // Cache the full list
-        //    Students = new ObservableCollection<Student>(_allStudents); // Initialize the displayed list
-        //    OnPropertyChanged(nameof(Students));
-        //}
 
-        //private async Task LoadStudents() ver 2
-        //{
-        //    Console.WriteLine("Loading students...");
-        //    var students = await _studentService.GetStudentsAsync();
-        //    Students.Clear();
-
-        //    foreach (var student in students)
-        //    {
-        //        Students.Add(student);
-        //    }
-
-        //    CalculateCourseCounts(); // Update course counts
-        //}
-
+       
 
         private async Task LoadStudents()
         {

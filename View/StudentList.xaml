@@ -7,38 +7,44 @@
         <ScrollView>
             <VerticalStackLayout>
 
+                <!-- BACK BUTTON -->
                 <Button 
-    Text="Back" 
-    Command="{Binding BackCommand}" 
-    HorizontalOptions="Start" 
-    Margin="10" />
+                    Text="Back" 
+                    Command="{Binding BackCommand}" 
+                    HorizontalOptions="Start" 
+                    Margin="10" />
 
                 <!-- TITLE -->
                 <Label 
-            Text="Student Data Management"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" 
-            FontAttributes="Bold" 
-            FontSize="20" />
+                    Text="Student Data Management"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center" 
+                    FontAttributes="Bold" 
+                    FontSize="20" />
 
                 <!-- TOTAL STUDENTS DISPLAY -->
                 <Label Text="{Binding TotalStudentsDisplay}" 
-            FontAttributes="Bold"
-            HorizontalOptions="Center"
-            Margin="10" />
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    Margin="10" />
 
                 <!-- LOAD STUDENTS BUTTON -->
                 <Button Text="Load Students" Command="{Binding LoadStudentCommand}" />
 
+                <!-- EXPORT TO CSV BUTTON -->
+                <Button Text="Export to CSV" Command="{Binding ExportToCSVCommand}" 
+                        HorizontalOptions="Center" 
+                        Margin="10" />
+
                 <!-- SEARCH BAR -->
                 <SearchBar Placeholder="Search by name, email, or course"
-            Text="{Binding SearchTerm}" />
+                           Text="{Binding SearchTerm}" />
 
                 <!-- TOTAL STUDENTS PER COURSE -->
                 <Label Text="Total Students per Course" 
-            FontAttributes="Bold"
-            HorizontalOptions="Center" 
-            Margin="10" />
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" 
+                       Margin="10" />
 
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
                     <Button Text="BSCS" Command="{Binding FilterByCourseCommand}" CommandParameter="BSCS" />

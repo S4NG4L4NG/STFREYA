@@ -3,9 +3,9 @@ using STFREYA.ViewModel;
 
 public partial class StudentList : ContentPage
 {
-	public StudentList()
-	{
-		InitializeComponent();
+    public StudentList()
+    {
+        InitializeComponent();
         BindingContext = new StudentViewModel();
 
     }
