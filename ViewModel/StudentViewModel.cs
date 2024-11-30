@@ -131,18 +131,18 @@ namespace STFREYA.ViewModel
 
                     var mailMessage = new MailMessage
                     {
-                        From = new MailAddress("sia.sangalang.leandro@gmail.com"), // Replace with your email
+                        From = new MailAddress("sangalang.leandro@auf.edu.ph"), // Replace with your Gmail email
                         Subject = "Important Update",
                         Body = $"Dear {student.name},\n\nThis is a notification for your course: {student.course}.",
                     };
 
                     mailMessage.To.Add(student.email);
 
-                    using (var smtpClient = new SmtpClient("sandbox.smtp.mailtrap.io"))
+                    using (var smtpClient = new SmtpClient("smtp.gmail.com"))
                     {
-                        smtpClient.Port = 2525; // Adjust the port for your SMTP provider
-                        smtpClient.Credentials = new NetworkCredential("4ac3816e6d6593", "0c315cd661cf9e");
-                        smtpClient.EnableSsl = true;
+                        smtpClient.Port = 587; // Gmail uses port 587 for TLS
+                        smtpClient.Credentials = new NetworkCredential("sangalang.leandro@auf.edu.ph", "euol zhif lfns seyf");
+                        smtpClient.EnableSsl = true; // Enable SSL
 
                         smtpClient.Send(mailMessage);
                     }
