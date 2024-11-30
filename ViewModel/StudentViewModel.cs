@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using STFREYA.Model;
 using STFREYA.Services;
+using System.Net.Mail;
 
 namespace STFREYA.ViewModel
 {
@@ -97,6 +100,70 @@ namespace STFREYA.ViewModel
             }
         }
 
+        private async void SendEmails(string course)
+        {
+            try
+            {
+                Console.WriteLine("SendEmails triggered.");
+
+                // Filter selected students or by course
+                var selectedStudents = Students
+                    .Where(s => (course == null || s.course == course || s.IsSelected))
+                    .ToList();
+
+                if (!selectedStudents.Any())
+                {
+                    Console.WriteLine("No students found for email.");
+                    await App.Current.MainPage.DisplayAlert("No Students Selected", "Please select students or filter by course to send emails.", "OK");
+                    return;
+                }
+
+                foreach (var student in selectedStudents)
+                {
+                    if (!IsValidEmail(student.email))
+                    {
+                        Console.WriteLine($"Invalid email: {student.email}");
+                        await App.Current.MainPage.DisplayAlert("Invalid Email", $"Invalid email address: {student.email}", "OK");
+                        continue;
+                    }
+
+                    Console.WriteLine($"Sending email to: {student.email}");
+
+                    var mailMessage = new MailMessage
+                    {
+                        From = new MailAddress("sia.sangalang.leandro@gmail.com"), // Replace with your email
+                        Subject = "Important Update",
+                        Body = $"Dear {student.name},\n\nThis is a notification for your course: {student.course}.",
+                    };
+
+                    mailMessage.To.Add(student.email);
+
+                    using (var smtpClient = new SmtpClient("sandbox.smtp.mailtrap.io"))
+                    {
+                        smtpClient.Port = 2525; // Adjust the port for your SMTP provider
+                        smtpClient.Credentials = new NetworkCredential("4ac3816e6d6593", "0c315cd661cf9e");
+                        smtpClient.EnableSsl = true;
+
+                        smtpClient.Send(mailMessage);
+                    }
+
+                    Console.WriteLine($"Email sent successfully to: {student.email}");
+                }
+
+                await App.Current.MainPage.DisplayAlert("Success", "Emails sent successfully!", "OK");
+            }
+            catch (SmtpException smtpEx)
+            {
+                Console.WriteLine($"SMTP Error: {smtpEx}");
+                await App.Current.MainPage.DisplayAlert("SMTP Error", $"SMTP failed: {smtpEx.Message}", "OK");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex}");
+                await App.Current.MainPage.DisplayAlert("Error", $"Failed to send emails: {ex.Message}", "OK");
+            }
+        }
+
         private void CalculateCourseCounts()
         {
             if (_allStudents == null) return;
@@ -136,6 +203,23 @@ namespace STFREYA.ViewModel
             catch (Exception ex)
             {
                 App.Current.MainPage.DisplayAlert("Export Failed", $"Error: {ex.Message}", "OK");
+            }
+        }
+
+        // Email Validation Helper
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(email))
+                    return false;
+
+                var mailAddress = new MailAddress(email);
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
 
@@ -263,6 +347,7 @@ namespace STFREYA.ViewModel
             FilterByCourseCommand = new Command<string>(FilterByCourse); // Initialize the command
             BackCommand = new Command(async () => await Shell.Current.GoToAsync("//MainPage"));
             ExportToCSVCommand = new Command(ExportToCSV);
+            SendEmailCommand = new Command<string>(SendEmails);
         }
 
         // PUBLIC COMMANDS
@@ -273,9 +358,9 @@ namespace STFREYA.ViewModel
         public ICommand FilterByCourseCommand { get; }
         public ICommand BackCommand { get; }
         public ICommand ExportToCSVCommand { get; }
+        public ICommand SendEmailCommand { get; }
 
 
-       
 
         private async Task LoadStudents()
         {

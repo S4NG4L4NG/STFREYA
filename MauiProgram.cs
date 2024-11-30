@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using STFREYA.Services;
 
 namespace STFREYA
 {
@@ -17,9 +18,11 @@ namespace STFREYA
 
 #if DEBUG
             builder.Logging.AddDebug();
+
 #endif
 
             return builder.Build();
         }
     }
 }
+

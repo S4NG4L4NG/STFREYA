@@ -3,78 +3,114 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="STFREYA.View.StudentList"
              Title="StudentList">
-    <VerticalStackLayout>
-        <ScrollView>
-            <VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout>
 
-                <!-- BACK BUTTON -->
-                <Button 
-                    Text="Back" 
-                    Command="{Binding BackCommand}" 
-                    HorizontalOptions="Start" 
-                    Margin="10" />
+            <!-- BACK BUTTON -->
+            <Button 
+                Text="Back" 
+                Command="{Binding BackCommand}" 
+                HorizontalOptions="Start" 
+                Margin="10" />
 
-                <!-- TITLE -->
-                <Label 
-                    Text="Student Data Management"
-                    VerticalOptions="Center" 
-                    HorizontalOptions="Center" 
-                    FontAttributes="Bold" 
-                    FontSize="20" />
+            <!-- TITLE -->
+            <Label 
+                Text="Student Data Management"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" 
+                FontAttributes="Bold" 
+                FontSize="20" />
 
-                <!-- TOTAL STUDENTS DISPLAY -->
-                <Label Text="{Binding TotalStudentsDisplay}" 
-                    FontAttributes="Bold"
+            <!-- TOTAL STUDENTS DISPLAY -->
+            <Label Text="{Binding TotalStudentsDisplay}" 
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="10" />
+
+            <!-- LOAD STUDENTS BUTTON -->
+            <Button Text="Load Students" Command="{Binding LoadStudentCommand}" />
+
+            <!-- EXPORT TO CSV BUTTON -->
+            <Button Text="Export to CSV"
+                    Command="{Binding ExportToCSVCommand}"
                     HorizontalOptions="Center"
                     Margin="10" />
 
-                <!-- LOAD STUDENTS BUTTON -->
-                <Button Text="Load Students" Command="{Binding LoadStudentCommand}" />
+            <!-- SEARCH BAR -->
+            <SearchBar Placeholder="Search by name, email, or course"
+                       Text="{Binding SearchTerm}" />
 
-                <!-- EXPORT TO CSV BUTTON -->
-                <Button Text="Export to CSV" Command="{Binding ExportToCSVCommand}" 
-                        HorizontalOptions="Center" 
-                        Margin="10" />
+            <!-- TOTAL STUDENTS PER COURSE -->
+            <Label Text="Total Students per Course" 
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" 
+                   Margin="10" />
 
-                <!-- SEARCH BAR -->
-                <SearchBar Placeholder="Search by name, email, or course"
-                           Text="{Binding SearchTerm}" />
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                <Button Text="Email BSCS" Command="{Binding SendEmailCommand}" CommandParameter="BSCS" />
+                <Button Text="Email BSIT" Command="{Binding SendEmailCommand}" CommandParameter="BSIT" />
+                <Button Text="Email BMMA" Command="{Binding SendEmailCommand}" CommandParameter="BMMA" />
+            </HorizontalStackLayout>
 
-                <!-- TOTAL STUDENTS PER COURSE -->
-                <Label Text="Total Students per Course" 
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center" 
-                       Margin="10" />
+            <!-- RESET FILTER BUTTON -->
+            <Button Text="Show All Students" Command="{Binding LoadStudentCommand}" Margin="10" />
 
-                <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
-                    <Button Text="BSCS" Command="{Binding FilterByCourseCommand}" CommandParameter="BSCS" />
-                    <Button Text="BSIT" Command="{Binding FilterByCourseCommand}" CommandParameter="BSIT" />
-                    <Button Text="BMMA" Command="{Binding FilterByCourseCommand}" CommandParameter="BMMA" />
-                </HorizontalStackLayout>
+            <!-- LIST OF STUDENTS -->
+            <ListView ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal" Padding="10">
+                                <CheckBox IsChecked="{Binding IsSelected}" />
+                                <Label Text="{Binding FullName}" FontAttributes="Bold" />
+                                <Label Text=" | " FontAttributes="Bold" />
+                                <Label Text="{Binding age}" />
+                                <Label Text=" | " FontAttributes="Bold" />
+                                <Label Text="{Binding email}" />
+                                <Label Text=" | " FontAttributes="Bold" />
+                                <Label Text="{Binding contactno}" />
+                                <Label Text=" | " FontAttributes="Bold" />
+                                <Label Text="{Binding course}" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
-                <!-- LIST OF STUDENTS -->
-                <ListView ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <StackLayout Orientation="Horizontal" Padding="10">
-                                    <!-- Combined Name and Last Name -->
-                                    <Label Text="{Binding FullName}" FontAttributes="Bold" />
-                                    <Label Text=" | " FontAttributes="Bold" />
-                                    <Label Text="{Binding age}" />
-                                    <Label Text=" | " FontAttributes="Bold" />
-                                    <Label Text="{Binding email}" />
-                                    <Label Text=" | " FontAttributes="Bold" />
-                                    <Label Text="{Binding contactno}" />
-                                    <Label Text=" | " FontAttributes="Bold" />
-                                    <Label Text="{Binding course}" />
-                                </StackLayout>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </VerticalStackLayout>
+            <!-- ADD STUDENT SECTION -->
+            <Label Text="ADD STUDENT" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" 
+                   VerticalOptions="Center" 
+                   FontSize="18" />
 
-        </ScrollView>
-    </VerticalStackLayout>
+            <Label Text="Name" />
+            <Entry Placeholder="Enter Name" Text="{Binding NameInput}" />
+
+            <Label Text="Last Name" />
+            <Entry Placeholder="Enter Last Name" Text="{Binding LastNameInput}" />
+
+            <Label Text="Age" />
+            <Entry Placeholder="Enter Age" Text="{Binding AgeInput}" />
+
+            <Label Text="Email" />
+            <Entry Placeholder="Enter Email" Text="{Binding EmailInput}" />
+
+            <Label Text="Contact No" />
+            <Entry Placeholder="Enter Contact No" Text="{Binding ContactNoInput}" />
+
+            <Label Text="Course" />
+            <Picker Title="Select a Course"
+                    ItemsSource="{Binding CourseOptions}" 
+                    SelectedItem="{Binding SelectedCourse}" />
+
+            <!-- BUTTONS -->
+            <Button Text="Send Email to Selected Students" Command="{Binding SendEmailCommand}" Margin="10" />
+            <Button Text="Add Student" Command="{Binding AddStudentCommand}" />
+            <Button Text="Delete Student" Command="{Binding DeleteCommand}" />
+            <Button Text="Update Student" Command="{Binding UpdateStudentCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
+
