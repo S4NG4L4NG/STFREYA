@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="STFREYA.View.StudentProfileView"
+             Title="Student Profile">
+    <VerticalStackLayout Padding="20">
+        <Label Text="Student Profile" 
+               FontSize="24" 
+               FontAttributes="Bold" 
+               HorizontalOptions="Center" 
+               Margin="10" />
+
+  
+        <Button 
+         Text="Back" 
+         Clicked="ClieckedToListSudents" 
+         HorizontalOptions="Start" 
+         Margin="10" />
+
+
+        <Label Text="First Name" FontAttributes="Bold" />
+        <Label Text="{Binding name}" />
+
+        <Label Text="Last Name" FontAttributes="Bold" Margin="0,10,0,0" />
+        <Label Text="{Binding lastname}" />
+
+        <Label Text="Age" FontAttributes="Bold" Margin="0,10,0,0" />
+        <Label Text="{Binding age}" />
+
+        <Label Text="Email" FontAttributes="Bold" Margin="0,10,0,0" />
+        <Label Text="{Binding email}" />
+
+        <Label Text="Contact Number" FontAttributes="Bold" Margin="0,10,0,0" />
+        <Label Text="{Binding contactno}" />
+
+        <Label Text="Course" FontAttributes="Bold" Margin="0,10,0,0" />
+        <Label Text="{Binding course}" />
+    </VerticalStackLayout>
+</ContentPage>

@@ -10,6 +10,7 @@ using System.Windows.Input;
 using STFREYA.Model;
 using STFREYA.Services;
 using System.Net.Mail;
+using STFREYA.View;
 
 namespace STFREYA.ViewModel
 {
@@ -89,6 +90,22 @@ namespace STFREYA.ViewModel
             }
         }
 
+        //generating report
+        public int TotalStudents => Students?.Count ?? 0;
+
+        public Dictionary<string, int> StudentsPerCourse =>
+            Students?.GroupBy(s => s.course)
+                     .ToDictionary(g => g.Key, g => g.Count()) ?? new Dictionary<string, int>();
+
+        public double AverageAge =>
+            Students?.Any() == true
+                ? Students.Average(s => int.TryParse(s.age, out var age) ? age : 0)
+                : 0;
+
+        public Dictionary<string, double> CoursePercentageDistribution =>
+            StudentsPerCourse?.ToDictionary(kvp => kvp.Key, kvp => (kvp.Value / (double)TotalStudents) * 100) ?? new Dictionary<string, double>();
+        
+
         private Dictionary<string, int> _courseCounts;
         public Dictionary<string, int> CourseCounts
         {
@@ -163,6 +180,7 @@ namespace STFREYA.ViewModel
                 await App.Current.MainPage.DisplayAlert("Error", $"Failed to send emails: {ex.Message}", "OK");
             }
         }
+
 
         private void CalculateCourseCounts()
         {
@@ -348,6 +366,8 @@ namespace STFREYA.ViewModel
             BackCommand = new Command(async () => await Shell.Current.GoToAsync("//MainPage"));
             ExportToCSVCommand = new Command(ExportToCSV);
             SendEmailCommand = new Command<string>(SendEmails);
+            NavigateToProfileCommand = new Command<Student>(async (student) => await NavigateToProfile(student));
+            GenerateReportCommand = new Command(GenerateReport);
         }
 
         // PUBLIC COMMANDS
@@ -359,6 +379,8 @@ namespace STFREYA.ViewModel
         public ICommand BackCommand { get; }
         public ICommand ExportToCSVCommand { get; }
         public ICommand SendEmailCommand { get; }
+        public ICommand NavigateToProfileCommand { get; }
+        public ICommand GenerateReportCommand { get; }
 
 
 
@@ -445,5 +467,38 @@ namespace STFREYA.ViewModel
                 Console.WriteLine("No student selected for update.");
             }
         }
+
+        private async Task NavigateToProfile(Student student)
+        {
+            if (student == null) return;
+
+            await Shell.Current.GoToAsync($"///{nameof(StudentProfileView)}", new Dictionary<string, object>
+    {
+        { "SelectedStudent", student }
+    });
+        }
+
+        //generate report method
+        private void GenerateReport()
+        {
+            var report = new StringBuilder();
+            report.AppendLine("Student Statistics Report");
+            report.AppendLine($"Total Students: {TotalStudents}");
+            report.AppendLine($"Average Age: {AverageAge:F2}");
+            report.AppendLine("\nStudents Per Course:");
+            foreach (var course in StudentsPerCourse)
+            {
+                report.AppendLine($"{course.Key}: {course.Value}");
+            }
+            report.AppendLine("\nPercentage Distribution:");
+            foreach (var course in CoursePercentageDistribution)
+            {
+                report.AppendLine($"{course.Key}: {course.Value:F2}%");
+            }
+
+            // Display the report in an alert
+            App.Current.MainPage.DisplayAlert("Student Report", report.ToString(), "OK");
+        }
+
     }
 }
