@@ -37,6 +37,11 @@ namespace STFREYA.ViewModel
             "BSCS", "BSIT", "BMMA"
         };
 
+        public ObservableCollection<string> GenderOptions { get; set; } = new ObservableCollection<string>
+    {
+        "Male", "Female"
+    };
+
         private void FilterStudents()
         {
             if (_allStudents == null) return; // Avoid null reference errors
@@ -87,6 +92,7 @@ namespace STFREYA.ViewModel
                 EmailInput = SelectedStudent.email;
                 ContactNoInput = SelectedStudent.contactno;
                 SelectedCourse = SelectedStudent.course; // Set the dropdown to the selected course
+                SelectedGender = SelectedStudent.gender;
             }
         }
 
@@ -104,7 +110,13 @@ namespace STFREYA.ViewModel
 
         public Dictionary<string, double> CoursePercentageDistribution =>
             StudentsPerCourse?.ToDictionary(kvp => kvp.Key, kvp => (kvp.Value / (double)TotalStudents) * 100) ?? new Dictionary<string, double>();
-        
+
+        public Dictionary<string, int> GenderCounts =>
+    Students?.GroupBy(s => s.gender)
+             .ToDictionary(g => g.Key, g => g.Count()) ?? new Dictionary<string, int>();
+
+        public Dictionary<string, double> GenderPercentageDistribution =>
+            GenderCounts?.ToDictionary(kvp => kvp.Key, kvp => (kvp.Value / (double)TotalStudents) * 100) ?? new Dictionary<string, double>();
 
         private Dictionary<string, int> _courseCounts;
         public Dictionary<string, int> CourseCounts
@@ -292,6 +304,17 @@ namespace STFREYA.ViewModel
             }
         }
 
+        private string _selectedGender;
+        public string SelectedGender
+        {
+            get => _selectedGender;
+            set
+            {
+                _selectedGender = value;
+                OnPropertyChanged();
+            }
+        }
+
         private Student _selectedStudent;
         public Student SelectedStudent
         {
@@ -393,7 +416,6 @@ namespace STFREYA.ViewModel
             }
         }
 
-
         public StudentViewModel()
         {
             _studentService = new StudentService();
@@ -424,9 +446,6 @@ namespace STFREYA.ViewModel
         public ICommand GenerateReportCommand { get; }
         public ICommand NotifyNewStudentCommand { get; }
 
-
-
-
         private async Task LoadStudents()
         {
             var students = await _studentService.GetStudentsAsync();
@@ -441,11 +460,12 @@ namespace STFREYA.ViewModel
         {
             // Validate inputs
             if (!string.IsNullOrWhiteSpace(NameInput) &&
-                !string.IsNullOrWhiteSpace(LastNameInput) &&
-                !string.IsNullOrWhiteSpace(AgeInput) &&
-                !string.IsNullOrWhiteSpace(EmailInput) &&
-                !string.IsNullOrWhiteSpace(ContactNoInput) &&
-                !string.IsNullOrWhiteSpace(SelectedCourse))
+            !string.IsNullOrWhiteSpace(LastNameInput) &&
+            !string.IsNullOrWhiteSpace(AgeInput) &&
+            !string.IsNullOrWhiteSpace(EmailInput) &&
+            !string.IsNullOrWhiteSpace(ContactNoInput) &&
+            !string.IsNullOrWhiteSpace(SelectedCourse) &&
+            !string.IsNullOrWhiteSpace(SelectedGender))
             {
                 var newStudent = new Student
                 {
@@ -454,7 +474,8 @@ namespace STFREYA.ViewModel
                     age = AgeInput,
                     email = EmailInput,
                     contactno = ContactNoInput,
-                    course = SelectedCourse
+                    course = SelectedCourse,
+                    gender = SelectedGender
                 };
 
                 var result = await _studentService.AddStudentAsync(newStudent);
@@ -510,8 +531,6 @@ namespace STFREYA.ViewModel
             });
         }
 
-
-
         private async Task DeleteStudent()
         {
             if (SelectedStudent != null)
@@ -532,6 +551,7 @@ namespace STFREYA.ViewModel
                 SelectedStudent.email = EmailInput;
                 SelectedStudent.contactno = ContactNoInput;
                 SelectedStudent.course = SelectedCourse; // Use SelectedCourse
+                SelectedStudent.gender = SelectedGender;
 
                 var result = await _studentService.UpdateStudentAsync(SelectedStudent);
 
@@ -552,8 +572,6 @@ namespace STFREYA.ViewModel
             }
         }
 
-
-
         private async Task NavigateToProfile(Student student)
         {
             if (student == null) return;
@@ -565,9 +583,6 @@ namespace STFREYA.ViewModel
         }
 
 
-
-
-       
         //generate report method
         private void GenerateReport()
         {
@@ -585,6 +600,17 @@ namespace STFREYA.ViewModel
             {
                 report.AppendLine($"{course.Key}: {course.Value:F2}%");
             }
+            report.AppendLine("\nGender Distribution:");
+            foreach (var gender in GenderCounts)
+            {
+                report.AppendLine($"{gender.Key}: {gender.Value} student(s)");
+            }
+
+            report.AppendLine("\nGender Percentage Distribution:");
+            foreach (var genderPercentage in GenderPercentageDistribution)
+            {
+                report.AppendLine($"{genderPercentage.Key}: {genderPercentage.Value:F2}%");
+            }
 
             // Display the report
             App.Current.MainPage.DisplayAlert("Student Report", report.ToString(), "OK");
@@ -596,8 +622,6 @@ namespace STFREYA.ViewModel
             // Notify the user
             App.Current.MainPage.DisplayAlert("Export Successful", $"Report saved to {filePath}", "OK");
         }
-
-  
 
     }
 }

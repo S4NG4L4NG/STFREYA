@@ -73,15 +73,22 @@ namespace STFREYA.ViewModel
             }
         }
 
-      
+        private string _gender;
+        public string gender
+        {
+            get => _gender;
+            set
+            {
+                _course = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         public StudentProfileViewModel()
         {
 
         }
-
-  
-
 
         public void LoadStudentData(Student student)
         {
@@ -93,6 +100,7 @@ namespace STFREYA.ViewModel
             email = student.email;
             contactno = student.contactno;
             course = student.course;
+            course = student.gender;
         }
 
        

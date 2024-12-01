@@ -22,6 +22,8 @@ namespace STFREYA.Model
         public string contactno { get; set; }
 
         public string course { get; set; }
+        
+        public string gender { get; set; }
 
 
         public string FullName => $"{name} {lastname}";

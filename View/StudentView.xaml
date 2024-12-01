@@ -80,6 +80,8 @@
                                 <Label Text="{Binding contactno}" />
                                 <Label Text=" | " FontAttributes="Bold" />
                                 <Label Text="{Binding course}" />
+                                <Label Text=" | " FontAttributes="Bold" />
+                                <Label Text="{Binding gender}" />
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>
@@ -112,6 +114,11 @@
             <Picker Title="Select a Course"
                     ItemsSource="{Binding CourseOptions}" 
                     SelectedItem="{Binding SelectedCourse}" />
+
+            <Label Text="Gender" />
+            <Picker Title="Select Gender"
+                ItemsSource="{Binding GenderOptions}" 
+                SelectedItem="{Binding SelectedGender}" />
 
             <!-- BUTTONS -->
             <Button Text="Add Student" Command="{Binding AddStudentCommand}" />

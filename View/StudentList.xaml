@@ -87,6 +87,8 @@
                                 <Label Text="{Binding contactno}" />
                                 <Label Text=" | " FontAttributes="Bold" />
                                 <Label Text="{Binding course}" />
+                                <Label Text=" | " FontAttributes="Bold" />
+                                <Label Text="{Binding gender}" />
                             </StackLayout>
                             <ViewCell.ContextActions>
                                 <MenuItem Command="{Binding BindingContext.NavigateToProfileCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
