@@ -6,37 +6,55 @@
     <ScrollView>
         <VerticalStackLayout>
 
+            <!-- BACK BUTTON -->
             <Button 
-    Text="Back" 
-    Command="{Binding BackCommand}" 
-    HorizontalOptions="Start" 
-    Margin="10" />
+                Text="Back" 
+                Command="{Binding BackCommand}" 
+                HorizontalOptions="Start" 
+                Margin="10" />
+
             <!-- TITLE -->
             <Label 
-            Text="Student Data Management"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" 
-            FontAttributes="Bold" 
-            FontSize="20" />
+                Text="Student Data Management"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" 
+                FontAttributes="Bold" 
+                FontSize="20" />
 
             <!-- TOTAL STUDENTS DISPLAY -->
             <Label Text="{Binding TotalStudentsDisplay}" 
-               FontAttributes="Bold"
-               HorizontalOptions="Center"
-               Margin="10" />
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="10" />
 
             <!-- LOAD STUDENTS BUTTON -->
             <Button Text="Load Students" Command="{Binding LoadStudentCommand}" />
 
+            <!-- NOTIFICATION MESSAGE -->
+            <BoxView AbsoluteLayout.LayoutBounds="0.5, 0.1, 0.8, 0.1"
+             AbsoluteLayout.LayoutFlags="All"
+             IsVisible="{Binding IsNotificationVisible}"
+             BackgroundColor="Green"
+             Opacity="0.8" />
+
+            <Label AbsoluteLayout.LayoutBounds="0.5, 0.1, 0.8, 0.1"
+           AbsoluteLayout.LayoutFlags="All"
+           Text="{Binding NotificationMessage}"
+           IsVisible="{Binding IsNotificationVisible}"
+           TextColor="White"
+           BackgroundColor="Transparent"
+           HorizontalOptions="Center"
+           FontSize="14" />
+
             <!-- SEARCH BAR -->
             <SearchBar Placeholder="Search by name, email, or course"
-                   Text="{Binding SearchTerm}" />
+                       Text="{Binding SearchTerm}" />
 
             <!-- TOTAL STUDENTS PER COURSE -->
             <Label Text="Total Students per Course" 
-               FontAttributes="Bold"
-               HorizontalOptions="Center" 
-               Margin="10" />
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" 
+                   Margin="10" />
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
                 <Button Text="BSCS" Command="{Binding FilterByCourseCommand}" CommandParameter="BSCS" />
                 <Button Text="BSIT" Command="{Binding FilterByCourseCommand}" CommandParameter="BSIT" />
@@ -70,10 +88,10 @@
 
             <!-- ADD STUDENT SECTION -->
             <Label Text="ADD STUDENT" 
-               FontAttributes="Bold" 
-               HorizontalOptions="Center" 
-               VerticalOptions="Center" 
-               FontSize="18" />
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" 
+                   VerticalOptions="Center" 
+                   FontSize="18" />
 
             <Label Text="Name" />
             <Entry Placeholder="Enter Name" Text="{Binding NameInput}" />
@@ -92,8 +110,8 @@
 
             <Label Text="Course" />
             <Picker Title="Select a Course"
-                ItemsSource="{Binding CourseOptions}" 
-                SelectedItem="{Binding SelectedCourse}" />
+                    ItemsSource="{Binding CourseOptions}" 
+                    SelectedItem="{Binding SelectedCourse}" />
 
             <!-- BUTTONS -->
             <Button Text="Add Student" Command="{Binding AddStudentCommand}" />

@@ -241,7 +241,36 @@ namespace STFREYA.ViewModel
             }
         }
 
+
+        // notification
+        private string _notificationMessage;
+        private bool _isNotificationVisible;
+
         private string _totalStudentsDisplay;
+
+        public string NotificationMessage
+        {
+            get => _notificationMessage;
+            set
+            {
+                _notificationMessage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsNotificationVisible
+        {
+            get => _isNotificationVisible;
+            set
+            {
+        _isNotificationVisible = value;
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            OnPropertyChanged(nameof(IsNotificationVisible));
+        });
+    }
+        }
+
         public string TotalStudentsDisplay
         {
             get => _totalStudentsDisplay;
@@ -272,6 +301,17 @@ namespace STFREYA.ViewModel
                 _selectedStudent = value;
                 OnPropertyChanged();
                 UpdateEntryField();
+            }
+        }
+
+        private string _qrCodeData;
+        public string QRCodeData
+        {
+            get => _qrCodeData;
+            set
+            {
+                _qrCodeData = value;
+                OnPropertyChanged();
             }
         }
 
@@ -368,6 +408,7 @@ namespace STFREYA.ViewModel
             SendEmailCommand = new Command<string>(SendEmails);
             NavigateToProfileCommand = new Command<Student>(async (student) => await NavigateToProfile(student));
             GenerateReportCommand = new Command(GenerateReport);
+            NotifyNewStudentCommand = new Command(NotifyNewStudent);
         }
 
         // PUBLIC COMMANDS
@@ -381,6 +422,8 @@ namespace STFREYA.ViewModel
         public ICommand SendEmailCommand { get; }
         public ICommand NavigateToProfileCommand { get; }
         public ICommand GenerateReportCommand { get; }
+        public ICommand NotifyNewStudentCommand { get; }
+
 
 
 
@@ -394,23 +437,24 @@ namespace STFREYA.ViewModel
         }
 
         // ADD STUDENT METHOD
-        private async Task AddStudent()
+        public async Task AddStudent()
         {
+            // Validate inputs
             if (!string.IsNullOrWhiteSpace(NameInput) &&
                 !string.IsNullOrWhiteSpace(LastNameInput) &&
                 !string.IsNullOrWhiteSpace(AgeInput) &&
                 !string.IsNullOrWhiteSpace(EmailInput) &&
                 !string.IsNullOrWhiteSpace(ContactNoInput) &&
-                !string.IsNullOrWhiteSpace(SelectedCourse)) // Use SelectedCourse
+                !string.IsNullOrWhiteSpace(SelectedCourse))
             {
                 var newStudent = new Student
                 {
                     name = NameInput,
                     lastname = LastNameInput,
-                    age = AgeInput, // Store Age as string
+                    age = AgeInput,
                     email = EmailInput,
                     contactno = ContactNoInput,
-                    course = SelectedCourse // Use SelectedCourse
+                    course = SelectedCourse
                 };
 
                 var result = await _studentService.AddStudentAsync(newStudent);
@@ -419,13 +463,53 @@ namespace STFREYA.ViewModel
                 {
                     await LoadStudents();
                     ClearInput();
+
+                    // Trigger notification
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        NotificationMessage = "New student added successfully!";
+                        IsNotificationVisible = true;
+                    });
+
+                    // Hide notification after 5 seconds
+                    await Task.Delay(5000);
+
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        IsNotificationVisible = false;
+                    });
                 }
             }
             else
             {
-                Console.WriteLine("Input validation failed: All fields must be filled.");
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    NotificationMessage = "All fields must be filled.";
+                    IsNotificationVisible = true;
+                });
+
+                // Hide notification after 5 seconds
+                await Task.Delay(5000);
+
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    IsNotificationVisible = false;
+                });
             }
         }
+
+        private void NotifyNewStudent()
+        {
+            NotificationMessage = "A new student has been added!";
+            IsNotificationVisible = true;
+
+            // Hide notification after 5 seconds using Dispatcher
+            Application.Current.Dispatcher.DispatchDelayed(TimeSpan.FromSeconds(5), () =>
+            {
+                IsNotificationVisible = false;
+            });
+        }
+
 
 
         private async Task DeleteStudent()
@@ -468,6 +552,8 @@ namespace STFREYA.ViewModel
             }
         }
 
+
+
         private async Task NavigateToProfile(Student student)
         {
             if (student == null) return;
@@ -478,6 +564,10 @@ namespace STFREYA.ViewModel
     });
         }
 
+
+
+
+       
         //generate report method
         private void GenerateReport()
         {
@@ -496,9 +586,18 @@ namespace STFREYA.ViewModel
                 report.AppendLine($"{course.Key}: {course.Value:F2}%");
             }
 
-            // Display the report in an alert
+            // Display the report
             App.Current.MainPage.DisplayAlert("Student Report", report.ToString(), "OK");
+
+            // Save to CSV file
+            var filePath = Path.Combine(FileSystem.AppDataDirectory, "StudentReport.csv");
+            File.WriteAllText(filePath, report.ToString());
+
+            // Notify the user
+            App.Current.MainPage.DisplayAlert("Export Successful", $"Report saved to {filePath}", "OK");
         }
+
+  
 
     }
 }

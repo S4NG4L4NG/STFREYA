@@ -67,6 +67,10 @@
             <!-- RESET FILTER BUTTON -->
             <Button Text="Show All Students" Command="{Binding LoadStudentCommand}" Margin="10" />
 
+            <!-- QR CODE -->
+            <Button Text="View QR Code"
+        Command="{Binding NavigateToQRCodeCommand}" 
+        CommandParameter="{Binding SelectedStudent}" />
             <!-- LIST OF STUDENTS -->
             <ListView ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}">
                 <ListView.ItemTemplate>
