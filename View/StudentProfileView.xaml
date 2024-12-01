@@ -4,6 +4,7 @@
              x:Class="STFREYA.View.StudentProfileView"
              Title="Student Profile">
     <VerticalStackLayout Padding="20">
+
         <Label Text="Student Profile" 
                FontSize="24" 
                FontAttributes="Bold" 

@@ -14,10 +14,14 @@ using STFREYA.View;
 
 namespace STFREYA.ViewModel
 {
+
+ 
+
     public class StudentViewModel : BindableObject
     {
         private readonly StudentService _studentService;
         public ObservableCollection<Student> Students { get; set; }
+        public ObservableCollection<AttendanceRecord> AttendanceRecords { get; set; }
 
         // FOR CLEARING INPUTS
         private void ClearInput()
@@ -29,6 +33,7 @@ namespace STFREYA.ViewModel
             ContactNoInput = string.Empty;
             CourseInput = string.Empty;
         }
+
 
         private ObservableCollection<Student> _allStudents;
 
@@ -129,6 +134,9 @@ namespace STFREYA.ViewModel
             }
         }
 
+       
+
+
         private async void SendEmails(string course)
         {
             try
@@ -210,6 +218,9 @@ namespace STFREYA.ViewModel
             }
         }
 
+     
+
+
         private void ExportToCSV()
         {
             try
@@ -252,7 +263,7 @@ namespace STFREYA.ViewModel
                 return false;
             }
         }
-
+  
 
         // notification
         private string _notificationMessage;
@@ -420,6 +431,7 @@ namespace STFREYA.ViewModel
         {
             _studentService = new StudentService();
             Students = new ObservableCollection<Student>();
+            AttendanceRecords = new ObservableCollection<AttendanceRecord>();
             LoadStudentCommand = new Command(async () => await LoadStudents());
             AddStudentCommand = new Command(async () => await AddStudent());
             DeleteCommand = new Command(async () => await DeleteStudent());
@@ -431,6 +443,10 @@ namespace STFREYA.ViewModel
             NavigateToProfileCommand = new Command<Student>(async (student) => await NavigateToProfile(student));
             GenerateReportCommand = new Command(GenerateReport);
             NotifyNewStudentCommand = new Command(NotifyNewStudent);
+            MarkAttendanceCommand = new Command<Student>(MarkAttendance);
+            ExportAttendanceCommand = new Command(ExportAttendance);
+
+
         }
 
         // PUBLIC COMMANDS
@@ -445,6 +461,9 @@ namespace STFREYA.ViewModel
         public ICommand NavigateToProfileCommand { get; }
         public ICommand GenerateReportCommand { get; }
         public ICommand NotifyNewStudentCommand { get; }
+
+        public ICommand MarkAttendanceCommand { get; }
+        public ICommand ExportAttendanceCommand { get; }
 
         private async Task LoadStudents()
         {
@@ -582,6 +601,37 @@ namespace STFREYA.ViewModel
     });
         }
 
+        private async void MarkAttendance(Student student)
+        {
+            if (student == null) return;
+
+            // Prompt the user to select attendance status
+            var attendanceStatus = await App.Current.MainPage.DisplayActionSheet(
+                $"Mark Attendance for {student.name} {student.lastname}",
+                "Cancel",
+                null,
+                "Present",
+                "Absent");
+
+            if (attendanceStatus == "Cancel" || string.IsNullOrEmpty(attendanceStatus))
+            {
+                return; // User canceled or closed the action sheet
+            }
+
+            var currentDate = DateTime.Now.ToString("MM/dd/yyyy");
+
+            // Add the attendance record
+            AttendanceRecords.Add(new AttendanceRecord
+            {
+                StudentID = student.student_id,
+                Name = $"{student.name} {student.lastname}",
+                Date = currentDate,
+                Status = attendanceStatus
+            });
+
+            await App.Current.MainPage.DisplayAlert("Attendance Marked", $"{student.name} {student.lastname} is marked as {attendanceStatus}.", "OK");
+        }
+
 
         //generate report method
         private void GenerateReport()
@@ -623,5 +673,38 @@ namespace STFREYA.ViewModel
             App.Current.MainPage.DisplayAlert("Export Successful", $"Report saved to {filePath}", "OK");
         }
 
+        private void ExportAttendance()
+        {
+            try
+            {
+                var fileName = "AttendanceReport.csv";
+                var filePath = Path.Combine(FileSystem.AppDataDirectory, fileName);
+
+                var csvBuilder = new StringBuilder();
+                csvBuilder.AppendLine("Student ID,Name,Date,Status");
+
+                foreach (var record in AttendanceRecords)
+                {
+                    csvBuilder.AppendLine($"{record.StudentID},{record.Name},{record.Date},{record.Status}");
+                }
+
+                File.WriteAllText(filePath, csvBuilder.ToString());
+
+                App.Current.MainPage.DisplayAlert("Export Successful", $"Attendance report saved to {filePath}", "OK");
+            }
+            catch (Exception ex)
+            {
+                App.Current.MainPage.DisplayAlert("Export Failed", $"Error: {ex.Message}", "OK");
+            }
+        }
     }
+    public class AttendanceRecord
+    {
+        public int StudentID { get; set; }
+        public string Name { get; set; }
+        public string Date { get; set; }
+        public string Status { get; set; }
+    }
+
 }
+

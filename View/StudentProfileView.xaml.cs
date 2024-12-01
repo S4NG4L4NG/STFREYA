@@ -28,5 +28,7 @@ namespace STFREYA.View
         {
             await Shell.Current.GoToAsync("//StudentList");
         }
+
+
     }
 }

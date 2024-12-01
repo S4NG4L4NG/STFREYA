@@ -8,56 +8,57 @@
 
             <!-- BACK BUTTON -->
             <Button 
-            Text="Back" 
-            Command="{Binding BackCommand}" 
-            HorizontalOptions="Start" 
-            Margin="10" />
+                Text="Back" 
+                Command="{Binding BackCommand}" 
+                HorizontalOptions="Start" 
+                Margin="10" />
 
             <!-- TITLE -->
             <Label 
-            Text="Student Data Management"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" 
-            FontAttributes="Bold" 
-            FontSize="20" />
+                Text="Student Data Management"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" 
+                FontAttributes="Bold" 
+                FontSize="20" />
 
             <!-- TOTAL STUDENTS DISPLAY -->
             <Label Text="{Binding TotalStudentsDisplay}" 
-               FontAttributes="Bold"
-               HorizontalOptions="Center"
-               Margin="10" />
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="10" />
 
             <!-- LOAD STUDENTS BUTTON -->
             <Button Text="Load Students" Command="{Binding LoadStudentCommand}" />
 
             <!-- EXPORT TO CSV BUTTON -->
             <Button Text="Export to CSV"
-                Command="{Binding ExportToCSVCommand}"
-                HorizontalOptions="Center"
-                Margin="10" />
-            
+                    Command="{Binding ExportToCSVCommand}"
+                    HorizontalOptions="Center"
+                    Margin="10" />
+
             <Button Text="Generate Report"
                     Command="{Binding GenerateReportCommand}"
                     HorizontalOptions="Center"
                     Margin="10" />
+
+            <!-- FILTER BUTTONS -->
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
                 <Button Text="BSCS" Command="{Binding FilterByCourseCommand}" CommandParameter="BSCS" />
                 <Button Text="BSIT" Command="{Binding FilterByCourseCommand}" CommandParameter="BSIT" />
                 <Button Text="BMMA" Command="{Binding FilterByCourseCommand}" CommandParameter="BMMA" />
             </HorizontalStackLayout>
 
-            <!-- RESET FILTER BUTTON -->
-
             <!-- SEARCH BAR -->
             <SearchBar Placeholder="Search by name, email, or course"
-                   Text="{Binding SearchTerm}" />
+                       Text="{Binding SearchTerm}" />
 
             <!-- TOTAL STUDENTS PER COURSE -->
             <Label Text="Total Students per Course" 
-               FontAttributes="Bold"
-               HorizontalOptions="Center" 
-               Margin="10" />
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" 
+                   Margin="10" />
 
+            <!-- EMAIL BUTTONS -->
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
                 <Button Text="Email BSCS" Command="{Binding SendEmailCommand}" CommandParameter="BSCS" />
                 <Button Text="Email BSIT" Command="{Binding SendEmailCommand}" CommandParameter="BSIT" />
@@ -67,10 +68,11 @@
             <!-- RESET FILTER BUTTON -->
             <Button Text="Show All Students" Command="{Binding LoadStudentCommand}" Margin="10" />
 
-            <!-- QR CODE -->
+            <!-- QR CODE BUTTON -->
             <Button Text="View QR Code"
-        Command="{Binding NavigateToQRCodeCommand}" 
-        CommandParameter="{Binding SelectedStudent}" />
+                    Command="{Binding NavigateToQRCodeCommand}" 
+                    CommandParameter="{Binding SelectedStudent}" />
+
             <!-- LIST OF STUDENTS -->
             <ListView ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}">
                 <ListView.ItemTemplate>
@@ -89,17 +91,24 @@
                                 <Label Text="{Binding course}" />
                                 <Label Text=" | " FontAttributes="Bold" />
                                 <Label Text="{Binding gender}" />
+                                <Button Text="Mark Attendance"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MarkAttendanceCommand}"
+                                        CommandParameter="{Binding .}" />
                             </StackLayout>
                             <ViewCell.ContextActions>
                                 <MenuItem Command="{Binding BindingContext.NavigateToProfileCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
-                              CommandParameter="{Binding .}" 
-                              Text="View Profile" />
+                                          CommandParameter="{Binding .}" 
+                                          Text="View Profile" />
                             </ViewCell.ContextActions>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+            <!-- EXPORT ATTENDANCE BUTTON -->
+            <Button Text="Export Attendance to CSV" Command="{Binding ExportAttendanceCommand}" Margin="10" />
+
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
-
