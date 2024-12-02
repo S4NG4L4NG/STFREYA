@@ -11,6 +11,9 @@ using STFREYA.Model;
 using STFREYA.Services;
 using System.Net.Mail;
 using STFREYA.View;
+using CommunityToolkit.Maui.Views;
+using System.Diagnostics;
+using System.Text.Json;
 
 namespace STFREYA.ViewModel
 {
@@ -22,6 +25,9 @@ namespace STFREYA.ViewModel
         private readonly StudentService _studentService;
         public ObservableCollection<Student> Students { get; set; }
         public ObservableCollection<AttendanceRecord> AttendanceRecords { get; set; }
+
+        private AddStudentModal _addPopup;
+        private UpdateStudentModal _updatePopup;
 
         // FOR CLEARING INPUTS
         private void ClearInput()
@@ -99,6 +105,10 @@ namespace STFREYA.ViewModel
                 SelectedCourse = SelectedStudent.course; // Set the dropdown to the selected course
                 SelectedGender = SelectedStudent.gender;
             }
+             else 
+            {
+                ClearInput();
+            }
         }
 
         //generating report
@@ -133,9 +143,6 @@ namespace STFREYA.ViewModel
                 OnPropertyChanged();
             }
         }
-
-       
-
 
         private async void SendEmails(string course)
         {
@@ -218,9 +225,7 @@ namespace STFREYA.ViewModel
             }
         }
 
-     
-
-
+    
         private void ExportToCSV()
         {
             try
@@ -442,11 +447,15 @@ namespace STFREYA.ViewModel
             SendEmailCommand = new Command<string>(SendEmails);
             NavigateToProfileCommand = new Command<Student>(async (student) => await NavigateToProfile(student));
             GenerateReportCommand = new Command(GenerateReport);
-            NotifyNewStudentCommand = new Command(NotifyNewStudent);
             MarkAttendanceCommand = new Command<Student>(MarkAttendance);
             ExportAttendanceCommand = new Command(ExportAttendance);
             AddScoreCommand = new Command<Student>(AddScore);
             ExportPerformanceCommand = new Command(ExportPerformance);
+            OpenAddStudentModalCommand = new Command(OpenAddStudentModal);
+            OpenUpdateStudentModalCommand = new Command(OpenUpdateStudentModal);
+            CloseModalCommand = new Command(CloseModal);
+            CloseUpdateModalCommand = new Command(CloseUpdateModal);
+            LoadStudents();
         }
 
         // PUBLIC COMMANDS
@@ -460,14 +469,16 @@ namespace STFREYA.ViewModel
         public ICommand SendEmailCommand { get; }
         public ICommand NavigateToProfileCommand { get; }
         public ICommand GenerateReportCommand { get; }
-        public ICommand NotifyNewStudentCommand { get; }
-
         public ICommand MarkAttendanceCommand { get; }
         public ICommand ExportAttendanceCommand { get; }
 
         public ICommand AddScoreCommand { get; }
         public ICommand ExportPerformanceCommand { get; }
 
+        public Command OpenAddStudentModalCommand { get; }
+        public Command OpenUpdateStudentModalCommand { get; }
+        public Command CloseModalCommand { get; }
+        public Command CloseUpdateModalCommand { get; }
         private async Task LoadStudents()
         {
             var students = await _studentService.GetStudentsAsync();
@@ -475,19 +486,61 @@ namespace STFREYA.ViewModel
             Students = new ObservableCollection<Student>(_allStudents); // Initialize displayed list
             TotalStudentsDisplay = $"Overall Total Students: {_allStudents.Count}";
             OnPropertyChanged(nameof(Students));
+            FilterStudents();
+            ClearInput();
         }
 
+        private void OpenAddStudentModal()
+        {
+            _addPopup = new AddStudentModal
+            {
+                BindingContext = this
+            };
+            App.Current.MainPage.ShowPopup(_addPopup);
+        }
+        private void OpenUpdateStudentModal()
+        {
+            if (SelectedStudent == null)
+            {
+                App.Current.MainPage.DisplayAlert("Error", "Please select a student to update.", "OK");
+                return;
+            }
+
+            // Populate fields with selected student data
+            NameInput = SelectedStudent.name;
+            LastNameInput = SelectedStudent.lastname;
+            AgeInput = SelectedStudent.age;
+            EmailInput = SelectedStudent.email;
+            ContactNoInput = SelectedStudent.contactno;
+            SelectedCourse = SelectedStudent.course;
+            SelectedGender = SelectedStudent.gender;
+
+            _updatePopup = new UpdateStudentModal
+            {
+                BindingContext = this
+            };
+            App.Current.MainPage.ShowPopup(_updatePopup);
+        }
+
+        private void CloseModal()
+        {
+            _addPopup?.Close();
+        }
+        private void CloseUpdateModal()
+        {
+            _updatePopup?.Close();
+        }
         // ADD STUDENT METHOD
         public async Task AddStudent()
         {
             // Validate inputs
             if (!string.IsNullOrWhiteSpace(NameInput) &&
-            !string.IsNullOrWhiteSpace(LastNameInput) &&
-            !string.IsNullOrWhiteSpace(AgeInput) &&
-            !string.IsNullOrWhiteSpace(EmailInput) &&
-            !string.IsNullOrWhiteSpace(ContactNoInput) &&
-            !string.IsNullOrWhiteSpace(SelectedCourse) &&
-            !string.IsNullOrWhiteSpace(SelectedGender))
+                !string.IsNullOrWhiteSpace(LastNameInput) &&
+                !string.IsNullOrWhiteSpace(AgeInput) &&
+                !string.IsNullOrWhiteSpace(EmailInput) &&
+                !string.IsNullOrWhiteSpace(ContactNoInput) &&
+                !string.IsNullOrWhiteSpace(SelectedCourse) &&
+                !string.IsNullOrWhiteSpace(SelectedGender))
             {
                 var newStudent = new Student
                 {
@@ -501,64 +554,87 @@ namespace STFREYA.ViewModel
                 };
 
                 var result = await _studentService.AddStudentAsync(newStudent);
-
-                if (result.Equals("Success", StringComparison.OrdinalIgnoreCase))
+                var response = JsonSerializer.Deserialize<Dictionary<string, string>>(result);
+                if (response != null && response.ContainsKey("message") && response["message"].Contains("successfully", StringComparison.OrdinalIgnoreCase))
                 {
-                    await LoadStudents();
+                    // Close modal, reset fields, and reload data
+                    CloseModal();
                     ClearInput();
+                    await LoadStudents();
 
-                    // Trigger notification
-                    MainThread.BeginInvokeOnMainThread(() =>
-                    {
-                        NotificationMessage = "New student added successfully!";
-                        IsNotificationVisible = true;
-                    });
-
-                    // Hide notification after 5 seconds
-                    await Task.Delay(5000);
-
-                    MainThread.BeginInvokeOnMainThread(() =>
-                    {
-                        IsNotificationVisible = false;
-                    });
+                    // Show success alert
+                    await App.Current.MainPage.DisplayAlert(
+                        "Success",
+                        "New student added successfully!",
+                        "OK"
+                    );
+                }
+                else
+                {
+                    // Show error alert
+                    await App.Current.MainPage.DisplayAlert(
+                        "Error",
+                        $"Failed to add student: {result}",
+                        "OK"
+                    );
                 }
             }
             else
             {
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    NotificationMessage = "All fields must be filled.";
-                    IsNotificationVisible = true;
-                });
-
-                // Hide notification after 5 seconds
-                await Task.Delay(5000);
-
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    IsNotificationVisible = false;
-                });
+                // Show an alert for missing inputs
+                await App.Current.MainPage.DisplayAlert(
+                    "Error",
+                    "Please fill in all required fields.",
+                    "OK"
+                );
             }
-        }
-
-        private void NotifyNewStudent()
-        {
-            NotificationMessage = "A new student has been added!";
-            IsNotificationVisible = true;
-
-            // Hide notification after 5 seconds using Dispatcher
-            Application.Current.Dispatcher.DispatchDelayed(TimeSpan.FromSeconds(5), () =>
-            {
-                IsNotificationVisible = false;
-            });
         }
 
         private async Task DeleteStudent()
         {
             if (SelectedStudent != null)
             {
-                var result = await _studentService.DeleteStudentAsync(SelectedStudent.student_id);
-                await LoadStudents();
+                // Show confirmation dialog
+                bool isConfirmed = await App.Current.MainPage.DisplayAlert(
+                    "Confirm Deletion",
+                    $"Are you sure you want to delete {SelectedStudent.name} {SelectedStudent.lastname}?",
+                    "Yes",
+                    "No"
+                );
+
+                // Proceed only if the user confirms
+                if (isConfirmed)
+                {
+                    var result = await _studentService.DeleteStudentAsync(SelectedStudent.student_id);
+                    var response = JsonSerializer.Deserialize<Dictionary<string, string>>(result);
+                    if (response != null && response.ContainsKey("message") && response["message"].Contains("successfully", StringComparison.OrdinalIgnoreCase))
+                    {
+                        await App.Current.MainPage.DisplayAlert(
+                            "Success",
+                            $"{SelectedStudent.name} has been deleted successfully.",
+                            "OK"
+                        );
+
+                        await LoadStudents();
+                    }
+                    else
+                    {
+                        await App.Current.MainPage.DisplayAlert(
+                            "Error",
+                            $"Failed to delete the student: {result}",
+                            "OK"
+                        );
+                    }
+                }
+            }
+            else
+            {
+                // Show an alert if no student is selected
+                await App.Current.MainPage.DisplayAlert(
+                    "Error",
+                    "No student selected for deletion.",
+                    "OK"
+                );
             }
         }
 
@@ -576,21 +652,28 @@ namespace STFREYA.ViewModel
                 SelectedStudent.gender = SelectedGender;
 
                 var result = await _studentService.UpdateStudentAsync(SelectedStudent);
-
-                if (result.Equals("Success", StringComparison.OrdinalIgnoreCase))
+                var response = JsonSerializer.Deserialize<Dictionary<string, string>>(result);
+                
+                if (response != null && response.ContainsKey("message") && response["message"].Contains("successfully", StringComparison.OrdinalIgnoreCase))
                 {
-                    await LoadStudents();
+                    CloseUpdateModal();
+
+                    // Clear input fields
                     ClearInput();
-                    Console.WriteLine("Student updated successfully.");
+                    await LoadStudents();
+                    // Show success alert
+                    await App.Current.MainPage.DisplayAlert("Success", "Student updated successfully.", "OK");
                 }
                 else
                 {
-                    Console.WriteLine($"Failed to update student: {result}");
+                    // Show error alert if the update fails
+                    await App.Current.MainPage.DisplayAlert("Error", $"Failed to update student: {result}", "OK");
+
                 }
             }
             else
             {
-                Console.WriteLine("No student selected for update.");
+                await App.Current.MainPage.DisplayAlert("Error", "No student selected for update.", "OK");
             }
         }
 
@@ -599,9 +682,9 @@ namespace STFREYA.ViewModel
             if (student == null) return;
 
             await Shell.Current.GoToAsync($"///{nameof(StudentProfileView)}", new Dictionary<string, object>
-    {
-        { "SelectedStudent", student }
-    });
+            {
+                { "SelectedStudent", student }
+            });
         }
 
         private async void MarkAttendance(Student student)
