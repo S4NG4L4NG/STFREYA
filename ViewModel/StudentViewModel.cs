@@ -445,8 +445,8 @@ namespace STFREYA.ViewModel
             NotifyNewStudentCommand = new Command(NotifyNewStudent);
             MarkAttendanceCommand = new Command<Student>(MarkAttendance);
             ExportAttendanceCommand = new Command(ExportAttendance);
-
-
+            AddScoreCommand = new Command<Student>(AddScore);
+            ExportPerformanceCommand = new Command(ExportPerformance);
         }
 
         // PUBLIC COMMANDS
@@ -464,6 +464,9 @@ namespace STFREYA.ViewModel
 
         public ICommand MarkAttendanceCommand { get; }
         public ICommand ExportAttendanceCommand { get; }
+
+        public ICommand AddScoreCommand { get; }
+        public ICommand ExportPerformanceCommand { get; }
 
         private async Task LoadStudents()
         {
@@ -697,6 +700,68 @@ namespace STFREYA.ViewModel
                 App.Current.MainPage.DisplayAlert("Export Failed", $"Error: {ex.Message}", "OK");
             }
         }
+
+        private void AddScore(Student student)
+        {
+            if (student == null) return;
+
+            var input = App.Current.MainPage.DisplayPromptAsync(
+                "Add Score",
+                $"Enter a score for {student.name} {student.lastname}:",
+                "OK",
+                "Cancel",
+                "Enter score",
+                keyboard: Keyboard.Numeric);
+
+            input.ContinueWith(t =>
+            {
+                if (t.Result != null && int.TryParse(t.Result, out var score))
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        student.Scores.Add(score);
+                        App.Current.MainPage.DisplayAlert(
+                            "Success",
+                            $"Score {score} added for {student.name} {student.lastname}.",
+                            "OK");
+                    });
+                }
+            });
+        }
+
+        private void ExportPerformance()
+        {
+            try
+            {
+                var fileName = "StudentPerformanceReport.csv";
+                var filePath = Path.Combine(FileSystem.AppDataDirectory, fileName);
+
+                var csvBuilder = new StringBuilder();
+                csvBuilder.AppendLine("Student ID,Name,Average Score,Performance Level");
+
+                foreach (var student in Students)
+                {
+                    var averageScore = student.Scores.Any() ? student.Scores.Average() : 0;
+                    var performanceLevel = averageScore switch
+                    {
+                        > 90 => "Excellent",
+                        >= 75 => "Good",
+                        _ => "Needs Improvement"
+                    };
+
+                    csvBuilder.AppendLine($"{student.student_id},{student.name} {student.lastname},{averageScore:F2},{performanceLevel}");
+                }
+
+                File.WriteAllText(filePath, csvBuilder.ToString());
+
+                App.Current.MainPage.DisplayAlert("Export Successful", $"Performance report saved to {filePath}", "OK");
+            }
+            catch (Exception ex)
+            {
+                App.Current.MainPage.DisplayAlert("Export Failed", $"Error: {ex.Message}", "OK");
+            }
+        }
+
     }
     public class AttendanceRecord
     {

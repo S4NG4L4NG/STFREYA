@@ -28,5 +28,6 @@ namespace STFREYA.Model
 
         public string FullName => $"{name} {lastname}";
         public bool IsSelected { get; set; } = false; // Default to false
+        public List<int> Scores { get; set; } = new List<int>();
     }
 }

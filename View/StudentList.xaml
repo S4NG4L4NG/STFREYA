@@ -31,7 +31,7 @@
             <Button Text="Load Students" Command="{Binding LoadStudentCommand}" />
 
             <!-- EXPORT TO CSV BUTTON -->
-            <Button Text="Export to CSV"
+            <Button Text="Export the Student List to CSV"
                     Command="{Binding ExportToCSVCommand}"
                     HorizontalOptions="Center"
                     Margin="10" />
@@ -68,11 +68,6 @@
             <!-- RESET FILTER BUTTON -->
             <Button Text="Show All Students" Command="{Binding LoadStudentCommand}" Margin="10" />
 
-            <!-- QR CODE BUTTON -->
-            <Button Text="View QR Code"
-                    Command="{Binding NavigateToQRCodeCommand}" 
-                    CommandParameter="{Binding SelectedStudent}" />
-
             <!-- LIST OF STUDENTS -->
             <ListView ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}">
                 <ListView.ItemTemplate>
@@ -94,6 +89,9 @@
                                 <Button Text="Mark Attendance"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MarkAttendanceCommand}"
                                         CommandParameter="{Binding .}" />
+                                <Button Text="Add Score"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AddScoreCommand}"
+                            CommandParameter="{Binding .}" />
                             </StackLayout>
                             <ViewCell.ContextActions>
                                 <MenuItem Command="{Binding BindingContext.NavigateToProfileCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
@@ -107,7 +105,7 @@
 
             <!-- EXPORT ATTENDANCE BUTTON -->
             <Button Text="Export Attendance to CSV" Command="{Binding ExportAttendanceCommand}" Margin="10" />
-
+            <Button Text="Export Performance to CSV" Command="{Binding ExportPerformanceCommand}" />
 
         </VerticalStackLayout>
     </ScrollView>
