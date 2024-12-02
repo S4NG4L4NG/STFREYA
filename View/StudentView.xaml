@@ -1,94 +1,185 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="STFREYA.View.StudentView"
-             Title="StudentView">
-    <ScrollView>
-        <VerticalStackLayout>
-
-            <!-- BACK BUTTON -->
-            <Button 
-                Text="Back" 
-                Command="{Binding BackCommand}" 
-                HorizontalOptions="Start" 
-                Margin="10" />
-
-            <!-- TITLE -->
+             Title="Student Management"
+             BackgroundColor="#F7F8FA">
+    <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="250,*,*">
+        <!-- LEFT SIDEBAR -->
+        <VerticalStackLayout Grid.RowSpan="3" Grid.Column="0" BackgroundColor="#FFFFFF" Padding="20" Spacing="15">
             <Label 
-                Text="Student Data Management"
-                VerticalOptions="Center" 
+                Text="Navigation"
+                FontFamily="RobotoBold"
+                FontSize="16"
+                TextColor="#1C1C1E" />
+
+            <!-- Small Search Bar -->
+            <SearchBar 
+                Placeholder="Search by name, email, or course"
+                Text="{Binding SearchTerm}" 
+                BackgroundColor="#F7F8FA"
+                FontSize="14"
+                FontFamily="RobotoRegular"
+                TextColor="#1C1C1E"
+                HeightRequest="40"
+                Margin="0,0,0,10" />
+
+            <!-- Load Students Button -->
+            <Button 
+                Text="Load Students"
+                Command="{Binding LoadStudentCommand}"
+                BackgroundColor="#E9ECEF"
+                TextColor="#1C1C1E"
+                FontFamily="RobotoBold"
+                FontAttributes="Bold"
+                CornerRadius="8"
+                HeightRequest="50"
+                HorizontalOptions="Fill" />
+
+            <!-- Divider -->
+            <BoxView HeightRequest="1" BackgroundColor="#D6D6D6" Margin="0,10,0,10" />
+           
+
+            <!-- Action Buttons -->
+            <Button 
+                Text="Add Student"
+                Command="{Binding OpenAddStudentModalCommand}"
+                BackgroundColor="#cffdff"
+                TextColor="#1C1C1E"
+                FontFamily="RobotoBold"
+                CornerRadius="8"
+                HeightRequest="40"
+                HorizontalOptions="Fill" />
+
+            <Button 
+                Text="Edit Student"
+                Command="{Binding OpenUpdateStudentModalCommand}"
+                BackgroundColor="#E9ECEF"
+                TextColor="#1C1C1E"
+                FontFamily="RobotoBold"
+                CornerRadius="8"
+                HeightRequest="40"
+                HorizontalOptions="Fill" />
+
+            <Button 
+                Text="Remove Student"
+                Command="{Binding DeleteCommand}"
+                BackgroundColor="#FFD1CF"
+                TextColor="#1C1C1E"
+                FontFamily="RobotoBold"
+                CornerRadius="8"
+                HeightRequest="40"
+                HorizontalOptions="Fill" />
+
+            <!-- Total Students per Course -->
+            <Label 
+                Text="Total Students per Course" 
+                FontFamily="RobotoBold"
                 HorizontalOptions="Center" 
-                FontAttributes="Bold" 
-                FontSize="20" />
+                Margin="10,20,0,10" />
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
+                <Button 
+                    Text="BSCS" 
+                    Command="{Binding FilterByCourseCommand}" 
+                    CommandParameter="BSCS"
+                    BackgroundColor="#E9ECEF"
+                    TextColor="#1C1C1E"
+                    FontFamily="RobotoRegular"
+                    CornerRadius="6"
+                    WidthRequest="60"
+                    HeightRequest="30"
+                    FontSize="10" />
 
-            <!-- TOTAL STUDENTS DISPLAY -->
-            <Label Text="{Binding TotalStudentsDisplay}" 
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center"
-                   Margin="10" />
+                <Button 
+                    Text="BSIT" 
+                    Command="{Binding FilterByCourseCommand}" 
+                    CommandParameter="BSIT"
+                    BackgroundColor="#E9ECEF"
+                    TextColor="#1C1C1E"
+                    FontFamily="RobotoRegular"
+                    CornerRadius="6"
+                    WidthRequest="60"
+                    HeightRequest="30"
+                    FontSize="10" />
 
-            <!-- LOAD STUDENTS BUTTON -->
-            <Button Text="Load Students" Command="{Binding LoadStudentCommand}" />
-
-            <!-- NOTIFICATION MESSAGE -->
-            <BoxView AbsoluteLayout.LayoutBounds="0.5, 0.1, 0.8, 0.1"
-             AbsoluteLayout.LayoutFlags="All"
-             IsVisible="{Binding IsNotificationVisible}"
-             BackgroundColor="Green"
-             Opacity="0.8" />
-
-            <Label AbsoluteLayout.LayoutBounds="0.5, 0.1, 0.8, 0.1"
-           AbsoluteLayout.LayoutFlags="All"
-           Text="{Binding NotificationMessage}"
-           IsVisible="{Binding IsNotificationVisible}"
-           TextColor="White"
-           BackgroundColor="Transparent"
-           HorizontalOptions="Center"
-           FontSize="14" />
-
-            <!-- SEARCH BAR -->
-            <SearchBar Placeholder="Search by name, email, or course"
-                       Text="{Binding SearchTerm}" />
-
-            <!-- TOTAL STUDENTS PER COURSE -->
-            <Label Text="Total Students per Course" 
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center" 
-                   Margin="10" />
-            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
-                <Button Text="BSCS" Command="{Binding FilterByCourseCommand}" CommandParameter="BSCS" />
-                <Button Text="BSIT" Command="{Binding FilterByCourseCommand}" CommandParameter="BSIT" />
-                <Button Text="BMMA" Command="{Binding FilterByCourseCommand}" CommandParameter="BMMA" />
+                <Button 
+                    Text="BMMA" 
+                    Command="{Binding FilterByCourseCommand}" 
+                    CommandParameter="BMMA"
+                    BackgroundColor="#E9ECEF"
+                    TextColor="#1C1C1E"
+                    FontFamily="RobotoRegular"
+                    CornerRadius="6"
+                    WidthRequest="60"
+                    HeightRequest="30"
+                    FontSize="10" />
             </HorizontalStackLayout>
-
-            <!-- LIST OF STUDENTS -->
-            <ListView ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Orientation="Horizontal" Padding="10">
-                                <!-- Combined Name and Last Name -->
-                                <Label Text="{Binding FullName}" FontAttributes="Bold" />
-                                <Label Text=" | " FontAttributes="Bold" />
-                                <Label Text="{Binding age}" />
-                                <Label Text=" | " FontAttributes="Bold" />
-                                <Label Text="{Binding email}" />
-                                <Label Text=" | " FontAttributes="Bold" />
-                                <Label Text="{Binding contactno}" />
-                                <Label Text=" | " FontAttributes="Bold" />
-                                <Label Text="{Binding course}" />
-                                <Label Text=" | " FontAttributes="Bold" />
-                                <Label Text="{Binding gender}" />
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-
-            <!-- BUTTONS -->
-            <Button Text="Add Student" Command="{Binding OpenAddStudentModalCommand}" />
-            <Button Text="Update Student" Command="{Binding OpenUpdateStudentModalCommand}" />
-            <Button Text="Delete Student" Command="{Binding DeleteCommand}" />
         </VerticalStackLayout>
-    </ScrollView>
+
+        <!-- HEADER -->
+        <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,0,20">
+            <Label 
+                Text="  Student Management"
+                FontFamily="RobotoBold"
+                FontAttributes="Bold"
+                FontSize="24"
+                TextColor="#1C1C1E"
+                VerticalOptions="Center"
+                HorizontalOptions="Start" />
+
+            <Button 
+                Text="← Back"
+                Command="{Binding BackCommand}"
+                BackgroundColor="WHite"
+                TextColor="#1C1C1E"
+                FontFamily="RobotoRegular"
+                CornerRadius="8"
+                HeightRequest="40"
+                HorizontalOptions="End"
+                WidthRequest="100" />
+        </Grid>
+
+        <!-- STUDENT LIST WITH VISUAL SELECTION -->
+        <CollectionView Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}" SelectionMode="Single" Margin="0,0,0,20">
+            <CollectionView.ItemsLayout>
+                <!-- Horizontal Wrap Layout -->
+                <GridItemsLayout Orientation="Vertical" Span="2" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BackgroundColor="#FFFFFF" BorderColor="AliceBlue" CornerRadius="8" Padding="10" Margin="10" HasShadow="True">
+                        <VerticalStackLayout Spacing="5">
+                            <!-- Name with Icon -->
+                            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                                <!-- Student Icon -->
+                                <Image Source="student_icon.png" WidthRequest="20" HeightRequest="20" VerticalOptions="Center" />
+
+                                <!-- Student Name -->
+                                <Label Text="{Binding FullName}" FontAttributes="Bold" FontFamily="RobotoBold" FontSize="16" TextColor="#1C1C1E" VerticalOptions="Center" />
+
+                               
+                            </HorizontalStackLayout>
+
+                            <!-- Student Details -->
+                            <Label Text="{Binding age}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
+                            <Label Text="{Binding email}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
+                            <Label Text="{Binding course}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
+                            <Label Text="{Binding gender}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
+                        </VerticalStackLayout>
+
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- FOOTER -->
+        <Grid Grid.Row="2" Grid.ColumnSpan="3" BackgroundColor="#E9ECEF" HeightRequest="40" Padding="10">
+            <Label 
+                Text="© 2024 St. Freya All rights reserved."
+                FontFamily="RobotoRegular"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                FontSize="12"
+                TextColor="#6C757D" />
+        </Grid>
+    </Grid>
 </ContentPage>

@@ -2,40 +2,99 @@
 <toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Class="STFREYA.View.AddStudentModal"
-               >
-    <VerticalStackLayout Padding="20">
-        <Label Text="{Binding ModalTitle}" 
-               FontSize="20" 
-               FontAttributes="Bold" 
-               HorizontalOptions="Center" />
+               x:Class="STFREYA.View.AddStudentModal">
+    <!-- ScrollView to make the modal scrollable -->
+    <ScrollView>
+        <!-- Wrap content in a Frame for background customization -->
+        <Frame BackgroundColor="#FFFFFF" Padding="20" CornerRadius="10" HasShadow="True">
+            <VerticalStackLayout Spacing="15">
+                <!-- Huge, bold Title above the form -->
+                <Label Text="Add Student" 
+                       FontSize="30" 
+                       FontFamily="RobotoBold" 
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Center" 
+                       TextColor="#1C1C1E" 
+                       Margin="0,0,0,20"/>
 
-        <Label Text="Name" />
-        <Entry Placeholder="Enter Name" Text="{Binding NameInput}" />
+                <!-- Name Field -->
+                <Label Text="Name" FontFamily="RobotoRegular" TextColor="#3A3A3C"/>
+                <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
+                    <Entry Placeholder="Enter Name" Text="{Binding NameInput}" 
+                           FontFamily="RobotoRegular" 
+                           TextColor="#1C1C1E" 
+                           BackgroundColor="Transparent" 
+                           HeightRequest="40"/>
+                </Frame>
 
-        <Label Text="Last Name" />
-        <Entry Placeholder="Enter Last Name" Text="{Binding LastNameInput}" />
+                <!-- Last Name Field -->
+                <Label Text="Last Name" FontFamily="RobotoRegular" TextColor="#3A3A3C"/>
+                <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
+                    <Entry Placeholder="Enter Last Name" Text="{Binding LastNameInput}" 
+                           FontFamily="RobotoRegular" 
+                           TextColor="#1C1C1E" 
+                           BackgroundColor="Transparent" 
+                           HeightRequest="40"/>
+                </Frame>
 
-        <Label Text="Age" />
-        <Entry Placeholder="Enter Age" Text="{Binding AgeInput}" />
+                <!-- Age Field -->
+                <Label Text="Age" FontFamily="RobotoRegular" TextColor="#3A3A3C"/>
+                <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
+                    <Entry Placeholder="Enter Age" Text="{Binding AgeInput}" 
+                           FontFamily="RobotoRegular" 
+                           TextColor="#1C1C1E" 
+                           BackgroundColor="Transparent" 
+                           HeightRequest="40"/>
+                </Frame>
 
-        <Label Text="Email" />
-        <Entry Placeholder="Enter Email" Text="{Binding EmailInput}" />
+                <!-- Email Field -->
+                <Label Text="Email" FontFamily="RobotoRegular" TextColor="#3A3A3C"/>
+                <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
+                    <Entry Placeholder="Enter Email" Text="{Binding EmailInput}" 
+                           FontFamily="RobotoRegular" 
+                           TextColor="#1C1C1E" 
+                           BackgroundColor="Transparent" 
+                           HeightRequest="40"/>
+                </Frame>
 
-        <Label Text="Contact No" />
-        <Entry Placeholder="Enter Contact No" Text="{Binding ContactNoInput}" />
+                <!-- Contact No Field -->
+                <Label Text="Contact No" FontFamily="RobotoRegular" TextColor="#3A3A3C"/>
+                <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
+                    <Entry Placeholder="Enter Contact No" Text="{Binding ContactNoInput}" 
+                           FontFamily="RobotoRegular" 
+                           TextColor="#1C1C1E" 
+                           BackgroundColor="Transparent" 
+                           HeightRequest="40"/>
+                </Frame>
 
-        <Label Text="Course" />
-        <Picker Title="Select a Course"
-                ItemsSource="{Binding CourseOptions}" 
-                SelectedItem="{Binding SelectedCourse}" />
+                <!-- Course Picker -->
+                <Label Text="Course" FontFamily="RobotoRegular" TextColor="#3A3A3C"/>
+                <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
+                    <Picker Title="Select a Course" 
+                            ItemsSource="{Binding CourseOptions}" 
+                            SelectedItem="{Binding SelectedCourse, Mode=TwoWay}" 
+                            FontFamily="RobotoRegular"
+                            HeightRequest="40" />
+                </Frame>
 
-        <Label Text="Gender" />
-        <Picker Title="Select Gender"
-                ItemsSource="{Binding GenderOptions}" 
-                SelectedItem="{Binding SelectedGender}" />
+                <!-- Gender Picker -->
+                <Label Text="Gender" FontFamily="RobotoRegular" TextColor="#3A3A3C"/>
+                <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
+                    <Picker Title="Select Gender" 
+                            ItemsSource="{Binding GenderOptions}" 
+                            SelectedItem="{Binding SelectedGender, Mode=TwoWay}" 
+                            FontFamily="RobotoRegular"
+                            HeightRequest="40" />
+                </Frame>
 
-        <Button Text="Submit" Command="{Binding AddStudentCommand}" />
-        <Button Text="Cancel" Command="{Binding CloseModalCommand}" />
-    </VerticalStackLayout>
+                <!-- Submit and Cancel Buttons -->
+                <Button Text="Submit" Command="{Binding AddStudentCommand}" 
+                        BackgroundColor="#4CAF50" TextColor="#FFFFFF" 
+                        CornerRadius="8" HeightRequest="50"/>
+                <Button Text="Cancel" Command="{Binding CloseModalCommand}" 
+                        BackgroundColor="#FF6347" TextColor="#FFFFFF" 
+                        CornerRadius="8" HeightRequest="50"/>
+            </VerticalStackLayout>
+        </Frame>
+    </ScrollView>
 </toolkit:Popup>
