@@ -77,11 +77,7 @@
                                 <CheckBox IsChecked="{Binding IsSelected}" />
                                 <Label Text="{Binding FullName}" FontAttributes="Bold" />
                                 <Label Text=" | " FontAttributes="Bold" />
-                                <Label Text="{Binding age}" />
-                                <Label Text=" | " FontAttributes="Bold" />
                                 <Label Text="{Binding email}" />
-                                <Label Text=" | " FontAttributes="Bold" />
-                                <Label Text="{Binding contactno}" />
                                 <Label Text=" | " FontAttributes="Bold" />
                                 <Label Text="{Binding course}" />
                                 <Label Text=" | " FontAttributes="Bold" />
