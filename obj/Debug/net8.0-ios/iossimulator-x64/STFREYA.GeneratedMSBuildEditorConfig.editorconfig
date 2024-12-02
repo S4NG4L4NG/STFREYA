@@ -1,0 +1,71 @@
+is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = 
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
+build_property.TargetFramework = net8.0-ios
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = STFREYA
+build_property.ProjectDir = C:\Users\pc\Desktop\STFREYA-master\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+
+[C:/Users/pc/Desktop/STFREYA-master/App.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = STFREYA.App.xaml
+build_metadata.AdditionalFiles.TargetPath = App.xaml
+build_metadata.AdditionalFiles.RelativePath = App.xaml
+
+[C:/Users/pc/Desktop/STFREYA-master/AppShell.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = STFREYA.AppShell.xaml
+build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
+build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
+
+[C:/Users/pc/Desktop/STFREYA-master/MainPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = STFREYA.MainPage.xaml
+build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
+build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
+
+[C:/Users/pc/Desktop/STFREYA-master/Resources/Styles/Colors.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = STFREYA.Resources.Styles.Colors.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
+
+[C:/Users/pc/Desktop/STFREYA-master/Resources/Styles/Styles.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = STFREYA.Resources.Styles.Styles.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
+
+[C:/Users/pc/Desktop/STFREYA-master/View/AttendanceReportView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = STFREYA.View.AttendanceReportView.xaml
+build_metadata.AdditionalFiles.TargetPath = View\AttendanceReportView.xaml
+build_metadata.AdditionalFiles.RelativePath = View\AttendanceReportView.xaml
+
+[C:/Users/pc/Desktop/STFREYA-master/View/StudentList.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = STFREYA.View.StudentList.xaml
+build_metadata.AdditionalFiles.TargetPath = View\StudentList.xaml
+build_metadata.AdditionalFiles.RelativePath = View\StudentList.xaml
+
+[C:/Users/pc/Desktop/STFREYA-master/View/StudentProfileView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = STFREYA.View.StudentProfileView.xaml
+build_metadata.AdditionalFiles.TargetPath = View\StudentProfileView.xaml
+build_metadata.AdditionalFiles.RelativePath = View\StudentProfileView.xaml
+
+[C:/Users/pc/Desktop/STFREYA-master/View/StudentView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = STFREYA.View.StudentView.xaml
+build_metadata.AdditionalFiles.TargetPath = View\StudentView.xaml
+build_metadata.AdditionalFiles.RelativePath = View\StudentView.xaml
