@@ -261,7 +261,7 @@
    TextColor="#FFFFFF" 
    Margin="10,0,0,-5" />
 
-                <Label Text="That footer is blocking lol" 
+                <Label Text="That footer is blocking additional info lol" 
 FontFamily="RobotoBold" 
 FontSize="14" 
 TextColor="#FFFFFF" 
