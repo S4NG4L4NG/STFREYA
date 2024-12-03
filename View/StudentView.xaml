@@ -2,152 +2,277 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="STFREYA.View.StudentView"
              Title="Student Management"
-             BackgroundColor="#F7F8FA">
+             BackgroundColor="#ebebeb">
     <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="250,*,*">
         <!-- LEFT SIDEBAR -->
-        <VerticalStackLayout Grid.RowSpan="3" Grid.Column="0" BackgroundColor="#FFFFFF" Padding="20" Spacing="15">
-            <Label 
-                Text="Navigation"
-                FontFamily="RobotoBold"
-                FontSize="16"
-                TextColor="#1C1C1E" />
+        <ScrollView Grid.RowSpan="3" Grid.Column="0" BackgroundColor="#FFFFFF" Padding="20">
+            <VerticalStackLayout Spacing="15">
+                <Label 
+            Text="Search Preferences" 
+            FontSize="14" 
+            FontAttributes="Bold" 
+            TextColor="#1C1C1E" 
+            FontFamily="RobotoBold" 
+            HorizontalOptions="Center" />
 
-            <!-- Small Search Bar -->
-            <SearchBar 
-                Placeholder="Search by name, email, or course"
-                Text="{Binding SearchTerm}" 
-                BackgroundColor="#F7F8FA"
-                FontSize="14"
-                FontFamily="RobotoRegular"
-                TextColor="#1C1C1E"
-                HeightRequest="40"
-                Margin="0,0,0,10" />
+                <!-- Small Search Bar -->
+                <SearchBar 
+            Placeholder="Search by name, email, or course"
+            Text="{Binding SearchTerm}" 
+            BackgroundColor="#F7F8FA"
+            FontSize="14"
+            FontFamily="RobotoRegular"
+            TextColor="#1C1C1E"
+            HeightRequest="40"
+            Margin="0,0,0,0" />
 
-            <!-- Load Students Button -->
-            <Button 
-                Text="Load Students"
-                Command="{Binding LoadStudentCommand}"
-                BackgroundColor="#E9ECEF"
-                TextColor="#1C1C1E"
-                FontFamily="RobotoBold"
+                <!-- Load Students Button -->
+                <Button 
+            Text="Load All Students"
+            Command="{Binding LoadStudentCommand}"
+            BackgroundColor="#E9ECEF"
+            TextColor="#1C1C1E"
+            FontFamily="RobotoBold"
+            FontAttributes="Bold"
+            CornerRadius="8"
+            HeightRequest="50"
+            HorizontalOptions="Fill" />
+
+                <!-- Divider -->
+                <BoxView HeightRequest="1" BackgroundColor="#D6D6D6" Margin="0,10,0,10" />
+
+                <Label 
+            Text="Student Entry Actions" 
+            FontSize="14" 
+            FontAttributes="Bold" 
+            TextColor="#1C1C1E" 
+            FontFamily="RobotoBold" 
+            HorizontalOptions="Center" />
+                <!-- Action Buttons -->
+                <Frame BackgroundColor="#cffdff"  BorderColor="#D6D6D6" CornerRadius="8" HeightRequest="40" Padding="0" HasShadow="True">
+                    <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Fill" Padding="10,0">
+                        <!-- Icon -->
+                        <Image Source="add_icon.png" WidthRequest="12" HeightRequest="12" VerticalOptions="Center" />
+                        <!-- Button Text -->
+                        <Button Text="Add Student" 
+                           Command="{Binding OpenAddStudentModalCommand}"
+                           BackgroundColor="#cffdff" 
+                           FontFamily="RobotoBold" 
+                           FontSize="14" 
+                           TextColor="#1C1C1E" 
+                           VerticalOptions="Center" 
+                           Margin="5,0,0,0" />
+                    </HorizontalStackLayout>
+                </Frame>
+
+                <Frame BackgroundColor="#D4FFD5"  BorderColor="#D6D6D6" CornerRadius="8" HeightRequest="40" Padding="0" HasShadow="True">
+                    <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Fill" Padding="10,0">
+                        <!-- Icon -->
+                        <Image Source="edit_icon.png" WidthRequest="12" HeightRequest="12" VerticalOptions="Center" />
+                        <!-- Button Text -->
+                        <Button Text="Edit Student" 
+                           FontFamily="RobotoBold" 
+                           Command="{Binding OpenUpdateStudentModalCommand}"
+                           BackgroundColor="#D4FFD5"         
+                           FontSize="14" 
+                           TextColor="#1C1C1E" 
+                           VerticalOptions="Center" 
+                           Margin="5,0,0,0" />
+                    </HorizontalStackLayout>
+                </Frame>
+
+                <Frame BackgroundColor="#FFD1CF" BorderColor="#D6D6D6" CornerRadius="8" HeightRequest="40" Padding="0" HasShadow="True">
+                    <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Fill" Padding="10,0">
+                        <!-- Icon -->
+                        <Image Source="remove_icon.png" WidthRequest="12" HeightRequest="12" VerticalOptions="Center" />
+                        <!-- Button Text -->
+                        <Button Text="Remove Student" 
+                           Command="{Binding DeleteCommand}"
+                           BackgroundColor="#FFD1CF"
+                           FontFamily="RobotoBold" 
+                           FontSize="14" 
+                           TextColor="#1C1C1E" 
+                           VerticalOptions="Center" 
+                           Margin="5,0,0,0" />
+                    </HorizontalStackLayout>
+                </Frame>
+
+                <BoxView HeightRequest="1" BackgroundColor="#D6D6D6" Margin="0,10,0,10" />
+
+                <Label 
+            Text="Filter by Course" 
+            FontSize="14" 
+            FontAttributes="Bold" 
+            TextColor="#1C1C1E" 
+            FontFamily="RobotoBold" 
+            HorizontalOptions="Center" />
+
+                <!-- Horizontal Stack Layout for Buttons -->
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="7">
+                    <Button 
+                Text="BSCS" 
+                Command="{Binding FilterByCourseCommand}" 
+                CommandParameter="BSCS"
                 FontAttributes="Bold"
-                CornerRadius="8"
-                HeightRequest="50"
-                HorizontalOptions="Fill" />
+                BackgroundColor="#1C1C1E"
+                TextColor="#E9ECEF"
+                FontFamily="RobotoRegular"
+                CornerRadius="6"
+                WidthRequest="60"
+                HeightRequest="30"
+                FontSize="12" />
 
-            <!-- Divider -->
-            <BoxView HeightRequest="1" BackgroundColor="#D6D6D6" Margin="0,10,0,10" />
-           
+                    <Button 
+                Text="BSIT" 
+                Command="{Binding FilterByCourseCommand}" 
+                CommandParameter="BSIT"
+                FontAttributes="Bold"
+                BackgroundColor="#1C1C1E"
+                TextColor="#E9ECEF"
+                FontFamily="RobotoRegular"
+                CornerRadius="6"
+                WidthRequest="60"
+                HeightRequest="30"
+                FontSize="12" />
 
-            <!-- Action Buttons -->
-            <Frame BackgroundColor="#cffdff"  BorderColor="#D6D6D6" CornerRadius="8" HeightRequest="40" Padding="0" HasShadow="True">
-                <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Fill" Padding="10,0">
-                    <!-- Icon -->
-                    <Image Source="add_icon.png" WidthRequest="12" HeightRequest="12" VerticalOptions="Center" />
-                    <!-- Button Text -->
-                    <Label Text="Add Student" 
-               FontFamily="RobotoBold" 
-               FontSize="14" 
-               TextColor="#1C1C1E" 
-               VerticalOptions="Center" 
-               Margin="5,0,0,0" />
+                    <Button 
+                Text="BMMA" 
+                Command="{Binding FilterByCourseCommand}" 
+                CommandParameter="BMMA"
+                FontAttributes="Bold"
+                BackgroundColor="#1C1C1E"
+                TextColor="#E9ECEF"
+                FontFamily="RobotoRegular"
+                CornerRadius="6"
+                WidthRequest="60"
+                HeightRequest="30"
+                FontSize="10" />
                 </HorizontalStackLayout>
-            </Frame>
 
-            <Frame BackgroundColor="#D4FFD5"  BorderColor="#D6D6D6" CornerRadius="8" HeightRequest="40" Padding="0" HasShadow="True">
-                <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Fill" Padding="10,0">
-                    <!-- Icon -->
-                    <Image Source="edit_icon.png" WidthRequest="12" HeightRequest="12" VerticalOptions="Center" />
-                    <!-- Button Text -->
-                    <Label Text="Edit Student" 
-               FontFamily="RobotoBold" 
-                        
-               FontSize="14" 
-               TextColor="#1C1C1E" 
-               VerticalOptions="Center" 
-               Margin="5,0,0,0" />
-                </HorizontalStackLayout>
-            </Frame>
+                <Label 
+            Text="{Binding TotalStudentsDisplay}" 
+            FontFamily="RobotoBold"
+            HorizontalOptions="Center" 
+            Margin="10,5,0,10" 
+            FontSize="14"
+            TextColor="#1C1C1E" />
 
-            <Frame BackgroundColor="#FFD1CF" BorderColor="#D6D6D6" CornerRadius="8" HeightRequest="40" Padding="0" HasShadow="True">
-                <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Fill" Padding="10,0">
-                    <!-- Icon -->
-                    <Image Source="remove_icon.png" WidthRequest="12" HeightRequest="12" VerticalOptions="Center" />
-                    <!-- Button Text -->
-                    <Label Text="Remove Student" 
-               FontFamily="RobotoBold" 
-               FontSize="14" 
-               TextColor="#1C1C1E" 
-               VerticalOptions="Center" 
-               Margin="5,0,0,0" />
-                </HorizontalStackLayout>
-            </Frame>
+                <!-- Divider -->
+                <BoxView HeightRequest="1" BackgroundColor="#D6D6D6" Margin="0,10,0,10" />
 
+                <Label 
+            Text="Selected Student" 
+            FontSize="14" 
+            FontAttributes="Bold" 
+            TextColor="#1C1C1E" 
+            FontFamily="RobotoBold" 
+            HorizontalOptions="Center" />
 
+    
+                    <!-- Name -->
+                    <Label Text="Name:" 
+           FontFamily="RobotoRegular" 
+           TextColor="#3A3A3C" 
+           FontAttributes="Bold"  
+           Margin="0,0,0,-5" />
+                    <Label Text="{Binding NameInput}" 
+           FontFamily="RobotoBold" 
+           FontSize="14" 
+           TextColor="#1C1C1E" 
+           Grid.Row="0" 
+           Grid.Column="1" 
+           Margin="10,0,0,-5" />
 
-            <Label 
-        Text="Select Course" 
-        FontSize="14" 
-        FontAttributes="Bold" 
-        TextColor="#1C1C1E" 
-        FontFamily="RobotoBold" 
-        HorizontalOptions="Center" />
+                    <!-- Last Name -->
+                    <Label Text="Last Name:" 
+           FontFamily="RobotoRegular" 
+           TextColor="#3A3A3C" 
+           FontAttributes="Bold"  
+           Margin="0,0,0,-5" />
+                    <Label Text="{Binding LastNameInput}" 
+           FontFamily="RobotoBold" 
+           FontSize="14" 
+           TextColor="#1C1C1E" 
+           Margin="10,0,0,-5" />
 
-            <!-- Horizontal Stack Layout for Buttons -->
-            <HorizontalStackLayout HorizontalOptions="Center" Spacing="7">
-                <Button 
-                    Text="BSCS" 
-                    Command="{Binding FilterByCourseCommand}" 
-                    CommandParameter="BSCS"
-                    FontAttributes="Bold"
-                    BackgroundColor="#1C1C1E"
-                    TextColor="#E9ECEF"
-                    FontFamily="RobotoRegular"
-                    CornerRadius="6"
-                    WidthRequest="60"
-                    HeightRequest="30"
-                    FontSize="12" />
+                    <!-- Age -->
+                    <Label Text="Age:" 
+           FontFamily="RobotoRegular" 
+           TextColor="#3A3A3C" 
+           FontAttributes="Bold" 
+           Margin="0,0,0,-5" />
+                    <Label Text="{Binding AgeInput}" 
+           FontFamily="RobotoBold" 
+           FontSize="14" 
+           TextColor="#1C1C1E" 
+           Margin="10,-5,0,-5" />
 
-                <Button 
-                    Text="BSIT" 
-                    Command="{Binding FilterByCourseCommand}" 
-                    CommandParameter="BSIT"
-                    FontAttributes="Bold"
-                   BackgroundColor="#1C1C1E"
-                    TextColor="#E9ECEF"
-                    FontFamily="RobotoRegular"
-                    CornerRadius="6"
-                    WidthRequest="60"
-                    HeightRequest="30"
-                    FontSize="12" />
+                    <!-- Email -->
+                    <Label Text="Email:" 
+           FontFamily="RobotoRegular" 
+           TextColor="#3A3A3C" 
+           FontAttributes="Bold" 
+           Margin="0,0,0,-5" />
+                    <Label Text="{Binding EmailInput}" 
+           FontFamily="RobotoBold" 
+           FontSize="14" 
+           TextColor="#1C1C1E" 
+           Margin="10,-5,0,-5" />
 
-                <Button 
-                    Text="BMMA" 
-                    Command="{Binding FilterByCourseCommand}" 
-                    CommandParameter="BMMA"
-                    FontAttributes="Bold"
-                    BackgroundColor="#1C1C1E"
-                    TextColor="#E9ECEF"
-                    FontFamily="RobotoRegular"
-                    CornerRadius="6"
-                    WidthRequest="60"
-                    HeightRequest="30"
-                    FontSize="12" />
-            </HorizontalStackLayout>
-            <Label 
-        Text="{Binding TotalStudentsDisplay}" 
-        FontFamily="RobotoBold"
-        HorizontalOptions="Center" 
-        Margin="10,5,0,10" 
-        FontSize="14"
-        TextColor="#1C1C1E" />
+                    <!-- Contact No -->
+                    <Label Text="Contact No:" 
+           FontFamily="RobotoRegular" 
+           TextColor="#3A3A3C" 
+           FontAttributes="Bold" 
+           Margin="0,0,10,-5" />
+                    <Label Text="{Binding ContactNoInput}" 
+           FontFamily="RobotoBold" 
+           FontSize="14" 
+           TextColor="#1C1C1E" 
+           Margin="10,-5,0,-5" />
 
-            <!-- Total Students per Course -->
-     
-        </VerticalStackLayout>
+                    <!-- Course -->
+                    <Label Text="Course:" 
+           FontFamily="RobotoRegular" 
+           TextColor="#3A3A3C" 
+           FontAttributes="Bold" 
+           Margin="0,0,10,-5" />
+                    <Label Text="{Binding SelectedCourse}" 
+           FontFamily="RobotoBold" 
+           FontSize="14" 
+           TextColor="#1C1C1E" 
+           Margin="10,-5,0,-5" />
+
+                    <!-- Gender -->
+                    <Label Text="Gender:" 
+           FontFamily="RobotoRegular" 
+           TextColor="#3A3A3C" 
+           FontAttributes="Bold" 
+           Margin="0,0,10,-5" />
+                    <Label Text="{Binding SelectedGender}" 
+           FontFamily="RobotoBold" 
+           FontSize="14" 
+           TextColor="#1C1C1E" 
+           Margin="10,-5,0,-5" />
+
+                <Label Text="Congratulations" 
+   FontFamily="RobotoBold" 
+   FontSize="14" 
+   TextColor="#FFFFFF" 
+   Margin="10,0,0,-5" />
+
+                <Label Text="That footer is blocking lol" 
+FontFamily="RobotoBold" 
+FontSize="14" 
+TextColor="#FFFFFF" 
+Margin="10,0,0,-5" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+
 
         <!-- HEADER -->
-        <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,0,20">
+        <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="10,10,10,10">
             <Label 
                 Text="  Student Management"
                 FontFamily="RobotoBold"
@@ -158,36 +283,38 @@
                 HorizontalOptions="Start" />
 
             <Button 
-                Text="← Back"
+                Text="◀  Back"
                 Command="{Binding BackCommand}"
-                BackgroundColor="WHite"
-                TextColor="#1C1C1E"
+                BackgroundColor="#1c1c1e"
+                TextColor="#fff"
                 FontFamily="RobotoRegular"
                 CornerRadius="8"
                 HeightRequest="40"
                 HorizontalOptions="End"
-                WidthRequest="100" />
+                WidthRequest="100"
+                FontSize="13"
+                Margin="0,0,15,0"/>
         </Grid>
 
         <!-- STUDENT LIST WITH VISUAL SELECTION -->
-        <CollectionView Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}" SelectionMode="Single" Margin="0,0,0,20">
+        <CollectionView Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}" SelectionMode="Single" Margin="20,0,20,0">
             <CollectionView.ItemsLayout>
                 <!-- Horizontal Wrap Layout -->
-                <GridItemsLayout Orientation="Vertical" Span="2" />
+                <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="5" VerticalItemSpacing="5" />
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame BackgroundColor="#FFFFFF" BorderColor="AliceBlue" CornerRadius="8" Padding="10" Margin="10" HasShadow="True">
+                    <Frame BackgroundColor="#FFFFFF" BorderColor="AliceBlue" CornerRadius="8" Padding="20" Margin="10" HasShadow="True">
                         <VerticalStackLayout Spacing="5">
                             <!-- Name with Icon -->
                             <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
                                 <!-- Student Icon -->
-                                <Image Source="student_icon.png" WidthRequest="20" HeightRequest="20" VerticalOptions="Center" />
+                                <Image Source="student_icon.png" WidthRequest="30" HeightRequest="40" VerticalOptions="Center" />
 
                                 <!-- Student Name -->
                                 <Label Text="{Binding FullName}" FontAttributes="Bold" FontFamily="RobotoBold" FontSize="16" TextColor="#1C1C1E" VerticalOptions="Center" />
 
-                               
+
                             </HorizontalStackLayout>
 
                             <!-- Student Details -->
@@ -203,14 +330,15 @@
         </CollectionView>
 
         <!-- FOOTER -->
-        <Grid Grid.Row="2" Grid.ColumnSpan="3" BackgroundColor="#E9ECEF" HeightRequest="40" Padding="10">
+        <Grid Grid.Row="2" Grid.ColumnSpan="3" BackgroundColor="#d4d4d4" HeightRequest="50" Padding="10">
             <Label 
-                Text="© 2024 St. Freya All rights reserved."
+                Text="© 2024 St. Freya. All Rights Reserved."
                 FontFamily="RobotoRegular"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
                 FontSize="12"
-                TextColor="#6C757D" />
+                TextColor="#787878" />
         </Grid>
     </Grid>
+        
 </ContentPage>
