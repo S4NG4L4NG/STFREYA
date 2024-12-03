@@ -26,7 +26,9 @@
                    FontAttributes="Bold"
                    HorizontalOptions="Center"
                    Margin="10" />
-
+            <!-- SEARCH BAR -->
+            <SearchBar Placeholder="Search by name, email, or course"
+                       Text="{Binding SearchTerm}" />
             <!-- LOAD STUDENTS BUTTON -->
             <Button Text="Load Students" Command="{Binding LoadStudentCommand}" />
 
@@ -48,26 +50,13 @@
                 <Button Text="BMMA" Command="{Binding FilterByCourseCommand}" CommandParameter="BMMA" />
             </HorizontalStackLayout>
 
-            <!-- SEARCH BAR -->
-            <SearchBar Placeholder="Search by name, email, or course"
-                       Text="{Binding SearchTerm}" />
-
             <!-- TOTAL STUDENTS PER COURSE -->
-            <Label Text="Total Students per Course" 
+            <!--<Label Text="Total Students per Course" 
                    FontAttributes="Bold"
                    HorizontalOptions="Center" 
-                   Margin="10" />
-
-            <!-- EMAIL BUTTONS -->
-            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
-                <Button Text="Email BSCS" Command="{Binding SendEmailCommand}" CommandParameter="BSCS" />
-                <Button Text="Email BSIT" Command="{Binding SendEmailCommand}" CommandParameter="BSIT" />
-                <Button Text="Email BMMA" Command="{Binding SendEmailCommand}" CommandParameter="BMMA" />
-            </HorizontalStackLayout>
-
-            <!-- RESET FILTER BUTTON -->
-            <Button Text="Show All Students" Command="{Binding LoadStudentCommand}" Margin="10" />
-
+                   Margin="10" /> -->
+            <Label Text="Select Date" FontSize="18" FontAttributes="Bold" />
+            <DatePicker Date="{Binding SelectedDate}" />
             <!-- LIST OF STUDENTS -->
             <ListView ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}">
                 <ListView.ItemTemplate>
@@ -82,9 +71,7 @@
                                 <Label Text="{Binding course}" />
                                 <Label Text=" | " FontAttributes="Bold" />
                                 <Label Text="{Binding gender}" />
-                                <Button Text="Mark Attendance"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MarkAttendanceCommand}"
-                                        CommandParameter="{Binding .}" />
+
                                 <Button Text="Add Score"
                             Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AddScoreCommand}"
                             CommandParameter="{Binding .}" />
@@ -98,7 +85,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
+            <Button Text="Mark Attendance" Command="{Binding OpenMarkAttendanceModalCommand}" CommandParameter="{Binding SelectedDate}" />
             <!-- EXPORT ATTENDANCE BUTTON -->
             <Button Text="Export Attendance to CSV" Command="{Binding ExportAttendanceCommand}" Margin="10" />
             <Button Text="Export Performance to CSV" Command="{Binding ExportPerformanceCommand}" />

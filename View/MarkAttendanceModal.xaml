@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               x:Class="STFREYA.View.MarkAttendanceModal">
+    <ScrollView>
+    <VerticalStackLayout Padding="20" Spacing="10" BackgroundColor="White">
+
+        <Label Text="Mark Attendance" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
+
+        <!-- Select Date -->
+        <Label Text="Selected Date" />
+            <DatePicker Date="{Binding SelectedDate, Mode=TwoWay}" IsEnabled="True" />
+
+        <!-- Attendance List -->
+            <CollectionView ItemsSource="{Binding AttendanceItems}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Orientation="Horizontal" Spacing="10" Padding="5">
+                            <Label Text="{Binding Student.FullName}" VerticalOptions="Center" />
+                            <StackLayout Orientation="Horizontal" Spacing="20">
+                                <RadioButton 
+                                    Content="Present" 
+                                    GroupName="{Binding Student.student_id}" 
+                                    IsChecked="{Binding Status, Mode=TwoWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Present}" />
+                                <RadioButton 
+                                    Content="Late" 
+                                    GroupName="{Binding Student.student_id}" 
+                                    IsChecked="{Binding Status, Mode=TwoWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Late}" />
+                                <RadioButton 
+                                    Content="Absent" 
+                                    GroupName="{Binding Student.student_id}" 
+                                    IsChecked="{Binding Status, Mode=TwoWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Absent}" />
+                            </StackLayout>
+                        </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Save Button -->
+        <Button Text="Save Attendance" Command="{Binding SaveAttendanceCommand}" />
+
+        <!-- Close Button -->
+        <Button Text="Close" Command="{Binding CloseModalCommand}" />
+    </VerticalStackLayout>
+    </ScrollView>
+</toolkit:Popup>

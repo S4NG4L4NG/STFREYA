@@ -73,7 +73,7 @@
 	  <MauiXaml Update="View\AddStudentModal.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\AttendanceReportView.xaml">
+	  <MauiXaml Update="View\MarkAttendanceModal.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\StudentList.xaml">

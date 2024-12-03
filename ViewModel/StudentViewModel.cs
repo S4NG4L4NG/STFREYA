@@ -25,6 +25,10 @@ namespace STFREYA.ViewModel
         private readonly StudentService _studentService;
         public ObservableCollection<Student> Students { get; set; }
         public ObservableCollection<AttendanceRecord> AttendanceRecords { get; set; }
+        public ObservableCollection<string> AttendanceStatusOptions { get; set; } = new ObservableCollection<string>
+        {
+            "Present", "Absent", "Late"
+        };
 
         private AddStudentModal _addPopup;
         private UpdateStudentModal _updatePopup;
@@ -53,251 +57,9 @@ namespace STFREYA.ViewModel
         "Male", "Female"
     };
 
-        private void FilterStudents()
-        {
-            if (_allStudents == null) return; // Avoid null reference errors
-
-            if (string.IsNullOrWhiteSpace(SearchTerm))
-            {
-                // Reset to the full list if the search term is empty
-                Students = new ObservableCollection<Student>(_allStudents);
-            }
-            else
-            {
-                // Filter the list by name, email, or course
-                var filtered = _allStudents.Where(s =>
-                    (!string.IsNullOrEmpty(s.name) && s.name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
-                    (!string.IsNullOrEmpty(s.email) && s.email.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
-                    (!string.IsNullOrEmpty(s.course) && s.course.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)))
-                    .ToList();
-
-                Students = new ObservableCollection<Student>(filtered);
-            }
-
-            OnPropertyChanged(nameof(Students));
-        }
-
-        private void FilterByCourse(string course)
-        {
-            if (_allStudents == null || string.IsNullOrEmpty(course))
-            {
-                Console.WriteLine("FilterByCourse: No students or course is empty.");
-                return; // Avoid null reference errors
-            }
-
-            // Filter students matching the selected course
-            var filtered = _allStudents.Where(s => s.course.Equals(course, StringComparison.OrdinalIgnoreCase)).ToList();
-
-            Students = new ObservableCollection<Student>(filtered);
-            TotalStudentsDisplay = $"Total Students in {course}: {filtered.Count}";
-            OnPropertyChanged(nameof(Students)); // Notify the UI
-        }
-
-        private void UpdateEntryField()
-        {
-            if (SelectedStudent != null)
-            {
-                NameInput = SelectedStudent.name;
-                LastNameInput = SelectedStudent.lastname;
-                AgeInput = SelectedStudent.age; // Age as string
-                EmailInput = SelectedStudent.email;
-                ContactNoInput = SelectedStudent.contactno;
-                SelectedCourse = SelectedStudent.course; // Set the dropdown to the selected course
-                SelectedGender = SelectedStudent.gender;
-            }
-             else 
-            {
-                ClearInput();
-            }
-        }
-
-        //generating report
-        public int TotalStudents => Students?.Count ?? 0;
-
-        public Dictionary<string, int> StudentsPerCourse =>
-            Students?.GroupBy(s => s.course)
-                     .ToDictionary(g => g.Key, g => g.Count()) ?? new Dictionary<string, int>();
-
-        public double AverageAge =>
-            Students?.Any() == true
-                ? Students.Average(s => int.TryParse(s.age, out var age) ? age : 0)
-                : 0;
-
-        public Dictionary<string, double> CoursePercentageDistribution =>
-            StudentsPerCourse?.ToDictionary(kvp => kvp.Key, kvp => (kvp.Value / (double)TotalStudents) * 100) ?? new Dictionary<string, double>();
-
-        public Dictionary<string, int> GenderCounts =>
-    Students?.GroupBy(s => s.gender)
-             .ToDictionary(g => g.Key, g => g.Count()) ?? new Dictionary<string, int>();
-
-        public Dictionary<string, double> GenderPercentageDistribution =>
-            GenderCounts?.ToDictionary(kvp => kvp.Key, kvp => (kvp.Value / (double)TotalStudents) * 100) ?? new Dictionary<string, double>();
-
-        private Dictionary<string, int> _courseCounts;
-        public Dictionary<string, int> CourseCounts
-        {
-            get => _courseCounts;
-            set
-            {
-                _courseCounts = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private async void SendEmails(string course)
-        {
-            try
-            {
-                Console.WriteLine("SendEmails triggered.");
-
-                // Filter selected students or by course
-                var selectedStudents = Students
-                    .Where(s => (course == null || s.course == course || s.IsSelected))
-                    .ToList();
-
-                if (!selectedStudents.Any())
-                {
-                    Console.WriteLine("No students found for email.");
-                    await App.Current.MainPage.DisplayAlert("No Students Selected", "Please select students or filter by course to send emails.", "OK");
-                    return;
-                }
-
-                foreach (var student in selectedStudents)
-                {
-                    if (!IsValidEmail(student.email))
-                    {
-                        Console.WriteLine($"Invalid email: {student.email}");
-                        await App.Current.MainPage.DisplayAlert("Invalid Email", $"Invalid email address: {student.email}", "OK");
-                        continue;
-                    }
-
-                    Console.WriteLine($"Sending email to: {student.email}");
-
-                    var mailMessage = new MailMessage
-                    {
-                        From = new MailAddress("sangalang.leandro@auf.edu.ph"), // Replace with your Gmail email
-                        Subject = "Important Update",
-                        Body = $"Dear {student.name},\n\nThis is a notification for your course: {student.course}.",
-                    };
-
-                    mailMessage.To.Add(student.email);
-
-                    using (var smtpClient = new SmtpClient("smtp.gmail.com"))
-                    {
-                        smtpClient.Port = 587; // Gmail uses port 587 for TLS
-                        smtpClient.Credentials = new NetworkCredential("sangalang.leandro@auf.edu.ph", "euol zhif lfns seyf");
-                        smtpClient.EnableSsl = true; // Enable SSL
-
-                        smtpClient.Send(mailMessage);
-                    }
-
-                    Console.WriteLine($"Email sent successfully to: {student.email}");
-                }
-
-                await App.Current.MainPage.DisplayAlert("Success", "Emails sent successfully!", "OK");
-            }
-            catch (SmtpException smtpEx)
-            {
-                Console.WriteLine($"SMTP Error: {smtpEx}");
-                await App.Current.MainPage.DisplayAlert("SMTP Error", $"SMTP failed: {smtpEx.Message}", "OK");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"General Error: {ex}");
-                await App.Current.MainPage.DisplayAlert("Error", $"Failed to send emails: {ex.Message}", "OK");
-            }
-        }
-
-
-        private void CalculateCourseCounts()
-        {
-            if (_allStudents == null) return;
-
-            CourseCounts = _allStudents
-                .Where(s => !string.IsNullOrEmpty(s.course)) // Ignore null or empty courses
-                .GroupBy(s => s.course)
-                .ToDictionary(g => g.Key, g => g.Count());
-
-            Console.WriteLine("CourseCounts updated:");
-            foreach (var entry in CourseCounts)
-            {
-                Console.WriteLine($"{entry.Key}: {entry.Value}");
-            }
-        }
-
-    
-        private void ExportToCSV()
-        {
-            try
-            {
-                var fileName = "StudentList.csv";
-                var filePath = Path.Combine(FileSystem.AppDataDirectory, fileName);
-
-                var csvBuilder = new StringBuilder();
-                csvBuilder.AppendLine("Name,Last Name,Age,Email,Contact No,Course");
-
-                foreach (var student in Students)
-                {
-                    csvBuilder.AppendLine($"{student.name},{student.lastname},{student.age},{student.email},{student.contactno},{student.course}");
-                }
-
-                File.WriteAllText(filePath, csvBuilder.ToString());
-
-                // Notify user of successful export
-                App.Current.MainPage.DisplayAlert("Export Successful", $"CSV saved to: {filePath}", "OK");
-            }
-            catch (Exception ex)
-            {
-                App.Current.MainPage.DisplayAlert("Export Failed", $"Error: {ex.Message}", "OK");
-            }
-        }
-
-        // Email Validation Helper
-        private bool IsValidEmail(string email)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(email))
-                    return false;
-
-                var mailAddress = new MailAddress(email);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-  
-
-        // notification
-        private string _notificationMessage;
-        private bool _isNotificationVisible;
+        
 
         private string _totalStudentsDisplay;
-
-        public string NotificationMessage
-        {
-            get => _notificationMessage;
-            set
-            {
-                _notificationMessage = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsNotificationVisible
-        {
-            get => _isNotificationVisible;
-            set
-            {
-        _isNotificationVisible = value;
-        MainThread.BeginInvokeOnMainThread(() =>
-        {
-            OnPropertyChanged(nameof(IsNotificationVisible));
-        });
-    }
-        }
 
         public string TotalStudentsDisplay
         {
@@ -308,6 +70,17 @@ namespace STFREYA.ViewModel
                 OnPropertyChanged();
             }
         }
+        private DateTime _selectedDate;
+        public DateTime SelectedDate
+        {
+            get => _selectedDate;
+            set
+            {
+                _selectedDate = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         private string _selectedCourse;
         public string SelectedCourse
@@ -444,10 +217,8 @@ namespace STFREYA.ViewModel
             FilterByCourseCommand = new Command<string>(FilterByCourse); // Initialize the command
             BackCommand = new Command(async () => await Shell.Current.GoToAsync("//MainPage"));
             ExportToCSVCommand = new Command(ExportToCSV);
-            SendEmailCommand = new Command<string>(SendEmails);
             NavigateToProfileCommand = new Command<Student>(async (student) => await NavigateToProfile(student));
             GenerateReportCommand = new Command(GenerateReport);
-            MarkAttendanceCommand = new Command<Student>(MarkAttendance);
             ExportAttendanceCommand = new Command(ExportAttendance);
             AddScoreCommand = new Command<Student>(AddScore);
             ExportPerformanceCommand = new Command(ExportPerformance);
@@ -455,6 +226,7 @@ namespace STFREYA.ViewModel
             OpenUpdateStudentModalCommand = new Command(OpenUpdateStudentModal);
             CloseModalCommand = new Command(CloseModal);
             CloseUpdateModalCommand = new Command(CloseUpdateModal);
+            OpenMarkAttendanceModalCommand = new Command(OpenMarkAttendanceModal);
             LoadStudents();
         }
 
@@ -466,7 +238,6 @@ namespace STFREYA.ViewModel
         public ICommand FilterByCourseCommand { get; }
         public ICommand BackCommand { get; }
         public ICommand ExportToCSVCommand { get; }
-        public ICommand SendEmailCommand { get; }
         public ICommand NavigateToProfileCommand { get; }
         public ICommand GenerateReportCommand { get; }
         public ICommand MarkAttendanceCommand { get; }
@@ -479,6 +250,8 @@ namespace STFREYA.ViewModel
         public Command OpenUpdateStudentModalCommand { get; }
         public Command CloseModalCommand { get; }
         public Command CloseUpdateModalCommand { get; }
+
+        public Command OpenMarkAttendanceModalCommand { get; }
         private async Task LoadStudents()
         {
             var students = await _studentService.GetStudentsAsync();
@@ -529,6 +302,16 @@ namespace STFREYA.ViewModel
         private void CloseUpdateModal()
         {
             _updatePopup?.Close();
+        }
+
+        private void OpenMarkAttendanceModal()
+        {
+            var attendanceViewModel = new AttendanceViewModel(SelectedDate, Students);
+            var popup = new MarkAttendanceModal
+            {
+                BindingContext = attendanceViewModel
+            };
+            App.Current.MainPage.ShowPopup(popup);
         }
         // ADD STUDENT METHOD
         public async Task AddStudent()
@@ -687,38 +470,6 @@ namespace STFREYA.ViewModel
             });
         }
 
-        private async void MarkAttendance(Student student)
-        {
-            if (student == null) return;
-
-            // Prompt the user to select attendance status
-            var attendanceStatus = await App.Current.MainPage.DisplayActionSheet(
-                $"Mark Attendance for {student.name} {student.lastname}",
-                "Cancel",
-                null,
-                "Present",
-                "Absent");
-
-            if (attendanceStatus == "Cancel" || string.IsNullOrEmpty(attendanceStatus))
-            {
-                return; // User canceled or closed the action sheet
-            }
-
-            var currentDate = DateTime.Now.ToString("MM/dd/yyyy");
-
-            // Add the attendance record
-            AttendanceRecords.Add(new AttendanceRecord
-            {
-                StudentID = student.student_id,
-                Name = $"{student.name} {student.lastname}",
-                Date = currentDate,
-                Status = attendanceStatus
-            });
-
-            await App.Current.MainPage.DisplayAlert("Attendance Marked", $"{student.name} {student.lastname} is marked as {attendanceStatus}.", "OK");
-        }
-
-
         //generate report method
         private void GenerateReport()
         {
@@ -751,12 +502,12 @@ namespace STFREYA.ViewModel
             // Display the report
             App.Current.MainPage.DisplayAlert("Student Report", report.ToString(), "OK");
 
-            // Save to CSV file
-            var filePath = Path.Combine(FileSystem.AppDataDirectory, "StudentReport.csv");
-            File.WriteAllText(filePath, report.ToString());
+            //// Save to CSV file
+            //var filePath = Path.Combine(FileSystem.AppDataDirectory, "StudentReport.csv");
+            //File.WriteAllText(filePath, report.ToString());
 
-            // Notify the user
-            App.Current.MainPage.DisplayAlert("Export Successful", $"Report saved to {filePath}", "OK");
+            //// Notify the user
+            //App.Current.MainPage.DisplayAlert("Export Successful", $"Report saved to {filePath}", "OK");
         }
 
         private void ExportAttendance()
@@ -842,6 +593,157 @@ namespace STFREYA.ViewModel
             catch (Exception ex)
             {
                 App.Current.MainPage.DisplayAlert("Export Failed", $"Error: {ex.Message}", "OK");
+            }
+        }
+
+        private void FilterStudents()
+        {
+            if (_allStudents == null) return; // Avoid null reference errors
+
+            if (string.IsNullOrWhiteSpace(SearchTerm))
+            {
+                // Reset to the full list if the search term is empty
+                Students = new ObservableCollection<Student>(_allStudents);
+            }
+            else
+            {
+                // Filter the list by name, email, or course
+                var filtered = _allStudents.Where(s =>
+                    (!string.IsNullOrEmpty(s.name) && s.name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                    (!string.IsNullOrEmpty(s.email) && s.email.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                    (!string.IsNullOrEmpty(s.course) && s.course.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)))
+                    .ToList();
+
+                Students = new ObservableCollection<Student>(filtered);
+            }
+
+            OnPropertyChanged(nameof(Students));
+        }
+
+        private void FilterByCourse(string course)
+        {
+            if (_allStudents == null || string.IsNullOrEmpty(course))
+            {
+                Console.WriteLine("FilterByCourse: No students or course is empty.");
+                return; // Avoid null reference errors
+            }
+
+            // Filter students matching the selected course
+            var filtered = _allStudents.Where(s => s.course.Equals(course, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            Students = new ObservableCollection<Student>(filtered);
+            TotalStudentsDisplay = $"Total Students in {course}: {filtered.Count}";
+            OnPropertyChanged(nameof(Students)); // Notify the UI
+        }
+
+        private void UpdateEntryField()
+        {
+            if (SelectedStudent != null)
+            {
+                NameInput = SelectedStudent.name;
+                LastNameInput = SelectedStudent.lastname;
+                AgeInput = SelectedStudent.age; // Age as string
+                EmailInput = SelectedStudent.email;
+                ContactNoInput = SelectedStudent.contactno;
+                SelectedCourse = SelectedStudent.course; // Set the dropdown to the selected course
+                SelectedGender = SelectedStudent.gender;
+            }
+            else
+            {
+                ClearInput();
+            }
+        }
+
+        //generating report
+        public int TotalStudents => Students?.Count ?? 0;
+
+        public Dictionary<string, int> StudentsPerCourse =>
+            Students?.GroupBy(s => s.course)
+                     .ToDictionary(g => g.Key, g => g.Count()) ?? new Dictionary<string, int>();
+
+        public double AverageAge =>
+            Students?.Any() == true
+                ? Students.Average(s => int.TryParse(s.age, out var age) ? age : 0)
+                : 0;
+
+        public Dictionary<string, double> CoursePercentageDistribution =>
+            StudentsPerCourse?.ToDictionary(kvp => kvp.Key, kvp => (kvp.Value / (double)TotalStudents) * 100) ?? new Dictionary<string, double>();
+
+        public Dictionary<string, int> GenderCounts =>
+    Students?.GroupBy(s => s.gender)
+             .ToDictionary(g => g.Key, g => g.Count()) ?? new Dictionary<string, int>();
+
+        public Dictionary<string, double> GenderPercentageDistribution =>
+            GenderCounts?.ToDictionary(kvp => kvp.Key, kvp => (kvp.Value / (double)TotalStudents) * 100) ?? new Dictionary<string, double>();
+
+        private Dictionary<string, int> _courseCounts;
+        public Dictionary<string, int> CourseCounts
+        {
+            get => _courseCounts;
+            set
+            {
+                _courseCounts = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void CalculateCourseCounts()
+        {
+            if (_allStudents == null) return;
+
+            CourseCounts = _allStudents
+                .Where(s => !string.IsNullOrEmpty(s.course)) // Ignore null or empty courses
+                .GroupBy(s => s.course)
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            Console.WriteLine("CourseCounts updated:");
+            foreach (var entry in CourseCounts)
+            {
+                Console.WriteLine($"{entry.Key}: {entry.Value}");
+            }
+        }
+
+
+        private void ExportToCSV()
+        {
+            try
+            {
+                var fileName = "StudentList.csv";
+                var filePath = Path.Combine(FileSystem.AppDataDirectory, fileName);
+
+                var csvBuilder = new StringBuilder();
+                csvBuilder.AppendLine("Name,Last Name,Age,Email,Contact No,Course");
+
+                foreach (var student in Students)
+                {
+                    csvBuilder.AppendLine($"{student.name},{student.lastname},{student.age},{student.email},{student.contactno},{student.course}");
+                }
+
+                File.WriteAllText(filePath, csvBuilder.ToString());
+
+                // Notify user of successful export
+                App.Current.MainPage.DisplayAlert("Export Successful", $"CSV saved to: {filePath}", "OK");
+            }
+            catch (Exception ex)
+            {
+                App.Current.MainPage.DisplayAlert("Export Failed", $"Error: {ex.Message}", "OK");
+            }
+        }
+
+        // Email Validation Helper
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(email))
+                    return false;
+
+                var mailAddress = new MailAddress(email);
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
 
