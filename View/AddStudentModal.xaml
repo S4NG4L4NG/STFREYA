@@ -68,7 +68,7 @@
                 </Frame>
 
                 <!-- Course Picker -->
-                <Label Text="Course" FontFamily="RobotoRegular" TextColor="#3A3A3C"/>
+                <Label Text="Course" FontFamily="RobotoRegular" TextColor="#040001"/>
                 <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
                     <Picker Title="Select a Course" 
                             ItemsSource="{Binding CourseOptions}" 
@@ -78,7 +78,7 @@
                 </Frame>
 
                 <!-- Gender Picker -->
-                <Label Text="Gender" FontFamily="RobotoRegular" TextColor="#3A3A3C"/>
+                <Label Text="Gender" FontFamily="RobotoRegular" TextColor="#040001"/>
                 <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
                     <Picker Title="Select Gender" 
                             ItemsSource="{Binding GenderOptions}" 
@@ -89,10 +89,11 @@
 
                 <!-- Submit and Cancel Buttons -->
                 <Button Text="Submit" Command="{Binding AddStudentCommand}" 
-                        BackgroundColor="#4CAF50" TextColor="#FFFFFF" 
+                        BackgroundColor="#040001" TextColor="#FFFFFF" 
+
                         CornerRadius="8" HeightRequest="50"/>
                 <Button Text="Cancel" Command="{Binding CloseModalCommand}" 
-                        BackgroundColor="#FF6347" TextColor="#FFFFFF" 
+                        BackgroundColor="#040001" TextColor="#FFFFFF" 
                         CornerRadius="8" HeightRequest="50"/>
             </VerticalStackLayout>
         </Frame>

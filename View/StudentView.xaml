@@ -40,79 +40,110 @@
            
 
             <!-- Action Buttons -->
-            <Button 
-                Text="Add Student"
-                Command="{Binding OpenAddStudentModalCommand}"
-                BackgroundColor="#cffdff"
-                TextColor="#1C1C1E"
-                FontFamily="RobotoBold"
-                CornerRadius="8"
-                HeightRequest="40"
-                HorizontalOptions="Fill" />
+            <Frame BackgroundColor="#cffdff"  BorderColor="#D6D6D6" CornerRadius="8" HeightRequest="40" Padding="0" HasShadow="True">
+                <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Fill" Padding="10,0">
+                    <!-- Icon -->
+                    <Image Source="add_icon.png" WidthRequest="12" HeightRequest="12" VerticalOptions="Center" />
+                    <!-- Button Text -->
+                    <Label Text="Add Student" 
+               FontFamily="RobotoBold" 
+               FontSize="14" 
+               TextColor="#1C1C1E" 
+               VerticalOptions="Center" 
+               Margin="5,0,0,0" />
+                </HorizontalStackLayout>
+            </Frame>
 
-            <Button 
-                Text="Edit Student"
-                Command="{Binding OpenUpdateStudentModalCommand}"
-                BackgroundColor="#E9ECEF"
-                TextColor="#1C1C1E"
-                FontFamily="RobotoBold"
-                CornerRadius="8"
-                HeightRequest="40"
-                HorizontalOptions="Fill" />
+            <Frame BackgroundColor="#D4FFD5"  BorderColor="#D6D6D6" CornerRadius="8" HeightRequest="40" Padding="0" HasShadow="True">
+                <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Fill" Padding="10,0">
+                    <!-- Icon -->
+                    <Image Source="edit_icon.png" WidthRequest="12" HeightRequest="12" VerticalOptions="Center" />
+                    <!-- Button Text -->
+                    <Label Text="Edit Student" 
+               FontFamily="RobotoBold" 
+                        
+               FontSize="14" 
+               TextColor="#1C1C1E" 
+               VerticalOptions="Center" 
+               Margin="5,0,0,0" />
+                </HorizontalStackLayout>
+            </Frame>
 
-            <Button 
-                Text="Remove Student"
-                Command="{Binding DeleteCommand}"
-                BackgroundColor="#FFD1CF"
-                TextColor="#1C1C1E"
-                FontFamily="RobotoBold"
-                CornerRadius="8"
-                HeightRequest="40"
-                HorizontalOptions="Fill" />
+            <Frame BackgroundColor="#FFD1CF" BorderColor="#D6D6D6" CornerRadius="8" HeightRequest="40" Padding="0" HasShadow="True">
+                <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Fill" Padding="10,0">
+                    <!-- Icon -->
+                    <Image Source="remove_icon.png" WidthRequest="12" HeightRequest="12" VerticalOptions="Center" />
+                    <!-- Button Text -->
+                    <Label Text="Remove Student" 
+               FontFamily="RobotoBold" 
+               FontSize="14" 
+               TextColor="#1C1C1E" 
+               VerticalOptions="Center" 
+               Margin="5,0,0,0" />
+                </HorizontalStackLayout>
+            </Frame>
 
-            <!-- Total Students per Course -->
+
+
             <Label 
-                Text="Total Students per Course" 
-                FontFamily="RobotoBold"
-                HorizontalOptions="Center" 
-                Margin="10,20,0,10" />
-            <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
+        Text="Select Course" 
+        FontSize="14" 
+        FontAttributes="Bold" 
+        TextColor="#1C1C1E" 
+        FontFamily="RobotoBold" 
+        HorizontalOptions="Center" />
+
+            <!-- Horizontal Stack Layout for Buttons -->
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="7">
                 <Button 
                     Text="BSCS" 
                     Command="{Binding FilterByCourseCommand}" 
                     CommandParameter="BSCS"
-                    BackgroundColor="#E9ECEF"
-                    TextColor="#1C1C1E"
+                    FontAttributes="Bold"
+                    BackgroundColor="#1C1C1E"
+                    TextColor="#E9ECEF"
                     FontFamily="RobotoRegular"
                     CornerRadius="6"
                     WidthRequest="60"
                     HeightRequest="30"
-                    FontSize="10" />
+                    FontSize="12" />
 
                 <Button 
                     Text="BSIT" 
                     Command="{Binding FilterByCourseCommand}" 
                     CommandParameter="BSIT"
-                    BackgroundColor="#E9ECEF"
-                    TextColor="#1C1C1E"
+                    FontAttributes="Bold"
+                   BackgroundColor="#1C1C1E"
+                    TextColor="#E9ECEF"
                     FontFamily="RobotoRegular"
                     CornerRadius="6"
                     WidthRequest="60"
                     HeightRequest="30"
-                    FontSize="10" />
+                    FontSize="12" />
 
                 <Button 
                     Text="BMMA" 
                     Command="{Binding FilterByCourseCommand}" 
                     CommandParameter="BMMA"
-                    BackgroundColor="#E9ECEF"
-                    TextColor="#1C1C1E"
+                    FontAttributes="Bold"
+                    BackgroundColor="#1C1C1E"
+                    TextColor="#E9ECEF"
                     FontFamily="RobotoRegular"
                     CornerRadius="6"
                     WidthRequest="60"
                     HeightRequest="30"
-                    FontSize="10" />
+                    FontSize="12" />
             </HorizontalStackLayout>
+            <Label 
+        Text="{Binding TotalStudentsDisplay}" 
+        FontFamily="RobotoBold"
+        HorizontalOptions="Center" 
+        Margin="10,5,0,10" 
+        FontSize="14"
+        TextColor="#1C1C1E" />
+
+            <!-- Total Students per Course -->
+     
         </VerticalStackLayout>
 
         <!-- HEADER -->
