@@ -70,17 +70,6 @@ namespace STFREYA.ViewModel
                 OnPropertyChanged();
             }
         }
-        private DateTime _selectedDate;
-        public DateTime SelectedDate
-        {
-            get => _selectedDate;
-            set
-            {
-                _selectedDate = value;
-                OnPropertyChanged();
-            }
-        }
-
 
         private string _selectedCourse;
         public string SelectedCourse
@@ -219,7 +208,6 @@ namespace STFREYA.ViewModel
             ExportToCSVCommand = new Command(ExportToCSV);
             NavigateToProfileCommand = new Command<Student>(async (student) => await NavigateToProfile(student));
             GenerateReportCommand = new Command(GenerateReport);
-            ExportAttendanceCommand = new Command(ExportAttendance);
             AddScoreCommand = new Command<Student>(AddScore);
             ExportPerformanceCommand = new Command(ExportPerformance);
             OpenAddStudentModalCommand = new Command(OpenAddStudentModal);
@@ -306,7 +294,7 @@ namespace STFREYA.ViewModel
 
         private void OpenMarkAttendanceModal()
         {
-            var attendanceViewModel = new AttendanceViewModel(SelectedDate, Students);
+            var attendanceViewModel = new AttendanceViewModel(Students);
             var popup = new MarkAttendanceModal
             {
                 BindingContext = attendanceViewModel
@@ -510,30 +498,7 @@ namespace STFREYA.ViewModel
             //App.Current.MainPage.DisplayAlert("Export Successful", $"Report saved to {filePath}", "OK");
         }
 
-        private void ExportAttendance()
-        {
-            try
-            {
-                var fileName = "AttendanceReport.csv";
-                var filePath = Path.Combine(FileSystem.AppDataDirectory, fileName);
-
-                var csvBuilder = new StringBuilder();
-                csvBuilder.AppendLine("Student ID,Name,Date,Status");
-
-                foreach (var record in AttendanceRecords)
-                {
-                    csvBuilder.AppendLine($"{record.StudentID},{record.Name},{record.Date},{record.Status}");
-                }
-
-                File.WriteAllText(filePath, csvBuilder.ToString());
-
-                App.Current.MainPage.DisplayAlert("Export Successful", $"Attendance report saved to {filePath}", "OK");
-            }
-            catch (Exception ex)
-            {
-                App.Current.MainPage.DisplayAlert("Export Failed", $"Error: {ex.Message}", "OK");
-            }
-        }
+       
 
         private void AddScore(Student student)
         {

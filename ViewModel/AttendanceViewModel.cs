@@ -10,6 +10,9 @@ using STFREYA.Services;
 using System.Text.Json;
 using CommunityToolkit.Maui.Views;
 using System.Diagnostics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using CommunityToolkit.Maui.Storage;
+using System.Windows.Input;
 
 namespace STFREYA.ViewModel
 {
@@ -36,7 +39,7 @@ namespace STFREYA.ViewModel
                 }
             }
         }
-        private DateTime _selectedDate;
+        private DateTime _selectedDate = DateTime.Now;
         public DateTime SelectedDate
         {
             get => _selectedDate;
@@ -53,11 +56,12 @@ namespace STFREYA.ViewModel
 
         public Command SaveAttendanceCommand { get; }
         public Command CloseModalCommand { get; }
-
-        public AttendanceViewModel(DateTime selectedDate, ObservableCollection<Student> students)
+        public ICommand ExportAttendanceCommand { get; }
+        public Command OpenMarkAttendanceModalCommand { get; }
+        public AttendanceViewModel(ObservableCollection<Student> students)
         {
             _attendanceService = new AttendanceService();
-            SelectedDate = selectedDate;
+            SelectedDate = SelectedDate;
             Students = students;
 
             // Initialize AttendanceItems by creating AttendanceItems for each student
@@ -67,9 +71,21 @@ namespace STFREYA.ViewModel
                     Student = s,
                     Status = "Absent" // Default status
                 }));
-
+            OpenMarkAttendanceModalCommand = new Command(OpenMarkAttendanceModal);
             SaveAttendanceCommand = new Command(SaveAttendance);
             CloseModalCommand = new Command(CloseModal);
+            LoadAttendanceForDate(SelectedDate);
+            ExportAttendanceCommand = new Command(ExportAttendance);
+        }
+
+        private void OpenMarkAttendanceModal()
+        {
+            var attendanceViewModel = new AttendanceViewModel(Students);
+            var popup = new MarkAttendanceModal
+            {
+                BindingContext = attendanceViewModel
+            };
+            App.Current.MainPage.ShowPopup(popup);
         }
 
         private async void SaveAttendance()
@@ -83,13 +99,13 @@ namespace STFREYA.ViewModel
                     {
                         StudentId = item.Student.student_id, // Get student ID
                         Date = SelectedDate,                // Selected date
-                        Status = item.Status                // Status selected in the Picker
+                        Status = item.Status,                // Status selected in the Picker
                     };
 
                     var result = await _attendanceService.addAttendanceAsync(attendance);
                     Debug.WriteLine($"Server response: {result}");
 
-                    if (result != "Success")
+                    if (result != "Attendance record added successfully")
                     {
                         Debug.WriteLine($"Error saving attendance for StudentId: {attendance.StudentId}");
                     }
@@ -147,5 +163,49 @@ namespace STFREYA.ViewModel
         {
             _attendancePopup?.Close();
         }
+
+        private async void ExportAttendance()
+        {
+            try
+            {
+                // Validate attendance data
+                if (AttendanceItems == null || !AttendanceItems.Any())
+                {
+                    await App.Current.MainPage.DisplayAlert("No Data", "No attendance records to export.", "OK");
+                    return;
+                }
+
+                // Build the CSV content
+                var csvBuilder = new StringBuilder();
+                csvBuilder.AppendLine("Student ID,Name,Date,Status");
+
+                foreach (var record in AttendanceItems)
+                {
+                    csvBuilder.AppendLine($"{record.Student.student_id},{record.Student.FullName},{SelectedDate:yyyy-MM-dd},{record.Status}");
+                }
+
+                // Generate a unique file name with timestamp
+                var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss"); // e.g., 20241203_153045
+                var fileName = $"AttendanceReport_{SelectedDate:yyyyMMdd}_{timestamp}.csv";
+                var filePath = Path.Combine(FileSystem.AppDataDirectory, fileName);
+
+                // Write to file
+                await File.WriteAllTextAsync(filePath, csvBuilder.ToString());
+
+                // Display success message with file location
+                await App.Current.MainPage.DisplayAlert("Export Successful", $"Attendance report saved to: {filePath}", "OK");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // Handle permission issues
+                await App.Current.MainPage.DisplayAlert("Export Failed", "Permission denied. Cannot save the file.", "OK");
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                await App.Current.MainPage.DisplayAlert("Export Failed", $"An error occurred while exporting: {ex.Message}", "OK");
+            }
+        }
+
     }
 }

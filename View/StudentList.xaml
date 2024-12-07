@@ -55,8 +55,7 @@
                    FontAttributes="Bold"
                    HorizontalOptions="Center" 
                    Margin="10" /> -->
-            <Label Text="Select Date" FontSize="18" FontAttributes="Bold" />
-            <DatePicker Date="{Binding SelectedDate}" />
+            
             <!-- LIST OF STUDENTS -->
             <ListView ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}">
                 <ListView.ItemTemplate>
@@ -87,8 +86,6 @@
             </ListView>
             <Button Text="Mark Attendance" Command="{Binding OpenMarkAttendanceModalCommand}" CommandParameter="{Binding SelectedDate}" />
             <!-- EXPORT ATTENDANCE BUTTON -->
-            <Button Text="Export Attendance to CSV" Command="{Binding ExportAttendanceCommand}" Margin="10" />
-            <Button Text="Export Performance to CSV" Command="{Binding ExportPerformanceCommand}" />
 
         </VerticalStackLayout>
     </ScrollView>

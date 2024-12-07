@@ -19,5 +19,6 @@ namespace STFREYA.Model
         public DateTime Date { get; set; } // Date of attendance
         [JsonPropertyName("status")]
         public string Status { get; set; } // Status: Present, Absent, Late
+        
     }
 }

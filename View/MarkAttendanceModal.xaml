@@ -39,8 +39,11 @@
 
         <!-- Save Button -->
         <Button Text="Save Attendance" Command="{Binding SaveAttendanceCommand}" />
-
-        <!-- Close Button -->
+        <Button Text="Export to CSV"
+            Command="{Binding ExportAttendanceCommand}"
+            HorizontalOptions="Center"
+            VerticalOptions="End" />
+            <!-- Close Button -->
         <Button Text="Close" Command="{Binding CloseModalCommand}" />
     </VerticalStackLayout>
     </ScrollView>
