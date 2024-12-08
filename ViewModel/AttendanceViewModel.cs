@@ -19,7 +19,6 @@ namespace STFREYA.ViewModel
     public class AttendanceViewModel : BindableObject
     {
         private readonly AttendanceService _attendanceService;
-        private MarkAttendanceModal _attendancePopup;
         public ObservableCollection<AttendanceItem> AttendanceItems { get; set; } // A collection of attendance items
         public ObservableCollection<Student> Students { get; set; }
         public ObservableCollection<string> AttendanceStatusOptions { get; set; } = new ObservableCollection<string>
@@ -55,7 +54,6 @@ namespace STFREYA.ViewModel
         }
 
         public Command SaveAttendanceCommand { get; }
-        public Command CloseModalCommand { get; }
         public ICommand ExportAttendanceCommand { get; }
         public Command OpenMarkAttendanceModalCommand { get; }
         public AttendanceViewModel(ObservableCollection<Student> students)
@@ -73,7 +71,6 @@ namespace STFREYA.ViewModel
                 }));
             OpenMarkAttendanceModalCommand = new Command(OpenMarkAttendanceModal);
             SaveAttendanceCommand = new Command(SaveAttendance);
-            CloseModalCommand = new Command(CloseModal);
             LoadAttendanceForDate(SelectedDate);
             ExportAttendanceCommand = new Command(ExportAttendance);
         }
@@ -159,11 +156,6 @@ namespace STFREYA.ViewModel
             }
         }
 
-        private void CloseModal()
-        {
-            _attendancePopup?.Close();
-        }
-
         private async void ExportAttendance()
         {
             try
@@ -185,7 +177,7 @@ namespace STFREYA.ViewModel
                 }
 
                 // Generate a unique file name with timestamp
-                var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss"); // e.g., 20241203_153045
+                var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss"); 
                 var fileName = $"AttendanceReport_{SelectedDate:yyyyMMdd}_{timestamp}.csv";
                 var filePath = Path.Combine(FileSystem.AppDataDirectory, fileName);
 

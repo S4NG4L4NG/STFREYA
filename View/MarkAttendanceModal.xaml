@@ -43,8 +43,6 @@
             Command="{Binding ExportAttendanceCommand}"
             HorizontalOptions="Center"
             VerticalOptions="End" />
-            <!-- Close Button -->
-        <Button Text="Close" Command="{Binding CloseModalCommand}" />
-    </VerticalStackLayout>
+        </VerticalStackLayout>
     </ScrollView>
 </toolkit:Popup>

@@ -25,6 +25,8 @@ namespace STFREYA.ViewModel
         private readonly StudentService _studentService;
         public ObservableCollection<Student> Students { get; set; }
         public ObservableCollection<AttendanceRecord> AttendanceRecords { get; set; }
+
+        private readonly AcademicHistoryService _academicHistoryService;
         public ObservableCollection<string> AttendanceStatusOptions { get; set; } = new ObservableCollection<string>
         {
             "Present", "Absent", "Late"
@@ -42,6 +44,7 @@ namespace STFREYA.ViewModel
             EmailInput = string.Empty;
             ContactNoInput = string.Empty;
             CourseInput = string.Empty;
+            SelectedGender = string.Empty;
         }
 
 
@@ -197,6 +200,7 @@ namespace STFREYA.ViewModel
         public StudentViewModel()
         {
             _studentService = new StudentService();
+            _academicHistoryService = new AcademicHistoryService();
             Students = new ObservableCollection<Student>();
             AttendanceRecords = new ObservableCollection<AttendanceRecord>();
             LoadStudentCommand = new Command(async () => await LoadStudents());
@@ -208,8 +212,6 @@ namespace STFREYA.ViewModel
             ExportToCSVCommand = new Command(ExportToCSV);
             NavigateToProfileCommand = new Command<Student>(async (student) => await NavigateToProfile(student));
             GenerateReportCommand = new Command(GenerateReport);
-            AddScoreCommand = new Command<Student>(AddScore);
-            ExportPerformanceCommand = new Command(ExportPerformance);
             OpenAddStudentModalCommand = new Command(OpenAddStudentModal);
             OpenUpdateStudentModalCommand = new Command(OpenUpdateStudentModal);
             CloseModalCommand = new Command(CloseModal);
@@ -230,10 +232,6 @@ namespace STFREYA.ViewModel
         public ICommand GenerateReportCommand { get; }
         public ICommand MarkAttendanceCommand { get; }
         public ICommand ExportAttendanceCommand { get; }
-
-        public ICommand AddScoreCommand { get; }
-        public ICommand ExportPerformanceCommand { get; }
-
         public Command OpenAddStudentModalCommand { get; }
         public Command OpenUpdateStudentModalCommand { get; }
         public Command CloseModalCommand { get; }
@@ -304,7 +302,6 @@ namespace STFREYA.ViewModel
         // ADD STUDENT METHOD
         public async Task AddStudent()
         {
-            // Validate inputs
             if (!string.IsNullOrWhiteSpace(NameInput) &&
                 !string.IsNullOrWhiteSpace(LastNameInput) &&
                 !string.IsNullOrWhiteSpace(AgeInput) &&
@@ -324,41 +321,58 @@ namespace STFREYA.ViewModel
                     gender = SelectedGender
                 };
 
-                var result = await _studentService.AddStudentAsync(newStudent);
-                var response = JsonSerializer.Deserialize<Dictionary<string, string>>(result);
-                if (response != null && response.ContainsKey("message") && response["message"].Contains("successfully", StringComparison.OrdinalIgnoreCase))
+                try
                 {
-                    // Close modal, reset fields, and reload data
+                    var result = await _studentService.AddStudentAsync(newStudent);
+                    Debug.WriteLine($"Raw Response: {result}");
+
+                    var response = JsonSerializer.Deserialize<AddStudentResponse>(result);
+
+                    if (response == null || string.IsNullOrEmpty(response.message))
+                    {
+                        throw new Exception("Failed to add student. Server returned null or invalid JSON.");
+                    }
+
+                    if (!response.message.Contains("successfully", StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new Exception($"Failed to add student. Server message: {response.message}");
+                    }
+
+                    // Proceed with academic history if response is valid
+                    newStudent.student_id = response.student_id;
+
+                    var newHistory = new AcademicHistory
+                    {
+                        StudentId = newStudent.student_id,
+                        Course = SelectedCourse,
+                        Date = DateTime.Now
+                    };
+
+                    await _academicHistoryService.AddHistoryAsync(newHistory);
+
                     CloseModal();
                     ClearInput();
                     await LoadStudents();
-
-                    // Show success alert
-                    await App.Current.MainPage.DisplayAlert(
-                        "Success",
-                        "New student added successfully!",
-                        "OK"
-                    );
+                    await App.Current.MainPage.DisplayAlert("Success", "New student added successfully!", "OK");
                 }
-                else
+                catch (Exception ex)
                 {
-                    // Show error alert
-                    await App.Current.MainPage.DisplayAlert(
-                        "Error",
-                        $"Failed to add student: {result}",
-                        "OK"
-                    );
+                    Debug.WriteLine($"Error in AddStudent: {ex.Message}");
+                    await App.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
                 }
             }
             else
             {
-                // Show an alert for missing inputs
-                await App.Current.MainPage.DisplayAlert(
-                    "Error",
-                    "Please fill in all required fields.",
-                    "OK"
-                );
+                await App.Current.MainPage.DisplayAlert("Error", "Please fill in all required fields.", "OK");
             }
+        }
+
+        private async Task FinalizeStudentAddition()
+        {
+            CloseModal();
+            ClearInput();
+            await LoadStudents();
+            await App.Current.MainPage.DisplayAlert("Success", "New student added successfully!", "OK");
         }
 
         private async Task DeleteStudent()
@@ -414,6 +428,8 @@ namespace STFREYA.ViewModel
         {
             if (SelectedStudent != null)
             {
+                bool isCourseChanged = !string.Equals(SelectedStudent.course, SelectedCourse, StringComparison.OrdinalIgnoreCase);
+
                 SelectedStudent.name = NameInput;
                 SelectedStudent.lastname = LastNameInput;
                 SelectedStudent.age = AgeInput; // Store Age as string
@@ -424,7 +440,18 @@ namespace STFREYA.ViewModel
 
                 var result = await _studentService.UpdateStudentAsync(SelectedStudent);
                 var response = JsonSerializer.Deserialize<Dictionary<string, string>>(result);
-                
+                if (isCourseChanged)
+                {
+                    var newHistory = new AcademicHistory
+                    {
+                        StudentId = SelectedStudent.student_id, // Use the student's ID
+                        Course = SelectedCourse, // The new course
+                        Date = DateTime.Now 
+                    };
+
+                    var historyResult = await _academicHistoryService.AddHistoryAsync(newHistory);
+                }
+
                 if (response != null && response.ContainsKey("message") && response["message"].Contains("successfully", StringComparison.OrdinalIgnoreCase))
                 {
                     CloseUpdateModal();
@@ -452,10 +479,12 @@ namespace STFREYA.ViewModel
         {
             if (student == null) return;
 
-            await Shell.Current.GoToAsync($"///{nameof(StudentProfileView)}", new Dictionary<string, object>
+            var navigationData = new Dictionary<string, object>
             {
-                { "SelectedStudent", student }
-            });
+                { "Student", student }
+            };
+
+             await Shell.Current.GoToAsync("//StudentProfileView", navigationData);
         }
 
         //generate report method
@@ -496,69 +525,6 @@ namespace STFREYA.ViewModel
 
             //// Notify the user
             //App.Current.MainPage.DisplayAlert("Export Successful", $"Report saved to {filePath}", "OK");
-        }
-
-       
-
-        private void AddScore(Student student)
-        {
-            if (student == null) return;
-
-            var input = App.Current.MainPage.DisplayPromptAsync(
-                "Add Score",
-                $"Enter a score for {student.name} {student.lastname}:",
-                "OK",
-                "Cancel",
-                "Enter score",
-                keyboard: Keyboard.Numeric);
-
-            input.ContinueWith(t =>
-            {
-                if (t.Result != null && int.TryParse(t.Result, out var score))
-                {
-                    MainThread.BeginInvokeOnMainThread(() =>
-                    {
-                        student.Scores.Add(score);
-                        App.Current.MainPage.DisplayAlert(
-                            "Success",
-                            $"Score {score} added for {student.name} {student.lastname}.",
-                            "OK");
-                    });
-                }
-            });
-        }
-
-        private void ExportPerformance()
-        {
-            try
-            {
-                var fileName = "StudentPerformanceReport.csv";
-                var filePath = Path.Combine(FileSystem.AppDataDirectory, fileName);
-
-                var csvBuilder = new StringBuilder();
-                csvBuilder.AppendLine("Student ID,Name,Average Score,Performance Level");
-
-                foreach (var student in Students)
-                {
-                    var averageScore = student.Scores.Any() ? student.Scores.Average() : 0;
-                    var performanceLevel = averageScore switch
-                    {
-                        > 90 => "Excellent",
-                        >= 75 => "Good",
-                        _ => "Needs Improvement"
-                    };
-
-                    csvBuilder.AppendLine($"{student.student_id},{student.name} {student.lastname},{averageScore:F2},{performanceLevel}");
-                }
-
-                File.WriteAllText(filePath, csvBuilder.ToString());
-
-                App.Current.MainPage.DisplayAlert("Export Successful", $"Performance report saved to {filePath}", "OK");
-            }
-            catch (Exception ex)
-            {
-                App.Current.MainPage.DisplayAlert("Export Failed", $"Error: {ex.Message}", "OK");
-            }
         }
 
         private void FilterStudents()

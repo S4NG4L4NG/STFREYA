@@ -62,7 +62,7 @@
                     <DataTemplate>
                         <ViewCell>
                             <StackLayout Orientation="Horizontal" Padding="10">
-                                <CheckBox IsChecked="{Binding IsSelected}" />
+                                <!--<CheckBox IsChecked="{Binding IsSelected}" /> -->
                                 <Label Text="{Binding FullName}" FontAttributes="Bold" />
                                 <Label Text=" | " FontAttributes="Bold" />
                                 <Label Text="{Binding email}" />
@@ -70,10 +70,6 @@
                                 <Label Text="{Binding course}" />
                                 <Label Text=" | " FontAttributes="Bold" />
                                 <Label Text="{Binding gender}" />
-
-                                <Button Text="Add Score"
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AddScoreCommand}"
-                            CommandParameter="{Binding .}" />
                             </StackLayout>
                             <ViewCell.ContextActions>
                                 <MenuItem Command="{Binding BindingContext.NavigateToProfileCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
