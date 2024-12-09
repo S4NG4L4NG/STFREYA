@@ -110,7 +110,6 @@ namespace STFREYA.ViewModel
 
                 // Notify user and close modal
                 await App.Current.MainPage.DisplayAlert("Success", "Attendance marked successfully!", "OK");
-                CloseModal();
             }
             catch (Exception ex)
             {

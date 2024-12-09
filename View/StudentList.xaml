@@ -20,12 +20,6 @@
                 HorizontalOptions="Center" 
                 FontAttributes="Bold" 
                 FontSize="20" />
-
-            <!-- TOTAL STUDENTS DISPLAY -->
-            <Label Text="{Binding TotalStudentsDisplay}" 
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center"
-                   Margin="10" />
             <!-- SEARCH BAR -->
             <SearchBar Placeholder="Search by name, email, or course"
                        Text="{Binding SearchTerm}" />
@@ -49,6 +43,22 @@
                 <Button Text="BSIT" Command="{Binding FilterByCourseCommand}" CommandParameter="BSIT" />
                 <Button Text="BMMA" Command="{Binding FilterByCourseCommand}" CommandParameter="BMMA" />
             </HorizontalStackLayout>
+            <Label 
+            Text="Filter by Year Level" 
+            FontSize="14" 
+            FontAttributes="Bold" 
+            TextColor="#1C1C1E" 
+            FontFamily="RobotoBold" 
+            HorizontalOptions="Center" />
+            <Picker 
+            ItemsSource="{Binding YearLevelFilterOptions}" 
+            SelectedItem="{Binding SelectedYearLevelFilter}" 
+            Title="Select Year Level" 
+            FontFamily="RobotoRegular"
+            TextColor="#1C1C1E"
+            BackgroundColor="#F7F8FA"
+            FontSize="14" 
+            HorizontalOptions="FillAndExpand" />
 
             <!-- TOTAL STUDENTS PER COURSE -->
             <!--<Label Text="Total Students per Course" 
@@ -68,6 +78,8 @@
                                 <Label Text="{Binding email}" />
                                 <Label Text=" | " FontAttributes="Bold" />
                                 <Label Text="{Binding course}" />
+                                <Label Text=" | " FontAttributes="Bold" />
+                                <Label Text="{Binding yearlevel}" />
                                 <Label Text=" | " FontAttributes="Bold" />
                                 <Label Text="{Binding gender}" />
                             </StackLayout>

@@ -67,6 +67,15 @@
                            HeightRequest="40"/>
                 </Frame>
 
+                <Label Text="Year Level" FontFamily="RobotoRegular" TextColor="#040001"/>
+                <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
+                    <Picker Title="Select a Year level" 
+                            ItemsSource="{Binding YearLevelOptions}" 
+                            SelectedItem="{Binding SelectedYearLevel, Mode=TwoWay}" 
+                            FontFamily="RobotoRegular"
+                            HeightRequest="40" />
+                </Frame>
+
                 <!-- Course Picker -->
                 <Label Text="Course" FontFamily="RobotoRegular" TextColor="#040001"/>
                 <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">

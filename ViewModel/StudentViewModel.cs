@@ -31,6 +31,8 @@ namespace STFREYA.ViewModel
         {
             "Present", "Absent", "Late"
         };
+        private string _filterCourse;
+
 
         private AddStudentModal _addPopup;
         private UpdateStudentModal _updatePopup;
@@ -43,7 +45,8 @@ namespace STFREYA.ViewModel
             AgeInput = string.Empty;
             EmailInput = string.Empty;
             ContactNoInput = string.Empty;
-            CourseInput = string.Empty;
+            SelectedYearLevel = string.Empty;
+            SelectedCourse = string.Empty;
             SelectedGender = string.Empty;
         }
 
@@ -55,24 +58,25 @@ namespace STFREYA.ViewModel
             "BSCS", "BSIT", "BMMA"
         };
 
+        public ObservableCollection<string> YearLevelOptions { get; set; } = new ObservableCollection<string>
+        {
+            "1st Year", "2nd Year", "3rd Year", "4th Year"
+        };
+        public ObservableCollection<string> YearLevelFilterOptions { get; set; } = new ObservableCollection<string>
+        {
+            "All", 
+            "1st Year",
+            "2nd Year",
+            "3rd Year",
+            "4th Year"
+        };
+
         public ObservableCollection<string> GenderOptions { get; set; } = new ObservableCollection<string>
     {
         "Male", "Female"
     };
 
-        
-
-        private string _totalStudentsDisplay;
-
-        public string TotalStudentsDisplay
-        {
-            get => _totalStudentsDisplay;
-            set
-            {
-                _totalStudentsDisplay = value;
-                OnPropertyChanged();
-            }
-        }
+       
 
         private string _selectedCourse;
         public string SelectedCourse
@@ -81,6 +85,16 @@ namespace STFREYA.ViewModel
             set
             {
                 _selectedCourse = value;
+                OnPropertyChanged();
+            }
+        }
+        private string _selectedYearLevel;
+        public string SelectedYearLevel
+        {
+            get => _selectedYearLevel;
+            set
+            {
+                _selectedYearLevel = value;
                 OnPropertyChanged();
             }
         }
@@ -174,17 +188,6 @@ namespace STFREYA.ViewModel
             }
         }
 
-        private string _courseInput;
-        public string CourseInput
-        {
-            get => _courseInput;
-            set
-            {
-                _courseInput = value;
-                OnPropertyChanged();
-            }
-        }
-
         private string _searchTerm;
         public string SearchTerm
         {
@@ -194,6 +197,18 @@ namespace STFREYA.ViewModel
                 _searchTerm = value;
                 OnPropertyChanged();
                 FilterStudents(); // Filter students whenever the search term changes
+            }
+        }
+
+        private string _selectedYearLevelFilter;
+        public string SelectedYearLevelFilter
+        {
+            get => _selectedYearLevelFilter;
+            set
+            {
+                _selectedYearLevelFilter = value;
+                OnPropertyChanged();
+                FilterStudents(); // Trigger filtering whenever the selection changes
             }
         }
 
@@ -207,7 +222,6 @@ namespace STFREYA.ViewModel
             AddStudentCommand = new Command(async () => await AddStudent());
             DeleteCommand = new Command(async () => await DeleteStudent());
             UpdateStudentCommand = new Command(async () => await UpdateStudent());
-            FilterByCourseCommand = new Command<string>(FilterByCourse); // Initialize the command
             BackCommand = new Command(async () => await Shell.Current.GoToAsync("//MainPage"));
             ExportToCSVCommand = new Command(ExportToCSV);
             NavigateToProfileCommand = new Command<Student>(async (student) => await NavigateToProfile(student));
@@ -217,6 +231,7 @@ namespace STFREYA.ViewModel
             CloseModalCommand = new Command(CloseModal);
             CloseUpdateModalCommand = new Command(CloseUpdateModal);
             OpenMarkAttendanceModalCommand = new Command(OpenMarkAttendanceModal);
+            FilterByCourseCommand = new Command<string>(FilterByCourse);
             LoadStudents();
         }
 
@@ -225,28 +240,33 @@ namespace STFREYA.ViewModel
         public ICommand AddStudentCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand UpdateStudentCommand { get; }
-        public ICommand FilterByCourseCommand { get; }
         public ICommand BackCommand { get; }
         public ICommand ExportToCSVCommand { get; }
         public ICommand NavigateToProfileCommand { get; }
         public ICommand GenerateReportCommand { get; }
         public ICommand MarkAttendanceCommand { get; }
         public ICommand ExportAttendanceCommand { get; }
+        public ICommand FilterByCourseCommand { get; }
         public Command OpenAddStudentModalCommand { get; }
         public Command OpenUpdateStudentModalCommand { get; }
         public Command CloseModalCommand { get; }
         public Command CloseUpdateModalCommand { get; }
-
         public Command OpenMarkAttendanceModalCommand { get; }
+
         private async Task LoadStudents()
         {
             var students = await _studentService.GetStudentsAsync();
             _allStudents = new ObservableCollection<Student>(students); // Cache the full list
             Students = new ObservableCollection<Student>(_allStudents); // Initialize displayed list
-            TotalStudentsDisplay = $"Overall Total Students: {_allStudents.Count}";
             OnPropertyChanged(nameof(Students));
-            FilterStudents();
+            SelectedYearLevelFilter = "All";
+            OnPropertyChanged(nameof(SelectedYearLevelFilter));
+            SearchTerm = "";
+            OnPropertyChanged(nameof(SearchTerm));
+            _filterCourse = "";
+            OnPropertyChanged(nameof(_filterCourse));
             ClearInput();
+            FilterStudents();
         }
 
         private void OpenAddStudentModal()
@@ -272,8 +292,8 @@ namespace STFREYA.ViewModel
             EmailInput = SelectedStudent.email;
             ContactNoInput = SelectedStudent.contactno;
             SelectedCourse = SelectedStudent.course;
+            SelectedYearLevel = SelectedStudent.yearlevel;
             SelectedGender = SelectedStudent.gender;
-
             _updatePopup = new UpdateStudentModal
             {
                 BindingContext = this
@@ -308,6 +328,7 @@ namespace STFREYA.ViewModel
                 !string.IsNullOrWhiteSpace(EmailInput) &&
                 !string.IsNullOrWhiteSpace(ContactNoInput) &&
                 !string.IsNullOrWhiteSpace(SelectedCourse) &&
+                !string.IsNullOrWhiteSpace(SelectedYearLevel) &&
                 !string.IsNullOrWhiteSpace(SelectedGender))
             {
                 var newStudent = new Student
@@ -318,6 +339,7 @@ namespace STFREYA.ViewModel
                     email = EmailInput,
                     contactno = ContactNoInput,
                     course = SelectedCourse,
+                    yearlevel = SelectedYearLevel,
                     gender = SelectedGender
                 };
 
@@ -345,6 +367,7 @@ namespace STFREYA.ViewModel
                     {
                         StudentId = newStudent.student_id,
                         Course = SelectedCourse,
+                        yearlevel = SelectedYearLevel,
                         Date = DateTime.Now
                     };
 
@@ -429,6 +452,7 @@ namespace STFREYA.ViewModel
             if (SelectedStudent != null)
             {
                 bool isCourseChanged = !string.Equals(SelectedStudent.course, SelectedCourse, StringComparison.OrdinalIgnoreCase);
+                bool isYearLevelChanged = !string.Equals(SelectedStudent.yearlevel, SelectedYearLevel, StringComparison.OrdinalIgnoreCase);
 
                 SelectedStudent.name = NameInput;
                 SelectedStudent.lastname = LastNameInput;
@@ -436,16 +460,19 @@ namespace STFREYA.ViewModel
                 SelectedStudent.email = EmailInput;
                 SelectedStudent.contactno = ContactNoInput;
                 SelectedStudent.course = SelectedCourse; // Use SelectedCourse
+                SelectedStudent.yearlevel = SelectedYearLevel;
                 SelectedStudent.gender = SelectedGender;
 
                 var result = await _studentService.UpdateStudentAsync(SelectedStudent);
+                Debug.WriteLine($"Raw server response: {result}");
                 var response = JsonSerializer.Deserialize<Dictionary<string, string>>(result);
-                if (isCourseChanged)
+                if (isCourseChanged || isYearLevelChanged)
                 {
                     var newHistory = new AcademicHistory
                     {
                         StudentId = SelectedStudent.student_id, // Use the student's ID
                         Course = SelectedCourse, // The new course
+                        yearlevel = SelectedYearLevel,
                         Date = DateTime.Now 
                     };
 
@@ -531,40 +558,38 @@ namespace STFREYA.ViewModel
         {
             if (_allStudents == null) return; // Avoid null reference errors
 
-            if (string.IsNullOrWhiteSpace(SearchTerm))
+            // Start with all students
+            var filtered = _allStudents.AsEnumerable();
+
+            // Apply search term filter
+            if (!string.IsNullOrWhiteSpace(SearchTerm))
             {
-                // Reset to the full list if the search term is empty
-                Students = new ObservableCollection<Student>(_allStudents);
-            }
-            else
-            {
-                // Filter the list by name, email, or course
-                var filtered = _allStudents.Where(s =>
+                filtered = filtered.Where(s =>
                     (!string.IsNullOrEmpty(s.name) && s.name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
                     (!string.IsNullOrEmpty(s.email) && s.email.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
-                    (!string.IsNullOrEmpty(s.course) && s.course.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)))
-                    .ToList();
-
-                Students = new ObservableCollection<Student>(filtered);
+                    (!string.IsNullOrEmpty(s.course) && s.course.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)));
             }
 
+            // Apply course filter
+            if (!string.IsNullOrWhiteSpace(_filterCourse))
+            {
+                filtered = filtered.Where(s => s.course.Equals(_filterCourse, StringComparison.OrdinalIgnoreCase));
+            }
+
+            // Apply year level filter
+            if (!string.IsNullOrWhiteSpace(SelectedYearLevelFilter) && SelectedYearLevelFilter != "All")
+            {
+                filtered = filtered.Where(s => s.yearlevel.Equals(SelectedYearLevelFilter, StringComparison.OrdinalIgnoreCase));
+            }
+
+            // Update the displayed students
+            Students = new ObservableCollection<Student>(filtered);
             OnPropertyChanged(nameof(Students));
         }
-
         private void FilterByCourse(string course)
         {
-            if (_allStudents == null || string.IsNullOrEmpty(course))
-            {
-                Console.WriteLine("FilterByCourse: No students or course is empty.");
-                return; // Avoid null reference errors
-            }
-
-            // Filter students matching the selected course
-            var filtered = _allStudents.Where(s => s.course.Equals(course, StringComparison.OrdinalIgnoreCase)).ToList();
-
-            Students = new ObservableCollection<Student>(filtered);
-            TotalStudentsDisplay = $"Total Students in {course}: {filtered.Count}";
-            OnPropertyChanged(nameof(Students)); // Notify the UI
+            _filterCourse = course; // Update filter value
+            FilterStudents(); // Trigger the unified filter logic
         }
 
         private void UpdateEntryField()
@@ -573,10 +598,11 @@ namespace STFREYA.ViewModel
             {
                 NameInput = SelectedStudent.name;
                 LastNameInput = SelectedStudent.lastname;
-                AgeInput = SelectedStudent.age; // Age as string
+                AgeInput = SelectedStudent.age;
                 EmailInput = SelectedStudent.email;
                 ContactNoInput = SelectedStudent.contactno;
-                SelectedCourse = SelectedStudent.course; // Set the dropdown to the selected course
+                SelectedCourse = SelectedStudent.course; 
+                SelectedYearLevel = SelectedStudent.yearlevel;
                 SelectedGender = SelectedStudent.gender;
             }
             else
@@ -658,23 +684,6 @@ namespace STFREYA.ViewModel
             catch (Exception ex)
             {
                 App.Current.MainPage.DisplayAlert("Export Failed", $"Error: {ex.Message}", "OK");
-            }
-        }
-
-        // Email Validation Helper
-        private bool IsValidEmail(string email)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(email))
-                    return false;
-
-                var mailAddress = new MailAddress(email);
-                return true;
-            }
-            catch
-            {
-                return false;
             }
         }
 

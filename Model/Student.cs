@@ -22,7 +22,7 @@ namespace STFREYA.Model
         public string contactno { get; set; }
 
         public string course { get; set; }
-        
+        public string yearlevel { get; set; }
         public string gender { get; set; }
 
 
