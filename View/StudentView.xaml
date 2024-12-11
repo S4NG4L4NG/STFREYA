@@ -111,42 +111,42 @@
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="7">
                     <Button 
                 Text="BSCS" 
-                Command="{Binding FilterByCourseCommand}" 
-                CommandParameter="BSCS"
-                FontAttributes="Bold"
-                BackgroundColor="#1C1C1E"
-                TextColor="#E9ECEF"
-                FontFamily="RobotoRegular"
-                CornerRadius="6"
-                WidthRequest="60"
-                HeightRequest="30"
-                FontSize="12" />
+ Command="{Binding FilterByCourseCommand}" 
+ CommandParameter="BSCS"
+ FontAttributes="Bold"
+ BackgroundColor="#1C1C1E"
+ TextColor="#E9ECEF"
+ FontFamily="RobotoRegular"
+ CornerRadius="6"
+ WidthRequest="60"
+ HeightRequest="30"
+ FontSize="12" />
 
                     <Button 
-                Text="BSIT" 
-                Command="{Binding FilterByCourseCommand}" 
-                CommandParameter="BSIT"
-                FontAttributes="Bold"
-                BackgroundColor="#1C1C1E"
-                TextColor="#E9ECEF"
-                FontFamily="RobotoRegular"
-                CornerRadius="6"
-                WidthRequest="60"
-                HeightRequest="30"
-                FontSize="12" />
+ Text="BSIT" 
+ Command="{Binding FilterByCourseCommand}" 
+ CommandParameter="BSIT"
+ FontAttributes="Bold"
+ BackgroundColor="#1C1C1E"
+ TextColor="#E9ECEF"
+ FontFamily="RobotoRegular"
+ CornerRadius="6"
+ WidthRequest="60"
+ HeightRequest="30"
+ FontSize="12" />
 
                     <Button 
-                Text="BMMA" 
-                Command="{Binding FilterByCourseCommand}" 
-                CommandParameter="BMMA"
-                FontAttributes="Bold"
-                BackgroundColor="#1C1C1E"
-                TextColor="#E9ECEF"
-                FontFamily="RobotoRegular"
-                CornerRadius="6"
-                WidthRequest="60"
-                HeightRequest="30"
-                FontSize="10" />
+ Text="BMMA" 
+ Command="{Binding FilterByCourseCommand}" 
+ CommandParameter="BMMA"
+ FontAttributes="Bold"
+ BackgroundColor="#1C1C1E"
+ TextColor="#E9ECEF"
+ FontFamily="RobotoRegular"
+ CornerRadius="6"
+ WidthRequest="60"
+ HeightRequest="30"
+ FontSize="10" />
                 </HorizontalStackLayout>
                 <Label 
             Text="{Binding TotalStudentsDisplay}" 

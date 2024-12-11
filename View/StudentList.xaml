@@ -2,99 +2,256 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="STFREYA.View.StudentList"
-             Title="StudentList">
-    <ScrollView>
-        <VerticalStackLayout>
+             Title="Student List"
+             BackgroundColor="#ebebeb">
 
-            <!-- BACK BUTTON -->
-            <Button 
-                Text="Back" 
-                Command="{Binding BackCommand}" 
-                HorizontalOptions="Start" 
-                Margin="10" />
+    <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="250,*,*">
 
-            <!-- TITLE -->
-            <Label 
-                Text="Student Data Management"
-                VerticalOptions="Center" 
-                HorizontalOptions="Center" 
+        <!-- LEFT SIDEBAR -->
+        <ScrollView Grid.RowSpan="3" Grid.Column="0" BackgroundColor="#FFFFFF" Padding="15">
+            <VerticalStackLayout Spacing="20">
+
+                <Label 
+                Text="Search Preferences" 
+                FontSize="14" 
                 FontAttributes="Bold" 
-                FontSize="20" />
-            <!-- SEARCH BAR -->
-            <SearchBar Placeholder="Search by name, email, or course"
-                       Text="{Binding SearchTerm}" />
-            <!-- LOAD STUDENTS BUTTON -->
-            <Button Text="Load Students" Command="{Binding LoadStudentCommand}" />
+                TextColor="#1C1C1E" 
+                FontFamily="RobotoBold" 
+                HorizontalOptions="Center" />
+                <!-- SEARCH BAR -->
+                <SearchBar 
+                    Placeholder="Search by name, email, or course"
+                    Text="{Binding SearchTerm}" 
+                    BackgroundColor="#F7F8FA" 
+                    FontSize="14" />
+                <!-- LOAD STUDENTS BUTTON -->
 
-            <!-- EXPORT TO CSV BUTTON -->
-            <Button Text="Export the Student List to CSV"
-                    Command="{Binding ExportToCSVCommand}"
-                    HorizontalOptions="Center"
-                    Margin="10" />
+                <Button 
+                 Text="Load All Students"
+                 Command="{Binding LoadStudentCommand}"
+                 BackgroundColor="#E9ECEF"
+                 TextColor="#1C1C1E"
+                 FontFamily="RobotoBold"
+                 FontAttributes="Bold"
+                 CornerRadius="8"
+                 HeightRequest="50"
+                 HorizontalOptions="Fill" />
 
-            <Button Text="Generate Report"
-                    Command="{Binding GenerateReportCommand}"
-                    HorizontalOptions="Center"
-                    Margin="10" />
+                <!-- Divider -->
+                <BoxView HeightRequest="1" BackgroundColor="#D6D6D6" Margin="0,10,0,10" />
 
-            <!-- FILTER BUTTONS -->
-            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
-                <Button Text="BSCS" Command="{Binding FilterByCourseCommand}" CommandParameter="BSCS" />
-                <Button Text="BSIT" Command="{Binding FilterByCourseCommand}" CommandParameter="BSIT" />
-                <Button Text="BMMA" Command="{Binding FilterByCourseCommand}" CommandParameter="BMMA" />
-            </HorizontalStackLayout>
+                <!-- EXPORT TO CSV BUTTON -->
+                <Frame BackgroundColor="#FFF0D4" BorderColor="#D6D6D6" CornerRadius="8" HeightRequest="40" Padding="0" HasShadow="True">
+                    <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Fill" Padding="10,0">
+                        <Image Source="export_icon.png" WidthRequest="12" HeightRequest="12" VerticalOptions="Center" />
+                        <Button Text="Export to CSV"
+                Command="{Binding ExportToCSVCommand}"
+                BackgroundColor="#FFF0D4"
+                FontFamily="RobotoBold"
+                FontSize="14"
+                TextColor="#1C1C1E"
+                VerticalOptions="Center"
+                Margin="5,0,0,0" />
+                    </HorizontalStackLayout>
+                </Frame>
+
+                <!-- GENERATE REPORT BUTTON -->
+                <Frame BackgroundColor="#D4E9FF" BorderColor="#D6D6D6" CornerRadius="8" HeightRequest="40" Padding="0" HasShadow="True">
+                    <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Fill" Padding="10,0">
+                        <Image Source="report_icon.png" WidthRequest="12" HeightRequest="12" VerticalOptions="Center" />
+                        <Button Text="Generate Report"
+                Command="{Binding GenerateReportCommand}"
+                BackgroundColor="#D4E9FF"
+                FontFamily="RobotoBold"
+                FontSize="14"
+                TextColor="#1C1C1E"
+                VerticalOptions="Center"
+                Margin="5,0,0,0" />
+                    </HorizontalStackLayout>
+                </Frame>
+
+                <!-- MARK ATTENDANCE BUTTON -->
+                <Frame BackgroundColor="#EAD4FF" BorderColor="#D6D6D6" CornerRadius="8" HeightRequest="40" Padding="0" HasShadow="True">
+                    <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Fill" Padding="10,0">
+                        <Image Source="attendance_icon.png" WidthRequest="12" HeightRequest="12" VerticalOptions="Center" />
+                        <Button Text="Mark Attendance"
+                Command="{Binding OpenMarkAttendanceModalCommand}"
+                BackgroundColor="#EAD4FF"
+                FontFamily="RobotoBold"
+                FontSize="14"
+                TextColor="#1C1C1E"
+                VerticalOptions="Center"
+                Margin="5,0,0,0" />
+                    </HorizontalStackLayout>
+                </Frame>
+
+                <Label
+                Text="Filter by Course" 
+                 FontSize="14" 
+                 FontAttributes="Bold" 
+                 TextColor="#1C1C1E" 
+                 FontFamily="RobotoBold" 
+                 HorizontalOptions="Center" />
+
+
+                <!-- FILTER BUTTONS -->
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Button 
+                Text="BSCS" 
+                 Command="{Binding FilterByCourseCommand}" 
+                 CommandParameter="BSCS"
+                 FontAttributes="Bold"
+                 BackgroundColor="#1C1C1E"
+                 TextColor="#E9ECEF"
+                 FontFamily="RobotoRegular"
+                 CornerRadius="6"
+                 WidthRequest="60"
+                 HeightRequest="30"
+                 FontSize="12" />
+
+                    <Button 
+ Text="BSIT" 
+ Command="{Binding FilterByCourseCommand}" 
+ CommandParameter="BSIT"
+ FontAttributes="Bold"
+ BackgroundColor="#1C1C1E"
+ TextColor="#E9ECEF"
+ FontFamily="RobotoRegular"
+ CornerRadius="6"
+ WidthRequest="60"
+ HeightRequest="30"
+ FontSize="12" />
+
+                    <Button 
+ Text="BMMA" 
+ Command="{Binding FilterByCourseCommand}" 
+ CommandParameter="BMMA"
+ FontAttributes="Bold"
+ BackgroundColor="#1C1C1E"
+ TextColor="#E9ECEF"
+ FontFamily="RobotoRegular"
+ CornerRadius="6"
+ WidthRequest="60"
+ HeightRequest="30"
+ FontSize="10" />
+                </HorizontalStackLayout>
+
+                <!-- FILTER BY YEAR LEVEL -->
+                <Label 
+                    Text="Filter by Year Level" 
+                    FontSize="14" 
+                    FontAttributes="Bold" 
+                    TextColor="#1C1C1E" 
+                    HorizontalOptions="Center" />
+                <Picker 
+                    ItemsSource="{Binding YearLevelFilterOptions}" 
+                    SelectedItem="{Binding SelectedYearLevelFilter}" 
+                    Title="Select Year Level" 
+                    BackgroundColor="#F7F8FA" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="10,10,10,10">
             <Label 
-            Text="Filter by Year Level" 
-            FontSize="14" 
-            FontAttributes="Bold" 
-            TextColor="#1C1C1E" 
-            FontFamily="RobotoBold" 
-            HorizontalOptions="Center" />
-            <Picker 
-            ItemsSource="{Binding YearLevelFilterOptions}" 
-            SelectedItem="{Binding SelectedYearLevelFilter}" 
-            Title="Select Year Level" 
-            FontFamily="RobotoRegular"
-            TextColor="#1C1C1E"
-            BackgroundColor="#F7F8FA"
-            FontSize="14" 
-            HorizontalOptions="FillAndExpand" />
+         Text="  Student List"
+         FontFamily="RobotoBold"
+         FontAttributes="Bold"
+         FontSize="24"
+         TextColor="#1C1C1E"
+         VerticalOptions="Center"
+         HorizontalOptions="Start" />
 
-            <!-- TOTAL STUDENTS PER COURSE -->
-            <!--<Label Text="Total Students per Course" 
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center" 
-                   Margin="10" /> -->
-            
-            <!-- LIST OF STUDENTS -->
-            <ListView ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Orientation="Horizontal" Padding="10">
-                                <!--<CheckBox IsChecked="{Binding IsSelected}" /> -->
-                                <Label Text="{Binding FullName}" FontAttributes="Bold" />
-                                <Label Text=" | " FontAttributes="Bold" />
-                                <Label Text="{Binding email}" />
-                                <Label Text=" | " FontAttributes="Bold" />
-                                <Label Text="{Binding course}" />
-                                <Label Text=" | " FontAttributes="Bold" />
-                                <Label Text="{Binding yearlevel}" />
-                                <Label Text=" | " FontAttributes="Bold" />
-                                <Label Text="{Binding gender}" />
-                            </StackLayout>
-                            <ViewCell.ContextActions>
-                                <MenuItem Command="{Binding BindingContext.NavigateToProfileCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
-                                          CommandParameter="{Binding .}" 
-                                          Text="View Profile" />
-                            </ViewCell.ContextActions>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <Button Text="Mark Attendance" Command="{Binding OpenMarkAttendanceModalCommand}" CommandParameter="{Binding SelectedDate}" />
-            <!-- EXPORT ATTENDANCE BUTTON -->
+            <Button 
+         Text="◀  Back"
+         Command="{Binding BackCommand}"
+         BackgroundColor="#1c1c1e"
+         TextColor="#fff"
+         FontFamily="RobotoRegular"
+         CornerRadius="8"
+         HeightRequest="40"
+         HorizontalOptions="End"
+         WidthRequest="100"
+         FontSize="13"
+         Margin="0,0,15,0"/>
+        </Grid>
 
-        </VerticalStackLayout>
-    </ScrollView>
+
+        <!-- MAIN CONTENT -->
+        <!-- STUDENT LIST WITH VISUAL SELECTION -->
+        <CollectionView Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}" SelectionMode="Single" Margin="20,0,20,0">
+            <CollectionView.ItemsLayout>
+                <!-- Horizontal Wrap Layout -->
+                <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="5" VerticalItemSpacing="5" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BackgroundColor="#FFFFFF" BorderColor="AliceBlue" CornerRadius="8" Padding="20" Margin="10" HasShadow="True">
+                        <VerticalStackLayout Spacing="5">
+                            <!-- Name with Icon -->
+                            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                                <!-- Student Icon -->
+                                <Image Source="student_icon.png" WidthRequest="30" HeightRequest="40" VerticalOptions="Center" />
+
+                                <!-- Student Name -->
+                                <Label Text="{Binding FullName}" FontAttributes="Bold" FontFamily="RobotoBold" FontSize="16" TextColor="#1C1C1E" VerticalOptions="Center" />
+
+
+                            </HorizontalStackLayout>
+
+                            <!-- Student Details -->
+                            <Label Text="{Binding age}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
+                            <Label Text="{Binding email}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
+                            <Label Text="{Binding course}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
+                            <Label Text="{Binding yearlevel}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
+                            <Label Text="{Binding gender}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
+                        </VerticalStackLayout>
+
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <CollectionView Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}" SelectionMode="Single" Margin="20,0,20,0">
+            <CollectionView.ItemsLayout>
+                <!-- Horizontal Wrap Layout -->
+                <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="5" VerticalItemSpacing="5" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BackgroundColor="#FFFFFF" BorderColor="AliceBlue" CornerRadius="8" Padding="20" Margin="10" HasShadow="True">
+                        <VerticalStackLayout Spacing="5">
+                            <!-- Name with Icon -->
+                            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                                <!-- Student Icon -->
+                                <Image Source="student_icon.png" WidthRequest="30" HeightRequest="40" VerticalOptions="Center" />
+
+                                <!-- Student Name -->
+                                <Label Text="{Binding FullName}" FontAttributes="Bold" FontFamily="RobotoBold" FontSize="16" TextColor="#1C1C1E" VerticalOptions="Center" />
+
+
+                            </HorizontalStackLayout>
+
+                            <!-- Student Details -->
+                            <Label Text="{Binding age}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
+                            <Label Text="{Binding email}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
+                            <Label Text="{Binding course}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
+                            <Label Text="{Binding yearlevel}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
+                            <Label Text="{Binding gender}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
+                        </VerticalStackLayout>
+
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- FOOTER -->
+        <Grid Grid.Row="2" Grid.ColumnSpan="3" BackgroundColor="#E0E0E0" HeightRequest="50" Padding="10">
+            <Label 
+                Text="© 2024 St. Freya. All Rights Reserved." 
+                HorizontalOptions="Center" 
+                VerticalOptions="Center" 
+                FontSize="12" 
+                TextColor="#787878" />
+        </Grid>
+    </Grid>
 </ContentPage>
