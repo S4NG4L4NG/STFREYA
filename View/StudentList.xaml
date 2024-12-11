@@ -148,7 +148,131 @@
                     SelectedItem="{Binding SelectedYearLevelFilter}" 
                     Title="Select Year Level" 
                     BackgroundColor="#F7F8FA" />
+
+
+                <BoxView HeightRequest="1" BackgroundColor="#D6D6D6" Margin="0,10,0,10" />
+
+                <Label 
+            Text="Selected Student" 
+            FontSize="14" 
+            FontAttributes="Bold" 
+            TextColor="#1C1C1E" 
+            FontFamily="RobotoBold" 
+            HorizontalOptions="Center" />
+
+
+                <!-- Name -->
+                <Label Text="Name:" 
+           FontFamily="RobotoRegular" 
+           TextColor="#3A3A3C" 
+           FontAttributes="Bold"  
+           Margin="0,0,0,-5" />
+                <Label Text="{Binding NameInput}" 
+           FontFamily="RobotoBold" 
+           FontSize="14" 
+           TextColor="#1C1C1E" 
+           Grid.Row="0" 
+           Grid.Column="1" 
+           Margin="10,0,0,-5" />
+
+                <!-- Last Name -->
+                <Label Text="Last Name:" 
+           FontFamily="RobotoRegular" 
+           TextColor="#3A3A3C" 
+           FontAttributes="Bold"  
+           Margin="0,0,0,-5" />
+                <Label Text="{Binding LastNameInput}" 
+           FontFamily="RobotoBold" 
+           FontSize="14" 
+           TextColor="#1C1C1E" 
+           Margin="10,0,0,-5" />
+
+                <!-- Age -->
+                <Label Text="Age:" 
+           FontFamily="RobotoRegular" 
+           TextColor="#3A3A3C" 
+           FontAttributes="Bold" 
+           Margin="0,0,0,-5" />
+                <Label Text="{Binding AgeInput}" 
+           FontFamily="RobotoBold" 
+           FontSize="14" 
+           TextColor="#1C1C1E" 
+           Margin="10,-5,0,-5" />
+
+                <!-- Email -->
+                <Label Text="Email:" 
+           FontFamily="RobotoRegular" 
+           TextColor="#3A3A3C" 
+           FontAttributes="Bold" 
+           Margin="0,0,0,-5" />
+                <Label Text="{Binding EmailInput}" 
+           FontFamily="RobotoBold" 
+           FontSize="14" 
+           TextColor="#1C1C1E" 
+           Margin="10,-5,0,-5" />
+
+                <!-- Contact No -->
+                <Label Text="Contact No:" 
+           FontFamily="RobotoRegular" 
+           TextColor="#3A3A3C" 
+           FontAttributes="Bold" 
+           Margin="0,0,10,-5" />
+                <Label Text="{Binding ContactNoInput}" 
+           FontFamily="RobotoBold" 
+           FontSize="14" 
+           TextColor="#1C1C1E" 
+           Margin="10,-5,0,-5" />
+
+                <!-- Course -->
+                <Label Text="Course:" 
+           FontFamily="RobotoRegular" 
+           TextColor="#3A3A3C" 
+           FontAttributes="Bold" 
+           Margin="0,0,10,-5" />
+                <Label Text="{Binding SelectedCourse}" 
+           FontFamily="RobotoBold" 
+           FontSize="14" 
+           TextColor="#1C1C1E" 
+           Margin="10,-5,0,-5" />
+
+                <Label Text="Year Level:" 
+           FontFamily="RobotoRegular" 
+           TextColor="#3A3A3C" 
+           FontAttributes="Bold" 
+           Margin="0,0,10,-5" />
+                <Label Text="{Binding SelectedYearLevel}" 
+           FontFamily="RobotoBold" 
+           FontSize="14" 
+           TextColor="#1C1C1E" 
+           Margin="10,-5,0,-5" />
+
+                <!-- Gender -->
+                <Label Text="Gender:" 
+           FontFamily="RobotoRegular" 
+           TextColor="#3A3A3C" 
+           FontAttributes="Bold" 
+           Margin="0,0,10,-5" />
+                <Label Text="{Binding SelectedGender}" 
+           FontFamily="RobotoBold" 
+           FontSize="14" 
+           TextColor="#1C1C1E" 
+           Margin="10,-5,0,-5" />
+
+                <Label Text="Congratulations" 
+   FontFamily="RobotoBold" 
+   FontSize="14" 
+   TextColor="#FFFFFF" 
+   Margin="10,0,0,-5" />
+
+                <Label Text="That footer is blocking additional info lol" 
+FontFamily="RobotoBold" 
+FontSize="14" 
+TextColor="#FFFFFF" 
+Margin="10,0,0,-5" />
+
             </VerticalStackLayout>
+            
+            
         </ScrollView>
 
         <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="10,10,10,10">
@@ -211,38 +335,7 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <CollectionView Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}" SelectionMode="Single" Margin="20,0,20,0">
-            <CollectionView.ItemsLayout>
-                <!-- Horizontal Wrap Layout -->
-                <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="5" VerticalItemSpacing="5" />
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame BackgroundColor="#FFFFFF" BorderColor="AliceBlue" CornerRadius="8" Padding="20" Margin="10" HasShadow="True">
-                        <VerticalStackLayout Spacing="5">
-                            <!-- Name with Icon -->
-                            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-                                <!-- Student Icon -->
-                                <Image Source="student_icon.png" WidthRequest="30" HeightRequest="40" VerticalOptions="Center" />
 
-                                <!-- Student Name -->
-                                <Label Text="{Binding FullName}" FontAttributes="Bold" FontFamily="RobotoBold" FontSize="16" TextColor="#1C1C1E" VerticalOptions="Center" />
-
-
-                            </HorizontalStackLayout>
-
-                            <!-- Student Details -->
-                            <Label Text="{Binding age}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
-                            <Label Text="{Binding email}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
-                            <Label Text="{Binding course}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
-                            <Label Text="{Binding yearlevel}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
-                            <Label Text="{Binding gender}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
-                        </VerticalStackLayout>
-
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
 
         <!-- FOOTER -->
         <Grid Grid.Row="2" Grid.ColumnSpan="3" BackgroundColor="#E0E0E0" HeightRequest="50" Padding="10">
