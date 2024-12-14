@@ -2,62 +2,115 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="STFREYA.View.StudentProfileView"
-             Title="Student Profile">
-    <VerticalStackLayout Padding="20">
+             Shell.NavBarIsVisible="False">
 
-        <Label Text="Student Profile" 
-               FontSize="24" 
-               FontAttributes="Bold" 
-               HorizontalOptions="Center" 
-               Margin="10" />
+    <ScrollView>
+        <VerticalStackLayout Padding="20">
+            <Label Text="" HeightRequest="50"/>
 
-  
-        <Button 
-         Text="Back" 
-         Clicked="ClickedToListSudents" 
-         HorizontalOptions="Start" 
-         Margin="10" />
+            <Image Source="job_suugakusya_woman.png"
+                   HeightRequest="300"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"/>
 
+            <Label Text="" HeightRequest="50"/>
 
-        <Label Text="First Name" FontAttributes="Bold" />
-        <Label Text="{Binding firstname}" />
+            <Frame BackgroundColor="#98ffa7" CornerRadius="30" Padding="10" WidthRequest="300">
+                <Label Text="Student Profile" 
+                    FontSize="30" 
+                    FontFamily="Lexend-Black"
+                    HorizontalOptions="Center" 
+                    TextColor="#000"/>
+            </Frame>
 
-        <Label Text="Last Name" FontAttributes="Bold" Margin="0,10,0,0" />
-        <Label Text="{Binding lastname}" />
+            <Label Text="" HeightRequest="50"/>
 
-        <Label Text="Age" FontAttributes="Bold" Margin="0,10,0,0" />
-        <Label Text="{Binding age}" />
+            <StackLayout HorizontalOptions="Center" Spacing="25">
+                <StackLayout>
+                    <Label Text="First Name" FontFamily="Lexend-Bold" FontSize="16"/>
+                    <Label Text="{Binding firstname}" FontFamily="Lexend-Light" FontSize="16"/>
+                </StackLayout>
 
-        <Label Text="Email" FontAttributes="Bold" Margin="0,10,0,0" />
-        <Label Text="{Binding email}" />
+                <StackLayout>
+                    <Label Text="Last Name" FontFamily="Lexend-Bold" FontSize="16"/>
+                    <Label Text="{Binding lastname}" FontFamily="Lexend-Light" FontSize="16"/>
+                </StackLayout>
 
-        <Label Text="Contact Number" FontAttributes="Bold" Margin="0,10,0,0" />
-        <Label Text="{Binding contactno}" />
+                <StackLayout>
+                    <Label Text="Age" FontFamily="Lexend-Bold" FontSize="16"/>
+                    <Label Text="{Binding age}" FontFamily="Lexend-Light" FontSize="16"/>
+                </StackLayout>
 
-        <Label Text="Course" FontAttributes="Bold" Margin="0,10,0,0" />
-        <Label Text="{Binding course}" />
+                <StackLayout>
+                    <Label Text="Email" FontFamily="Lexend-Bold" FontSize="16"/>
+                    <Label Text="{Binding email}" FontFamily="Lexend-Light" FontSize="16"/>
+                </StackLayout>
 
-        <Label Text="Gender" FontAttributes="Bold" Margin="0,10,0,0" />
-        <Label Text="{Binding gender}" />
+                <StackLayout>
+                    <Label Text="Contact No." FontFamily="Lexend-Bold" FontSize="16"/>
+                    <Label Text="{Binding contactno}" FontFamily="Lexend-Light" FontSize="16"/>
+                </StackLayout>
 
-        <Label Text="Academic History" 
-               FontSize="20" 
-               FontAttributes="Bold" 
-               HorizontalOptions="Start" 
-               Margin="0,20,0,10" />
+                <StackLayout>
+                    <Label Text="Course" FontFamily="Lexend-Bold" FontSize="16"/>
+                    <Label Text="{Binding course}" FontFamily="Lexend-Light" FontSize="16"/>
+                </StackLayout>
 
-        <CollectionView ItemsSource="{Binding AcademicHistory}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame BorderColor="LightGray" CornerRadius="5" Padding="10" Margin="0,0,0,10">
-                        <VerticalStackLayout>
-                            <Label Text="{Binding Course}" FontAttributes="Bold" />
-                            <Label Text="{Binding yearlevel}" FontAttributes="Bold" />
-                            <Label Text="{Binding Date, StringFormat='Date: {0:yyyy} - {0:MMMM}'}" />
-                        </VerticalStackLayout>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </VerticalStackLayout>
+                <StackLayout Margin="0,0,0,20">
+                    <Label Text="Gender" FontFamily="Lexend-Bold" FontSize="16"/>
+                    <Label Text="{Binding gender}" FontFamily="Lexend-Light" FontSize="16"/>
+                </StackLayout>
+            </StackLayout>
+
+            <!-- Divider -->
+            <BoxView HeightRequest="1" BackgroundColor="#D6D6D6" Margin="0,10,0,50" WidthRequest="500"/>
+
+            <Image Source="kaigi_shinken_school_blazer.png"
+                   HeightRequest="300"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"/>
+
+            <Label Text="" HeightRequest="50"/>
+
+            <Frame BackgroundColor="#98ffa7" CornerRadius="30" Padding="10" WidthRequest="340">
+                <Label Text="Academic History" 
+                    FontSize="30" 
+                    FontFamily="Lexend-Black"
+                    HorizontalOptions="Center" 
+                    TextColor="#000"/>
+            </Frame>
+
+            <Label Text="" HeightRequest="50"/>
+
+            <CollectionView ItemsSource="{Binding AcademicHistory}" HorizontalOptions="Center" WidthRequest="500">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="LightGray" CornerRadius="15" Padding="20" Margin="0,0,0,10">
+                            <VerticalStackLayout>
+                                <Label Text="Course" FontFamily="Lexend-Bold" FontSize="16"/>
+                                <Label Text="{Binding Course}" FontFamily="Lexend-Light" FontSize="16" Margin="0,0,0,25"/>
+
+                                <Label Text="Year Level" FontFamily="Lexend-Bold" FontSize="16"/>
+                                <Label Text="{Binding yearlevel}" FontFamily="Lexend-Light" FontSize="16" Margin="0,0,0,25"/>
+
+                                <Label Text="Date Enlisted" FontFamily="Lexend-Bold" FontSize="16"/>
+                                <Label Text="{Binding Date, StringFormat='{0:yyyy} - {0:MMMM}'}" FontFamily="Lexend-Light" FontSize="16"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Label Text="" HeightRequest="50"/>
+
+            <!-- Submit and Cancel Buttons -->
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Button 
+                    Text="Back" Clicked="ClickedToListSudents" FontFamily="Lexend-Bold" FontSize="18"
+                    CornerRadius="8" HeightRequest="50" WidthRequest="120" BackgroundColor="#1c1c1e" TextColor="#fff"/>
+            </HorizontalStackLayout>
+
+            <Label Text="" HeightRequest="50"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
