@@ -1,97 +1,97 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="STFREYA.View.StudentView"
-             Title="Student Management"
-             BackgroundColor="#ebebeb">
+             BackgroundColor="#ebebeb"
+             Shell.NavBarIsVisible="False">
+    
     <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="250,*,*">
         <!-- LEFT SIDEBAR -->
         <ScrollView Grid.RowSpan="3" Grid.Column="0" BackgroundColor="#FFFFFF" Padding="20">
-            <VerticalStackLayout Spacing="15">
+            <VerticalStackLayout Spacing="18" HorizontalOptions="FillAndExpand">
                 <Label 
-            Text="Search Preferences" 
-            FontSize="14" 
-            FontAttributes="Bold" 
-            TextColor="#1C1C1E" 
-            FontFamily="RobotoBold" 
-            HorizontalOptions="Center" />
+                Text="Search Preferences" 
+                FontFamily="Lexend-Bold"
+                FontSize="14"
+                TextColor="#000"
+                HorizontalOptions="Center" />
 
                 <!-- Small Search Bar -->
                 <SearchBar 
-            Placeholder="Search by name, email, or course"
-            Text="{Binding SearchTerm}" 
-            BackgroundColor="#F7F8FA"
-            FontSize="14"
-            FontFamily="RobotoRegular"
-            TextColor="#1C1C1E"
-            HeightRequest="40"
-            Margin="0,0,0,0" />
+                Placeholder="Search..."
+                FontFamily="Lexend-Light"
+                Text="{Binding SearchTerm}" 
+                BackgroundColor="#F7F8FA"
+                FontSize="14"
+                TextColor="#1C1C1E"
+                HeightRequest="40"
+                HorizontalOptions="FillAndExpand"/>
 
                 <!-- Load Students Button -->
                 <Button 
-            Text="Load All Students"
-            Command="{Binding LoadStudentCommand}"
-            BackgroundColor="#E9ECEF"
-            TextColor="#1C1C1E"
-            FontFamily="RobotoBold"
-            FontAttributes="Bold"
-            CornerRadius="8"
-            HeightRequest="50"
-            HorizontalOptions="Fill" />
+                Text="Load All Students"
+                FontFamily="Lexend-Bold"
+                FontSize="14"
+                Command="{Binding LoadStudentCommand}"
+                BackgroundColor="#98d1ff"
+                TextColor="#000"
+                FontAttributes="Bold"
+                CornerRadius="8"
+                HeightRequest="50"
+                HorizontalOptions="Fill" />
 
                 <!-- Divider -->
                 <BoxView HeightRequest="1" BackgroundColor="#D6D6D6" Margin="0,10,0,10" />
 
                 <Label 
-            Text="Student Entry Actions" 
+            Text="Student Entry Actions"
+                    FontFamily="Lexend-Bold"
             FontSize="14" 
             FontAttributes="Bold" 
-            TextColor="#1C1C1E" 
-            FontFamily="RobotoBold" 
+            TextColor="#000"
             HorizontalOptions="Center" />
                 <!-- Action Buttons -->
-                <Frame BackgroundColor="#cffdff"  BorderColor="#D6D6D6" CornerRadius="8" HeightRequest="40" Padding="0" HasShadow="True">
-                    <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Fill" Padding="10,0">
+                <Frame BackgroundColor="#3413a0" BorderColor="#fff" CornerRadius="8" HeightRequest="50" Padding="0" HasShadow="True">
+                    <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
                         <!-- Icon -->
-                        <Image Source="add_icon.png" WidthRequest="12" HeightRequest="12" VerticalOptions="Center" />
+                        <Image Source="add_icon.png" HeightRequest="20"/>
                         <!-- Button Text -->
                         <Button Text="Add Student" 
                            Command="{Binding OpenAddStudentModalCommand}"
-                           BackgroundColor="#cffdff" 
-                           FontFamily="RobotoBold" 
+                           BackgroundColor="#3413a0"
+                           FontFamily="Lexend-SemiBold"
                            FontSize="14" 
-                           TextColor="#1C1C1E" 
-                           VerticalOptions="Center" 
-                           Margin="5,0,0,0" />
+                           TextColor="#fff" 
+                           VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                 </Frame>
 
-                <Frame BackgroundColor="#D4FFD5"  BorderColor="#D6D6D6" CornerRadius="8" HeightRequest="40" Padding="0" HasShadow="True">
-                    <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Fill" Padding="10,0">
+                <Frame BackgroundColor="#c9a400" BorderColor="#fff" CornerRadius="8" HeightRequest="50" Padding="0" HasShadow="True">
+                    <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
                         <!-- Icon -->
-                        <Image Source="edit_icon.png" WidthRequest="12" HeightRequest="12" VerticalOptions="Center" />
+                        <Image Source="edit_icon.png" HeightRequest="20"/>
                         <!-- Button Text -->
                         <Button Text="Edit Student" 
-                           FontFamily="RobotoBold" 
+                           FontFamily="Lexend-SemiBold"
                            Command="{Binding OpenUpdateStudentModalCommand}"
-                           BackgroundColor="#D4FFD5"         
+                           BackgroundColor="#c9a400"         
                            FontSize="14" 
-                           TextColor="#1C1C1E" 
+                           TextColor="#fff" 
                            VerticalOptions="Center" 
                            Margin="5,0,0,0" />
                     </HorizontalStackLayout>
                 </Frame>
 
-                <Frame BackgroundColor="#FFD1CF" BorderColor="#D6D6D6" CornerRadius="8" HeightRequest="40" Padding="0" HasShadow="True">
-                    <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Fill" Padding="10,0">
+                <Frame BackgroundColor="#a01313" BorderColor="#fff" CornerRadius="8" HeightRequest="50" Padding="0" HasShadow="True">
+                    <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
                         <!-- Icon -->
-                        <Image Source="remove_icon.png" WidthRequest="12" HeightRequest="12" VerticalOptions="Center" />
+                        <Image Source="remove_icon.png" HeightRequest="20"/>
                         <!-- Button Text -->
                         <Button Text="Remove Student" 
                            Command="{Binding DeleteCommand}"
-                           BackgroundColor="#FFD1CF"
-                           FontFamily="RobotoBold" 
+                           BackgroundColor="#a01313"
+                           FontFamily="Lexend-SemiBold"
                            FontSize="14" 
-                           TextColor="#1C1C1E" 
+                           TextColor="#fff" 
                            VerticalOptions="Center" 
                            Margin="5,0,0,0" />
                     </HorizontalStackLayout>
@@ -102,72 +102,63 @@
                 <Label 
             Text="Filter by Course" 
             FontSize="14" 
-            FontAttributes="Bold" 
-            TextColor="#1C1C1E" 
-            FontFamily="RobotoBold" 
+            FontFamily="Lexend-Bold"
+            TextColor="#000"
             HorizontalOptions="Center" />
 
                 <!-- Horizontal Stack Layout for Buttons -->
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="7">
                     <Button 
-                Text="BSCS" 
- Command="{Binding FilterByCourseCommand}" 
- CommandParameter="BSCS"
- FontAttributes="Bold"
- BackgroundColor="#1C1C1E"
- TextColor="#E9ECEF"
- FontFamily="RobotoRegular"
- CornerRadius="6"
- WidthRequest="60"
- HeightRequest="30"
- FontSize="12" />
+                    Text="BSCS" 
+                    Command="{Binding FilterByCourseCommand}" 
+                    CommandParameter="BSCS"
+                    FontFamily="Lexend-SemiBold"
+                    BackgroundColor="#7d7d7d"
+                    TextColor="#fff"
+                    CornerRadius="6"
+                    WidthRequest="60"
+                    HeightRequest="30"
+                    FontSize="12" />
 
                     <Button 
- Text="BSIT" 
- Command="{Binding FilterByCourseCommand}" 
- CommandParameter="BSIT"
- FontAttributes="Bold"
- BackgroundColor="#1C1C1E"
- TextColor="#E9ECEF"
- FontFamily="RobotoRegular"
- CornerRadius="6"
- WidthRequest="60"
- HeightRequest="30"
- FontSize="12" />
+                     Text="BSIT" 
+                     Command="{Binding FilterByCourseCommand}" 
+                     CommandParameter="BSIT"
+                     FontFamily="Lexend-SemiBold"
+                     BackgroundColor="#7d7d7d"
+                     TextColor="#fff"
+                     CornerRadius="6"
+                     WidthRequest="60"
+                     HeightRequest="30"
+                     FontSize="12" />
 
                     <Button 
- Text="BMMA" 
- Command="{Binding FilterByCourseCommand}" 
- CommandParameter="BMMA"
- FontAttributes="Bold"
- BackgroundColor="#1C1C1E"
- TextColor="#E9ECEF"
- FontFamily="RobotoRegular"
- CornerRadius="6"
- WidthRequest="60"
- HeightRequest="30"
- FontSize="10" />
+                     Text="BMMA" 
+                     Command="{Binding FilterByCourseCommand}" 
+                     CommandParameter="BMMA"
+                     FontFamily="Lexend-SemiBold"
+                     BackgroundColor="#7d7d7d"
+                     TextColor="#fff"
+                     CornerRadius="6"
+                     WidthRequest="60"
+                     HeightRequest="30"
+                     FontSize="10" />
                 </HorizontalStackLayout>
-                <Label 
-            Text="{Binding TotalStudentsDisplay}" 
-            FontFamily="RobotoBold"
-            HorizontalOptions="Center" 
-            Margin="10,5,0,10" 
-            FontSize="14"
-            TextColor="#1C1C1E" />
+
+                <!-- Divider -->
+                <BoxView HeightRequest="1" BackgroundColor="#D6D6D6" Margin="0,10,0,10" />
+
                 <Label 
             Text="Filter by Year Level" 
             FontSize="14" 
-            FontAttributes="Bold" 
-            TextColor="#1C1C1E" 
-            FontFamily="RobotoBold" 
+            FontFamily="Lexend-Bold"
+            TextColor="#000"
             HorizontalOptions="Center" />
                 <Picker 
             ItemsSource="{Binding YearLevelFilterOptions}" 
-            SelectedItem="{Binding SelectedYearLevelFilter}" 
-            Title="Select Year Level" 
-            FontFamily="RobotoRegular"
-            TextColor="#1C1C1E"
+            SelectedItem="{Binding SelectedYearLevelFilter}"
+                    FontFamily="Lexend-Light"
+            TextColor="#000"
             BackgroundColor="#F7F8FA"
             FontSize="14" 
             HorizontalOptions="FillAndExpand" />
@@ -177,149 +168,132 @@
                 <BoxView HeightRequest="1" BackgroundColor="#D6D6D6" Margin="0,10,0,10" />
 
                 <Label 
-            Text="Selected Student" 
-            FontSize="14" 
-            FontAttributes="Bold" 
-            TextColor="#1C1C1E" 
-            FontFamily="RobotoBold" 
+            Text="Selected Student"
+                    FontFamily="Lexend-Bold"
+            FontSize="14"
+            TextColor="#000"
             HorizontalOptions="Center" />
 
     
                     <!-- Name -->
-                    <Label Text="Name:" 
-           FontFamily="RobotoRegular" 
-           TextColor="#3A3A3C" 
-           FontAttributes="Bold"  
+                    <Label Text="First Name:"
+           TextColor="#000" 
+           FontFamily="Lexend-SemiBold"
            Margin="0,0,0,-5" />
-                    <Label Text="{Binding NameInput}" 
-           FontFamily="RobotoBold" 
+                    <Label Text="{Binding NameInput}"
+                           FontFamily="Lexend-Light"
            FontSize="14" 
-           TextColor="#1C1C1E" 
+           TextColor="#000" 
            Grid.Row="0" 
            Grid.Column="1" 
            Margin="10,0,0,-5" />
 
                     <!-- Last Name -->
-                    <Label Text="Last Name:" 
-           FontFamily="RobotoRegular" 
-           TextColor="#3A3A3C" 
-           FontAttributes="Bold"  
+                    <Label Text="Last Name:"
+           TextColor="#000" 
+           FontFamily="Lexend-SemiBold"
            Margin="0,0,0,-5" />
-                    <Label Text="{Binding LastNameInput}" 
-           FontFamily="RobotoBold" 
+                    <Label Text="{Binding LastNameInput}"
+                           FontFamily="Lexend-Light"
            FontSize="14" 
-           TextColor="#1C1C1E" 
+           TextColor="#000" 
            Margin="10,0,0,-5" />
 
                     <!-- Age -->
-                    <Label Text="Age:" 
-           FontFamily="RobotoRegular" 
-           TextColor="#3A3A3C" 
-           FontAttributes="Bold" 
+                    <Label Text="Age:"
+           TextColor="#000" 
+           FontFamily="Lexend-SemiBold"
            Margin="0,0,0,-5" />
-                    <Label Text="{Binding AgeInput}" 
-           FontFamily="RobotoBold" 
+                    <Label Text="{Binding AgeInput}"
+                           FontFamily="Lexend-Light"
            FontSize="14" 
-           TextColor="#1C1C1E" 
+           TextColor="#000" 
            Margin="10,-5,0,-5" />
 
                     <!-- Email -->
-                    <Label Text="Email:" 
-           FontFamily="RobotoRegular" 
-           TextColor="#3A3A3C" 
-           FontAttributes="Bold" 
+                    <Label Text="Email:"
+           TextColor="#000" 
+           FontFamily="Lexend-SemiBold"
            Margin="0,0,0,-5" />
-                    <Label Text="{Binding EmailInput}" 
-           FontFamily="RobotoBold" 
+                    <Label Text="{Binding EmailInput}"
+                           FontFamily="Lexend-Light"
            FontSize="14" 
-           TextColor="#1C1C1E" 
+           TextColor="#000" 
            Margin="10,-5,0,-5" />
 
                     <!-- Contact No -->
-                    <Label Text="Contact No:" 
-           FontFamily="RobotoRegular" 
-           TextColor="#3A3A3C" 
+                    <Label Text="Contact No:"
+                           FontFamily="Lexend-SemiBold"
+           TextColor="#000" 
            FontAttributes="Bold" 
            Margin="0,0,10,-5" />
-                    <Label Text="{Binding ContactNoInput}" 
-           FontFamily="RobotoBold" 
+                    <Label Text="{Binding ContactNoInput}"
+                           FontFamily="Lexend-Light"
            FontSize="14" 
-           TextColor="#1C1C1E" 
+           TextColor="#000" 
            Margin="10,-5,0,-5" />
 
                     <!-- Course -->
-                    <Label Text="Course:" 
-           FontFamily="RobotoRegular" 
-           TextColor="#3A3A3C" 
+                    <Label Text="Course:"
+                           FontFamily="Lexend-SemiBold"
+           TextColor="#000" 
            FontAttributes="Bold" 
            Margin="0,0,10,-5" />
-                    <Label Text="{Binding SelectedCourse}" 
-           FontFamily="RobotoBold" 
+                    <Label Text="{Binding SelectedCourse}"
+                           FontFamily="Lexend-Light"
            FontSize="14" 
-           TextColor="#1C1C1E" 
+           TextColor="#000" 
            Margin="10,-5,0,-5" />
 
-                <Label Text="Year Level:" 
-           FontFamily="RobotoRegular" 
-           TextColor="#3A3A3C" 
+                <Label Text="Year Level:"
+                       FontFamily="Lexend-SemiBold"
+           TextColor="#000" 
            FontAttributes="Bold" 
            Margin="0,0,10,-5" />
-                <Label Text="{Binding SelectedYearLevel}" 
-           FontFamily="RobotoBold" 
+                <Label Text="{Binding SelectedYearLevel}"
+                       FontFamily="Lexend-Light"
            FontSize="14" 
-           TextColor="#1C1C1E" 
+           TextColor="#000" 
            Margin="10,-5,0,-5" />
 
                 <!-- Gender -->
-                    <Label Text="Gender:" 
-           FontFamily="RobotoRegular" 
-           TextColor="#3A3A3C" 
+                    <Label Text="Gender:"
+                           FontFamily="Lexend-SemiBold"
+           TextColor="#000" 
            FontAttributes="Bold" 
            Margin="0,0,10,-5" />
-                    <Label Text="{Binding SelectedGender}" 
-           FontFamily="RobotoBold" 
+                <Label Text="{Binding SelectedGender}"
+                       FontFamily="Lexend-Light"
            FontSize="14" 
-           TextColor="#1C1C1E" 
+           TextColor="#000" 
            Margin="10,-5,0,-5" />
-
-                <Label Text="Congratulations" 
-   FontFamily="RobotoBold" 
-   FontSize="14" 
-   TextColor="#FFFFFF" 
-   Margin="10,0,0,-5" />
-
-                <Label Text="That footer is blocking additional info lol" 
-FontFamily="RobotoBold" 
-FontSize="14" 
-TextColor="#FFFFFF" 
-Margin="10,0,0,-5" />
+           <Label Text="" HeightRequest="50"/>
 
             </VerticalStackLayout>
         </ScrollView>
 
 
         <!-- HEADER -->
-        <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="10,10,10,10">
+        <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,0,10" Padding="20,10,20,10" BackgroundColor="#98d1ff">
             <Label 
                 Text="  Student Management"
-                FontFamily="RobotoBold"
-                FontAttributes="Bold"
+                FontFamily="Lexend-Black"
                 FontSize="24"
-                TextColor="#1C1C1E"
+                TextColor="#000"
                 VerticalOptions="Center"
                 HorizontalOptions="Start" />
 
             <Button 
-                Text="◀  Back"
+                Text="◀ Back"
                 Command="{Binding BackCommand}"
+                FontFamily="Lexend-SemiBold"
                 BackgroundColor="#1c1c1e"
                 TextColor="#fff"
-                FontFamily="RobotoRegular"
                 CornerRadius="8"
                 HeightRequest="40"
                 HorizontalOptions="End"
                 WidthRequest="100"
-                FontSize="13"
+                FontSize="18"
                 Margin="0,0,15,0"/>
         </Grid>
 
@@ -336,20 +310,21 @@ Margin="10,0,0,-5" />
                             <!-- Name with Icon -->
                             <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
                                 <!-- Student Icon -->
-                                <Image Source="student_icon.png" WidthRequest="30" HeightRequest="40" VerticalOptions="Center" />
+                                <Image Source="student_icon.png" WidthRequest="50" VerticalOptions="Center" />
 
                                 <!-- Student Name -->
-                                <Label Text="{Binding FullName}" FontAttributes="Bold" FontFamily="RobotoBold" FontSize="16" TextColor="#1C1C1E" VerticalOptions="Center" />
+                                <Label Text="{Binding FullName}" FontFamily="Lexend-Bold" FontSize="16" TextColor="#000" VerticalOptions="Center" />
 
 
                             </HorizontalStackLayout>
+                            <Label Text="" HeightRequest="5"/>
 
                             <!-- Student Details -->
-                            <Label Text="{Binding age}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
-                            <Label Text="{Binding email}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
-                            <Label Text="{Binding course}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
-                            <Label Text="{Binding yearlevel}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
-                            <Label Text="{Binding gender}" FontSize="14" FontFamily="RobotoRegular" TextColor="#3A3A3C" />
+                            <Label Text="{Binding age}" FontFamily="Lexend-Light" FontSize="14" TextColor="#000" />
+                            <Label Text="{Binding email}" FontFamily="Lexend-Light" FontSize="14" TextColor="#000" />
+                            <Label Text="{Binding course}" FontFamily="Lexend-Light" FontSize="14" TextColor="#000" />
+                            <Label Text="{Binding yearlevel}" FontFamily="Lexend-Light" FontSize="14" TextColor="#000" />
+                            <Label Text="{Binding gender}" FontFamily="Lexend-Light" FontSize="14" TextColor="#000" />
                         </VerticalStackLayout>
 
                     </Frame>
@@ -361,10 +336,10 @@ Margin="10,0,0,-5" />
         <Grid Grid.Row="2" Grid.ColumnSpan="3" BackgroundColor="#d4d4d4" HeightRequest="50" Padding="10">
             <Label 
                 Text="© 2024 St. Freya. All Rights Reserved."
-                FontFamily="RobotoRegular"
+                FontFamily="Lexend-Light"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
-                FontSize="12"
+                FontSize="13"
                 TextColor="#787878" />
         </Grid>
     </Grid>

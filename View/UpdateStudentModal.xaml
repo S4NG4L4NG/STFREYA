@@ -3,108 +3,120 @@
                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                x:Class="STFREYA.View.UpdateStudentModal">
+
     <!-- ScrollView to make the modal scrollable -->
     <ScrollView>
-        <!-- Wrap content in a Frame for background customization -->
-        <Frame BackgroundColor="#FFFFFF" Padding="20" CornerRadius="10" HasShadow="True">
+        <ContentView BackgroundColor="#fff" Padding="40">
             <VerticalStackLayout Spacing="15">
+                <Image Source="school_soudan_man_boy_smile.png"
+                   HeightRequest="300"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"/>
+
                 <!-- Huge, bold Title above the form -->
-                <Label Text="Update Student" 
-                       FontSize="30" 
-                       FontFamily="RobotoBold" 
-                       FontAttributes="Bold" 
-                       HorizontalOptions="Center" 
-                       TextColor="#1C1C1E" 
-                       Margin="0,0,0,20"/>
+                <Frame BackgroundColor="#c9a400" CornerRadius="30" Padding="10" WidthRequest="300">
+                    <Label Text="Edit Student" 
+                           FontFamily="Lexend-Black"
+                           FontSize="30" 
+                           FontAttributes="Bold" 
+                           HorizontalOptions="Center" 
+                           TextColor="#FFFFFF"/>
+                </Frame>
 
                 <!-- Name Field -->
-                <Label Text="Name" FontFamily="RobotoRegular" TextColor="#3A3A3C"/>
-                <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
+                <Label Text="Name" FontFamily="Lexend-SemiBold" TextColor="#000"/>
+                <ContentView BackgroundColor="#F0F0F0">
                     <Entry Placeholder="Enter Name" Text="{Binding NameInput}" 
-                           FontFamily="RobotoRegular" 
-                           TextColor="#1C1C1E" 
+                           FontFamily="Lexend-Light"
+                           TextColor="#000" 
                            BackgroundColor="Transparent" 
                            HeightRequest="40"/>
-                </Frame>
+                </ContentView>
 
                 <!-- Last Name Field -->
-                <Label Text="Last Name" FontFamily="RobotoRegular" TextColor="#3A3A3C"/>
-                <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
+                <Label Text="Last Name" FontFamily="Lexend-SemiBold" TextColor="#000"/>
+                <ContentView BackgroundColor="#F0F0F0">
                     <Entry Placeholder="Enter Last Name" Text="{Binding LastNameInput}" 
-                           FontFamily="RobotoRegular" 
-                           TextColor="#1C1C1E" 
+                           FontFamily="Lexend-Light"
+                           TextColor="#000" 
                            BackgroundColor="Transparent" 
                            HeightRequest="40"/>
-                </Frame>
+                </ContentView>
 
                 <!-- Age Field -->
-                <Label Text="Age" FontFamily="RobotoRegular" TextColor="#3A3A3C"/>
-                <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
-                    <Entry Placeholder="Enter Age" Text="{Binding AgeInput}" 
-                           FontFamily="RobotoRegular" 
-                           TextColor="#1C1C1E" 
+                <Label Text="Age" FontFamily="Lexend-SemiBold" TextColor="#000"/>
+                <ContentView BackgroundColor="#F0F0F0">
+                    <Entry Placeholder="Enter Age" Text="{Binding AgeInput}"
+                           FontFamily="Lexend-Light"
+                           TextColor="#000" 
                            BackgroundColor="Transparent" 
                            HeightRequest="40"/>
-                </Frame>
+                </ContentView>
 
                 <!-- Email Field -->
-                <Label Text="Email" FontFamily="RobotoRegular" TextColor="#3A3A3C"/>
-                <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
+                <Label Text="Email" FontFamily="Lexend-SemiBold" TextColor="#000"/>
+                <ContentView BackgroundColor="#F0F0F0">
                     <Entry Placeholder="Enter Email" Text="{Binding EmailInput}" 
-                           FontFamily="RobotoRegular" 
-                           TextColor="#1C1C1E" 
+                           FontFamily="Lexend-Light"
+                           TextColor="#000" 
                            BackgroundColor="Transparent" 
                            HeightRequest="40"/>
-                </Frame>
+                </ContentView>
 
                 <!-- Contact No Field -->
-                <Label Text="Contact No" FontFamily="RobotoRegular" TextColor="#3A3A3C"/>
-                <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
+                <Label Text="Contact No." FontFamily="Lexend-SemiBold" TextColor="#000"/>
+                <ContentView BackgroundColor="#F0F0F0">
                     <Entry Placeholder="Enter Contact No" Text="{Binding ContactNoInput}" 
-                           FontFamily="RobotoRegular" 
-                           TextColor="#1C1C1E" 
+                           FontFamily="Lexend-Light"
+                           TextColor="#000" 
                            BackgroundColor="Transparent" 
                            HeightRequest="40"/>
-                </Frame>
+                </ContentView>
 
                 <!-- Course Picker -->
-                <Label Text="Course" FontFamily="RobotoRegular" TextColor="#040001"/>
-                <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
-                    <Picker Title="Select a Course" 
+                <Label Text="Course" FontFamily="Lexend-SemiBold" TextColor="#000"/>
+                <ContentView BackgroundColor="#F0F0F0">
+                    <Picker
                             ItemsSource="{Binding CourseOptions}" 
-                            SelectedItem="{Binding SelectedCourse, Mode=TwoWay}" 
-                            FontFamily="RobotoRegular"
-                            HeightRequest="40" />
-                </Frame>
-                <Label Text="Year Level" FontFamily="RobotoRegular" TextColor="#040001"/>
-                <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
-                    <Picker Title="Select a Year Level" 
+                            SelectedItem="{Binding SelectedCourse, Mode=TwoWay}"
+                            FontFamily="Lexend-Light"
+                            TextColor="#000"
+                            HeightRequest="40"/>
+                </ContentView>
+
+                <!-- Year Level Picker -->
+                <Label Text="Year Level" FontFamily="Lexend-SemiBold" TextColor="#000"/>
+                <ContentView BackgroundColor="#F0F0F0">
+                    <Picker 
                             ItemsSource="{Binding YearLevelOptions}" 
                             SelectedItem="{Binding SelectedYearLevel, Mode=TwoWay}" 
-                            FontFamily="RobotoRegular"
-                            HeightRequest="40" />
-                </Frame>
+                            FontFamily="Lexend-Light"
+                            TextColor="#000"
+                            HeightRequest="40"/>
+                </ContentView>
 
                 <!-- Gender Picker -->
-                <Label Text="Gender" FontFamily="RobotoRegular" TextColor="#040001"/>
-                <Frame BackgroundColor="#F0F0F0" CornerRadius="8" Padding="0">
-                    <Picker Title="Select Gender" 
+                <Label Text="Gender" FontFamily="Lexend-SemiBold" TextColor="#000"/>
+                <ContentView BackgroundColor="#F0F0F0">
+                    <Picker 
                             ItemsSource="{Binding GenderOptions}" 
                             SelectedItem="{Binding SelectedGender, Mode=TwoWay}" 
-                            FontFamily="RobotoRegular"
-                            HeightRequest="40" />
-                </Frame>
+                            FontFamily="Lexend-Light"
+                            TextColor="#000"
+                            HeightRequest="40"/>
+                </ContentView>
+                <Label Text="" HeightRequest="10"/>
 
                 <!-- Submit and Cancel Buttons -->
                 <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                    <Button Text="Update" Command="{Binding UpdateStudentCommand}" 
-                            BackgroundColor="#040001" TextColor="#FFFFFF" 
+                    <Button Text="Update" FontFamily="Lexend-Bold" FontSize="18" Command="{Binding UpdateStudentCommand}" 
+                            BackgroundColor="#c9a400" TextColor="#FFFFFF" 
                             CornerRadius="8" HeightRequest="50" WidthRequest="120"/>
-                    <Button Text="Cancel" Command="{Binding CloseUpdateModalCommand}" 
-                            BackgroundColor="#040001" TextColor="#FFFFFF" 
+                    <Button Text="Cancel" FontFamily="Lexend-Bold" FontSize="18" Command="{Binding CloseUpdateModalCommand}" 
+                            BackgroundColor="#1c1c1e" TextColor="#FFFFFF" 
                             CornerRadius="8" HeightRequest="50" WidthRequest="120"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
-        </Frame>
+        </ContentView>
     </ScrollView>
 </toolkit:Popup>

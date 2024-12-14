@@ -4,31 +4,49 @@
                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                x:Class="STFREYA.View.MarkAttendanceModal">
     <ScrollView>
-    <VerticalStackLayout Padding="20" Spacing="10" BackgroundColor="White">
+        <VerticalStackLayout Padding="40" Spacing="15" BackgroundColor="White">
+            <Image Source="banzai_school.png"
+                   HeightRequest="300"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"/>
+            
+            <!-- Huge, bold Title above the form -->
+            <Frame BackgroundColor="#228B22" CornerRadius="30" Padding="10" WidthRequest="300">
+                <Label Text="Mark Attendance" 
+                           FontFamily="Lexend-Black"
+                           FontSize="28" 
+                           FontAttributes="Bold" 
+                           HorizontalOptions="Center" 
+                           TextColor="#FFFFFF"/>
+            </Frame>
 
-        <Label Text="Mark Attendance" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
+            <!-- Select Date -->
+            <Label Text="Selected Date" FontFamily="Lexend-Bold"/>
+            <DatePicker Date="{Binding SelectedDate, Mode=TwoWay}" FontFamily="Lexend-Light" IsEnabled="True" />
 
-        <!-- Select Date -->
-        <Label Text="Selected Date" />
-            <DatePicker Date="{Binding SelectedDate, Mode=TwoWay}" IsEnabled="True" />
+            <!-- Divider -->
+            <BoxView HeightRequest="1" BackgroundColor="#D6D6D6" Margin="0,20,0,10" />
 
-        <!-- Attendance List -->
+            <!-- Attendance List -->
             <CollectionView ItemsSource="{Binding AttendanceItems}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Orientation="Horizontal" Spacing="10" Padding="5">
-                            <Label Text="{Binding Student.FullName}" VerticalOptions="Center" />
+                    <StackLayout Orientation="Vertical" Spacing="10" Padding="5">
+                            <Label Text="{Binding Student.FullName}" FontFamily="Lexend-SemiBold" VerticalOptions="Center" />
                             <StackLayout Orientation="Horizontal" Spacing="20">
                                 <RadioButton 
-                                    Content="Present" 
+                                    Content="Present"
+                                    FontFamily="Lexend-Light"
                                     GroupName="{Binding Student.student_id}" 
                                     IsChecked="{Binding Status, Mode=TwoWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Present}" />
                                 <RadioButton 
-                                    Content="Late" 
+                                    Content="Late"
+                                    FontFamily="Lexend-Light"
                                     GroupName="{Binding Student.student_id}" 
                                     IsChecked="{Binding Status, Mode=TwoWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Late}" />
                                 <RadioButton 
                                     Content="Absent" 
+                                    FontFamily="Lexend-Light"
                                     GroupName="{Binding Student.student_id}" 
                                     IsChecked="{Binding Status, Mode=TwoWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Absent}" />
                             </StackLayout>
@@ -38,11 +56,14 @@
         </CollectionView>
 
         <!-- Save Button -->
-        <Button Text="Save Attendance" Command="{Binding SaveAttendanceCommand}" />
-        <Button Text="Export to CSV"
-            Command="{Binding ExportAttendanceCommand}"
-            HorizontalOptions="Center"
-            VerticalOptions="End" />
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Button Text="Save" FontFamily="Lexend-Bold" FontSize="18" Command="{Binding SaveAttendanceCommand}" 
+                    BackgroundColor="#228B22" TextColor="#FFFFFF"
+                    CornerRadius="8" HeightRequest="50" WidthRequest="120"/>
+                <Button Text="Export .CSV" FontFamily="Lexend-Bold" FontSize="15" Command="{Binding ExportAttendanceCommand}"
+                    BackgroundColor="#228B22" TextColor="#FFFFFF"
+                    CornerRadius="8" HeightRequest="50" WidthRequest="120"/>
+            </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </toolkit:Popup>
