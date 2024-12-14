@@ -11,10 +11,12 @@ $age = $data->age;
 $email = $data->email;
 $contactno = $data->contactno;
 $course = $data->course;
+$yearLevel = $data->yearlevel;
+$gender = $data->gender; // Added gender
 
 // Prepare the SQL query to update the student record
 $sql = "UPDATE student_list 
-        SET name='$name', lastname='$lastname', age=$age, email='$email', contactno='$contactno', course='$course' 
+        SET name='$name', lastname='$lastname', age=$age, email='$email', contactno='$contactno', course='$course', yearlevel='$yearLevel', gender='$gender' 
         WHERE student_id=$student_id";
 
 if ($conn->query($sql) === TRUE) {
