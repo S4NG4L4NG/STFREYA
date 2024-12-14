@@ -24,9 +24,9 @@
                 </Frame>
 
                 <!-- Name Field -->
-                <Label Text="Name" FontFamily="Lexend-SemiBold" TextColor="#000"/>
+                <Label Text="First Name" FontFamily="Lexend-SemiBold" TextColor="#000"/>
                 <ContentView BackgroundColor="#F0F0F0">
-                    <Entry Placeholder="Enter Name" Text="{Binding NameInput}" 
+                    <Entry Placeholder="Enter First Name" Text="{Binding NameInput}" 
                            FontFamily="Lexend-Light"
                            TextColor="#000" 
                            BackgroundColor="Transparent" 
