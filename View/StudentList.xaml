@@ -335,7 +335,10 @@
                             <Label Text="{Binding yearlevel}" FontSize="14" FontFamily="Lexend-Light" TextColor="#000" />
                             <Label Text="{Binding gender}" FontSize="14" FontFamily="Lexend-Light" TextColor="#000" />
                         </VerticalStackLayout>
-
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BindingContext.NavigateToProfileCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" 
+                                          CommandParameter="{Binding .}" />
+                        </Frame.GestureRecognizers>
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
