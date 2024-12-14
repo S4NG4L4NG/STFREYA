@@ -5,6 +5,7 @@ using System.Net.Http.Json;
 using STFREYA.Model;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace STFREYA.Services
 {
@@ -41,8 +42,8 @@ namespace STFREYA.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in AddStudentAsync: {ex.Message}");
-                return "Error";
+                Debug.WriteLine($"Error in AddStudentAsync: {ex.Message}");
+                throw;
             }
         }
 
